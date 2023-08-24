@@ -23,6 +23,8 @@ mongoose.connect(mongourl)
 
 app.use(cors())
 app.use(express.json())
+//using this to serve static png files
+app.use('/images', express.static('./media/images')) //virtual path to media folder
 /* would put connection to static FE and custom middleware here too, e.g.:
 app.use(express.static('build))
 app.use(middleWare.requestLogger)
