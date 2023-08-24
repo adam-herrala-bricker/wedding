@@ -1,8 +1,12 @@
 require('dotenv').config()
 
 const PORT = process.env.PORT
+
 const TOKEN = process.env.TOKEN
 const RANDY_HASH = process.env.RANDY_HASH
+
+const SECRET = process.env.SECRET
+const SECRET2 = process.env.SECRET2
 
 const ADMIN_KEY = process.env.ADMIN_KEY
 
@@ -14,4 +18,4 @@ const mongourl = NODE_ENV === 'development'
 
 
 
-module.exports = {mongourl, ADMIN_KEY, PORT, TOKEN, RANDY_HASH, NODE_ENV}
+module.exports = {mongourl, ADMIN_KEY, PORT, TOKEN, RANDY_HASH, NODE_ENV, SECRET, SECRET2}
