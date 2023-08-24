@@ -1,5 +1,6 @@
 const {mongourl} = require('./utils/config')
 const express = require('express')
+require('express-async-errors')
 const app = express()
 const cors = require('cors')
 const usersRouter = require('./controllers/usersRouter')
@@ -19,6 +20,23 @@ mongoose.connect(mongourl)
         logger.error('error connecting to MongoDB: error.message')
     })
 
+app.use(cors())
+app.use(express.json())
+/* would put connection to static FE and custom middleware here too, e.g.:
+app.use(express.static('build))
+app.use(middleWare.requestLogger)
+*/
+
+//custom middleware for extracting user info for authentication
+app.use(middleware.userExtractor)
+
+//routers
+app.use('/api/users', usersRouter)
+
+
+
+
+app.use(middleware.errorHandler)
 
 
 module.exports = app
