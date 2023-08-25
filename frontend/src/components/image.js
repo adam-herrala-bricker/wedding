@@ -3,42 +3,29 @@ import adminServices from '../services/adminServices'
 
 const Image = () => {
     //states
-    const [images, setImages] = useState([])
-    const [imagesURLs, setImageURLs] = useState([])
+    const [images, setImages] = useState([''])
 
     //event handlers
-    const uploadHandler = (event) => {
+    const handleUpload = (event) => {
         event.preventDefault()
 
-        const currentFiles = [...event.target.files]
-        //const currentFileURLs = currentFiles.map(i => URL.createObjectURL(i))
+        const currentFiles = [...event.target.files] //need to make an array
         console.log(currentFiles)
-        const currentFilesURL = currentFiles.map((i) => URL.createObjectURL(i))
-        console.log(currentFilesURL)
-        adminServices.postImage(currentFiles[0])
-
         setImages(currentFiles)
+    }
 
+    const handleSubmit = () => {
+        images.forEach(i => adminServices.postImage(i))
+        //something to-reload page?
     }
 
 
     return(
-        <input type = "file" id = "file" name = "testName" accept = "image/png" encType = "multipart/form-data" multiple = {true} onChange = {uploadHandler}/>
-
-    )
-    /*
-    return(
         <div>
-            <form method = "post" encType = "multipart/form-data" onSubmit={uploadHandler}>
-                <input type = "file" id = "file" accept = "image/png" multiple = {true}/>
-                <button type = "submit">submit!</button>
-            </form>
-
-            
+                <input type = "file" id = "file" name = "testName" accept = "image/png" encType = "multipart/form-data" multiple onChange = {handleUpload}/>
+                <button onClick = {handleSubmit}>submit</button>
         </div>
     )
-    */
-   
 }
 
 

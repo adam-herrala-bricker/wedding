@@ -9,7 +9,8 @@ const storage = multer.diskStorage({
         cb(null, './media/images/')
     },
     filename: (req, file, cb) => {
-        cb(null, `${file.fieldname}.png`)
+        const uniqueBody = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        cb(null, `${uniqueBody}.png`)
     }
 })
 
@@ -17,8 +18,14 @@ const upload = multer({storage: storage}) //simpler method, but leaves off exten
 
 
 //uploading images
-uploadRouter.post('/images', upload.single('testName'), async (request, response, next) => {
-    console.log(request.file)
+uploadRouter.post('/images', upload.array('testName'), (request, response, next) => {
+    /*
+    //authentication can go here
+    upload(request, response, (err) => {
+        next(err)
+    })
+    */
+    console.log(request.files)
     response.status(200).send()
 
     next()
