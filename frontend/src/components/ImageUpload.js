@@ -22,8 +22,9 @@ const ImageUpload = () => {
 
     return(
         <div>
-                <input type = "file" id = "file" name = "testName" accept = "image/png" encType = "multipart/form-data" multiple onChange = {handleUpload}/>
-                <button onClick = {handleSubmit}>submit</button>
+            <h2>upload images</h2>
+            <input type = "file" id = "file" name = "testName" accept = "image/png" encType = "multipart/form-data" multiple onChange = {handleUpload}/>
+            <button onClick = {handleSubmit}>submit</button>
         </div>
     )
 }

@@ -1,0 +1,12 @@
+.flexbox-container {
+    position: sticky;
+    top: 10px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    background-color: wheat;
+    padding: 1em;
+}

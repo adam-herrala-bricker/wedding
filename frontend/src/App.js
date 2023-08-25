@@ -8,9 +8,29 @@ const App = () => {
 
   return(
     <div>
-      <h1>Herrala Bricker Wedding</h1>
-      <User user = {user} setUser = {setUser} guestUser = {guestUser}/>
-      <ImageUpload />
+      <div className='flexbox-container'>
+        <h1>Herrala Bricker Wedding</h1>
+        <User user = {user} setUser = {setUser} guestUser = {guestUser}/>
+      </div>
+      {user.isAdmin && <ImageUpload />}
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+
     </div>
     
   )
