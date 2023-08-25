@@ -1,0 +1,2 @@
+##metadata of all images
+GET http://localhost:3003/api/image-data
