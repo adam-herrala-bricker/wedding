@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react'
 import userServices from '../services/userServices'
+import adminServices from '../services/adminServices'
 
 //component to display current user
 const DisplayUser = ({user}) => {
@@ -30,7 +31,7 @@ const LoginForm = ({setUser}) => {
             userServices.setToken(thisUser.token) //will probs need to move this to another services regular to one, admin to another
            
             if (thisUser.isAdmin) {
-                userServices.setAdminToken(thisUser.adminToken)
+                adminServices.setAdminToken(thisUser.adminToken)
             }
 
             setUser(thisUser)
@@ -81,7 +82,10 @@ const Login = ({user, setUser, guestUser}) => {
         if (loggedUserJSON) {
           const thisUser = JSON.parse(loggedUserJSON)
           setUser(thisUser)
-          userServices.setToken(thisUser.token) //likely need to change this too + ad admin
+          userServices.setToken(thisUser.token) // need to change this too
+          if (thisUser.isAdmin) {
+            adminServices.setAdminToken(thisUser.adminToken)
+          }
         }
       }, [])
 

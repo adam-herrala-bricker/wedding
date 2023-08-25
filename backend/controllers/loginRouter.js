@@ -31,7 +31,7 @@ loginRouter.post('/', async (request, response) => {
         : await bcrypt.compare(ADMIN_KEY, user.adminHash)
 
     const adminToken = adminCorrect
-        ? jwt.sign(userForToken, SECRET2)
+        ? jwt.sign(userForToken, SECRET)
         : null
 
     response.status(200).send({ token, adminToken, isAdmin: user.isAdmin, username: user.username, displayname: user.displayname})
