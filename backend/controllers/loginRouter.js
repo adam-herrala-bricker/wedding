@@ -34,7 +34,7 @@ loginRouter.post('/', async (request, response) => {
         ? jwt.sign(userForToken, SECRET2)
         : null
 
-    response.status(200).send({ token, adminToken, username: user.username, displayname: user.displayname})
+    response.status(200).send({ token, adminToken, isAdmin: user.isAdmin, username: user.username, displayname: user.displayname})
 
 })
 

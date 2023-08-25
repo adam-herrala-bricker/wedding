@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import adminServices from '../services/adminServices'
 
-const Image = () => {
+const ImageUpload = () => {
     //states
     const [images, setImages] = useState([''])
 
@@ -31,4 +31,4 @@ const Image = () => {
 
 
 
-export default Image
+export default ImageUpload

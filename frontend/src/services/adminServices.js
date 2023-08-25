@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const baseURL = '/api/admin/upload'
 
-//POST request for image
+//POST request for uploading images
 const postImage = async (imageFile) => {
     //need to do files as form data
     const formData = new FormData()
