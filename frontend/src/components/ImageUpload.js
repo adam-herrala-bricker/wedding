@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import adminServices from '../services/adminServices'
+import imageServices from '../services/imageServices'
 
-const ImageUpload = () => {
-    //states
+const ImageUpload = ({setImageList}) => {
     const [images, setImages] = useState([''])
+    
 
     //event handlers
     const handleUpload = (event) => {
@@ -14,17 +15,23 @@ const ImageUpload = () => {
         setImages(currentFiles)
     }
 
-    const handleSubmit = () => {
-        images.forEach(i => adminServices.postImage(i))
-        //something to-reload page?
-    }
+    const handleSubmit = async () => {
+        images.forEach(async (i) => {
+            await adminServices.postImage(i)
+        })
 
+        //NEED TO FIGURE OUT WHY THIS ISN'T REFRESHING ON THIS RENDER!!!
+        //AND THEN ONCE IT'S WORKING, TAKE ANOTHER LOOK AT WHICH STATES AND FUNCTIONS NEED TO LIVE WHERE
+        const newImageList = await imageServices.getImageData()
+            console.log(newImageList)
+            setImageList(newImageList.map(i => i.fileName))
+    }
 
     return(
         <div>
             <h2>upload images</h2>
             <input type = "file" id = "file" name = "testName" accept = "image/png" encType = "multipart/form-data" multiple onChange = {handleUpload}/>
-            <button onClick = {handleSubmit}>submit</button>
+            <button onClick={handleSubmit}>submit</button>
         </div>
     )
 }
