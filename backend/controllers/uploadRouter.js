@@ -1,4 +1,5 @@
 const uploadRouter = require('express').Router()
+const Image = require('../models/imageModel')
 
 //middleware for handling multipart form data (aka files)
 const multer = require('multer')
@@ -28,14 +29,25 @@ const authorizeUser = (request, response, next) => {
 
 //FINALLY the actual router for uploading images
 uploadRouter.post('/images', upload.array('testName'), authorizeUser, (request, response, next) => {
-    /*
-    //authentication can go here
-    upload(request, response, (err) => {
-        next(err)
-    })
-    */
+    //ADAM NOTE: This is currently set to handle posting the metadata to the DB as if the single 
+    //POST request gets all the files at once. But looking at the logging I think it might actually
+    //get it one at a time, since we're seeing a seperate POST request and file for each.
+    //This would mean that itterating over every file in files is unnecessary, since it's always 
+    //an array of a single file. Maybe look into this when you're cleaning up for production?
+    
+    //saves the metadata to the DB
     console.log(request.files)
-    response.status(200).send()
+    const filesNames = request.files.map(i => i.filename)
+
+    filesNames.forEach( async (i) => {
+        const imageMetadata = new Image({fileName: i})
+        const savedMetadata = await imageMetadata.save()
+
+        //populating and adding to people will go here
+
+    })
+
+    response.status(200).send() //maybe want to return array of saved metaData? unclear if that's necessary
 
     next()
 })
