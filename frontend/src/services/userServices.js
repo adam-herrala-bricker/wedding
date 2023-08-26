@@ -2,13 +2,8 @@ import axios from 'axios'
 
 const baseURL = '/api'
 
-//note: these get imported to other services to use with authentication
-let token = null
-
-//helper functions for correct token format for requests
-const setToken = (newToken) => {
-  token = `Bearer ${newToken}`
-}
+//might eventually want to put a user token back here for authenticating comments and "below image" stuff
+//which should get handled through here
 
 //POST request for loggin in
 const login = async (credentials) => {
@@ -17,4 +12,4 @@ const login = async (credentials) => {
 
 }
 
-export default { setToken, login }
+export default { login }

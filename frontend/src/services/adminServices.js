@@ -15,8 +15,6 @@ const postImage = async (imageFile) => {
         headers: { Authorization: adminToken },
       }
     
-    console.log(config)
-    
     //need to do files as form data
     const formData = new FormData()
 

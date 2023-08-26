@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const loginRouter = require('express').Router()
 const User = require('../models/userModel')
-const {ADMIN_KEY, SECRET, SECRET2} = require('../utils/config')
+const {ADMIN_KEY, SECRET} = require('../utils/config')
 
 //POST request to login
 loginRouter.post('/', async (request, response) => {
@@ -37,5 +37,7 @@ loginRouter.post('/', async (request, response) => {
     response.status(200).send({ token, adminToken, isAdmin: user.isAdmin, username: user.username, displayname: user.displayname})
 
 })
+
+//POST request to enter page
 
 module.exports = loginRouter

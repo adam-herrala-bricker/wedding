@@ -28,7 +28,7 @@ const LoginForm = ({setUser}) => {
             const thisUser = await userServices.login({username, password})
             window.localStorage.setItem('userData', JSON.stringify(thisUser))
             
-            userServices.setToken(thisUser.token) //will probs need to move this to another services regular to one, admin to another
+            //userServices.setToken(thisUser.token)
            
             if (thisUser.isAdmin) {
                 adminServices.setAdminToken(thisUser.adminToken)
@@ -64,7 +64,7 @@ const LoggerOuter = ({setUser, guestUser}) => {
     //event handler
     const handleLogout = () => {
         setUser(guestUser)
-        window.localStorage.clear()
+        window.localStorage.removeItem('userData')
     }
 
     return(
@@ -74,7 +74,13 @@ const LoggerOuter = ({setUser, guestUser}) => {
 
 //root component for this module
 //full user info component --> guest: login or create. logged in: display name + log out
-const Login = ({user, setUser, guestUser}) => {
+const Login = ({user, setUser, guestUser, setEntryKey}) => {
+    //event handler
+    const handleExit = () => {
+        setUser(guestUser)
+        setEntryKey(null)
+        window.localStorage.clear()
+    }
 
      //effect hook for keeping user logged in on refresh
      useEffect(() => {
@@ -82,7 +88,7 @@ const Login = ({user, setUser, guestUser}) => {
         if (loggedUserJSON) {
           const thisUser = JSON.parse(loggedUserJSON)
           setUser(thisUser)
-          userServices.setToken(thisUser.token) // need to change this too
+          // userServices.setToken(thisUser.token)
           if (thisUser.isAdmin) {
             adminServices.setAdminToken(thisUser.adminToken)
           }
@@ -95,7 +101,7 @@ const Login = ({user, setUser, guestUser}) => {
             {user.username === 'guest'
             ? <LoginForm setUser = {setUser}/>
             : <LoggerOuter setUser = {setUser} guestUser = {guestUser}/>}
-            
+            <button onClick = {handleExit}>exit</button>
         </div>
     )
 }

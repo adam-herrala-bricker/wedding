@@ -2,6 +2,7 @@ import { useState, useEffect} from 'react'
 import ImageUpload from './components/ImageUpload'
 import User from './components/User'
 import Images from './components/Images'
+import Entry from './components/Entry'
 import imageServices from './services/imageServices'
 
 //component for highlighting a single image
@@ -18,7 +19,7 @@ const HighlightView = ({highlight, setHighlight}) => {
 }
 
 //component for regular view
-const RegularView = ({setHighlight}) => {
+const RegularView = ({setHighlight, setEntryKey}) => {
   const guestUser = {displayname: 'guest', username: 'guest'}
   const [user, setUser] = useState(guestUser) //here bc will need to pass this to basically every component
   const [imageList, setImageList] = useState([])
@@ -39,7 +40,7 @@ const RegularView = ({setHighlight}) => {
     <div>
       <div className='flexbox-header'>
         <h1>Herrala Bricker Wedding</h1>
-        <User user = {user} setUser = {setUser} guestUser = {guestUser}/>
+        <User user = {user} setUser = {setUser} guestUser = {guestUser} setEntryKey = {setEntryKey}/>
       </div>
       {user.isAdmin && <ImageUpload setImageList = {setImageList}/>}
       <Images imageList={imageList} setImageList = {setImageList} user = {user} setHighlight = {setHighlight}/>
@@ -69,13 +70,17 @@ const RegularView = ({setHighlight}) => {
 //root component
 const App = () => {
   const [highlight, setHighlight] = useState(null)
+  const [entryKey, setEntryKey] = useState(null)
 
 
   return(
     <>
-      {highlight === null
-        ? <RegularView setHighlight = {setHighlight}/>
-        : <HighlightView highlight = {highlight} setHighlight = {setHighlight}/>}
+      {entryKey
+        ? highlight === null
+          ? <RegularView setHighlight = {setHighlight} setEntryKey = {setEntryKey}/>
+          : <HighlightView highlight = {highlight} setHighlight = {setHighlight}/>
+        : <Entry setEntryKey = {setEntryKey}/>
+      }
       
     </>
 

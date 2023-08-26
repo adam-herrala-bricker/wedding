@@ -4,15 +4,21 @@ const Image = require('../models/imageModel')
 
 const imagePath = './media/images'
 
-//getting all the image data (doesn't require user authentication)
+//getting all the image data (now requires ENTRY authentication)
 imagesRouter.get('/', async (request, response) => {
-    const imageData = await Image.find({})
+  const entryTokenFound = request.user //all done in the custon MW
 
-    if(imageData) {
-        response.json(imageData)
-      } else {
-        response.status(404).end()
-      }
+  if (!entryTokenFound) {
+    response.status(401).json({ error: 'valid token required' })
+  }
+
+  const imageData = await Image.find({})
+
+  if(imageData) {
+      response.json(imageData)
+    } else {
+      response.status(404).end()
+    }
 })
 
 //delete a single image (will add admin authentication later)
