@@ -3,8 +3,11 @@ import adminServices from '../services/adminServices'
 //component for rendering each image
 const Image = ({imagePath}) => {
     const baseURL = '/api/images'
+
     return(
-        <div><img className = 'single-image' alt = '' src = {`${baseURL}/${imagePath}`}/> </div>
+        <div>
+            <img className = 'single-image' alt = '' src = {`${baseURL}/${imagePath}`}/> 
+        </div>
     )
 }
 
@@ -25,12 +28,14 @@ const BelowImage = ({imageID, imageList, setImageList, user}) => {
 }
 
 //component for grouping together each rendered image
-const ImageGroup = ({imageList, setImageList, user}) => {
+const ImageGroup = ({imageList, setImageList, setHighlight, user}) => {
     return(
         <div className = 'image-grouping'>
             {imageList.map(i =>
                 <div key = {i.id}>
-                    <Image key = {`${i.id}-img`} imagePath={i.fileName}/>
+                    <button className = 'image-button' onClick = {() => setHighlight(i)}>
+                        <Image key = {`${i.id}-img`} imagePath={i.fileName}/>
+                    </button>
                     <BelowImage key = {`${i.id}-bel`} imageID = {i.id} imageList = {imageList} setImageList = {setImageList} user = {user}/>
                 </div>
                 )}
@@ -39,14 +44,14 @@ const ImageGroup = ({imageList, setImageList, user}) => {
 }
 
 //root component for this module
-const Images = ({imageList, setImageList, user}) => {
+const Images = ({imageList, setImageList, user, setHighlight}) => {
 
 
 
     return(
         <div>
             <h2>Images</h2>
-            <ImageGroup imageList = {imageList} setImageList = {setImageList} user = {user}/>
+            <ImageGroup imageList = {imageList} setImageList = {setImageList} user = {user} setHighlight = {setHighlight}/>
         </div>
     )
 }

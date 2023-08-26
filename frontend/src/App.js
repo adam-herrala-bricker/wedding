@@ -4,7 +4,21 @@ import User from './components/User'
 import Images from './components/Images'
 import imageServices from './services/imageServices'
 
-const App = () => {
+//component for highlighting a single image
+//NOTE: may want to eventually move to own module to add under-image features
+const HighlightView = ({highlight, setHighlight}) => {
+  const baseURL = '/api/images'
+  return(
+    <div className = 'highlight-background'>
+      <button onClick = {() => setHighlight(null)}>exit</button>
+      <img className = 'highlight-image' alt = '' src = {`${baseURL}/${highlight.fileName}`}/>
+    </div>
+  )
+
+}
+
+//component for regular view
+const RegularView = ({setHighlight}) => {
   const guestUser = {displayname: 'guest', username: 'guest'}
   const [user, setUser] = useState(guestUser) //here bc will need to pass this to basically every component
   const [imageList, setImageList] = useState([])
@@ -19,16 +33,16 @@ const App = () => {
     fetchData()
   }
 
-  useEffect(setImageFiles, []) //need to figure out how to handle refresh
+  useEffect(setImageFiles, [])
 
   return(
     <div>
-      <div className='flexbox-container'>
+      <div className='flexbox-header'>
         <h1>Herrala Bricker Wedding</h1>
         <User user = {user} setUser = {setUser} guestUser = {guestUser}/>
       </div>
       {user.isAdmin && <ImageUpload setImageList = {setImageList}/>}
-      <Images imageList={imageList} setImageList = {setImageList} user = {user}/>
+      <Images imageList={imageList} setImageList = {setImageList} user = {user} setHighlight = {setHighlight}/>
       <h1>F</h1>
       <h1>F</h1>
       <h1>F</h1>
@@ -51,5 +65,23 @@ const App = () => {
     
   )
 }
+
+//root component
+const App = () => {
+  const [highlight, setHighlight] = useState(null)
+
+
+  return(
+    <>
+      {highlight === null
+        ? <RegularView setHighlight = {setHighlight}/>
+        : <HighlightView highlight = {highlight} setHighlight = {setHighlight}/>}
+      
+    </>
+
+  )
+
+}
+
 
 export default App;

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseURL = '/api/'
+const baseURL = '/api'
 
 //note: these get imported to other services to use with authentication
 let token = null
