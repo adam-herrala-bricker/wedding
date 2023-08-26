@@ -39,9 +39,11 @@ uploadRouter.post('/images', upload.array('testName'), authorizeUser, (request, 
     console.log(request.files)
     const filesNames = request.files.map(i => i.filename)
 
+ 
+
     filesNames.forEach( async (i) => {
         const imageMetadata = new Image({fileName: i})
-        const savedMetadata = await imageMetadata.save()
+        await imageMetadata.save()
 
         //populating and adding to people will go here
 
