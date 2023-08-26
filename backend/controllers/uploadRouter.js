@@ -20,7 +20,7 @@ const upload = multer({storage: storage}) //simpler method, but leaves off exten
 //authentication function for multer
 const authorizeUser = (request, response, next) => {
    if (!request.user) {
-    response.status(401).json({ error: 'valid token required' })
+    return response.status(401).json({ error: 'valid token required' })
    }
     
    next()

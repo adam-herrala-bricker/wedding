@@ -28,9 +28,11 @@ const postImage = async (imageFile) => {
 
 //DELETE request for deleting a single image
 const deleteImage = async (imageID) => {
-    //will add authentication later
+    const config = {
+        headers: {Authorization : adminToken}
+    }
 
-    const response = await axios.delete(`/api/image-data/${imageID}`)
+    const response = await axios.delete(`/api/image-data/${imageID}`, config)
     return response.data
 }
 

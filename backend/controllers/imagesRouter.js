@@ -9,7 +9,7 @@ imagesRouter.get('/', async (request, response) => {
   const entryTokenFound = request.user //all done in the custon MW
 
   if (!entryTokenFound) {
-    response.status(401).json({ error: 'valid token required' })
+    return response.status(401).json({ error: 'valid token required' })
   }
 
   const imageData = await Image.find({})
@@ -21,14 +21,20 @@ imagesRouter.get('/', async (request, response) => {
     }
 })
 
-//delete a single image (will add admin authentication later)
+//delete a single image
 imagesRouter.delete('/:id', async (request, response, next) => {
+  //token bit
+  if (!request.user) {
+    return response.status(401).json({ error: 'valid token required' })
+  }
+  
+  //regular bits
   const thisID = request.params.id
   const image = await Image.findById(thisID)
 
   //something goes wrong
   if (!image) {
-    response.status(404).json({ error: 'requested image not found' })
+    return response.status(404).json({ error: 'requested image not found' })
   }
   
   const thisFile = image.fileName

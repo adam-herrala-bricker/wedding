@@ -2,4 +2,5 @@
 GET http://localhost:3003/api/image-data
 
 ###delete single image
-DELETE http://localhost:3003/api/image-data/64e902cd791a385b100f7ea7
+DELETE http://localhost:3003/api/image-data/64ea4cad82dcaec67653a1db
+Authorization: 
