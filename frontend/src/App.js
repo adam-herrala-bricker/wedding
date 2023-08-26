@@ -14,7 +14,7 @@ const App = () => {
   const setImageFiles = () => {
     const fetchData = async () => {
         const response = await imageServices.getImageData()
-        setImageList(response.map(i => i.fileName))
+        setImageList(response)
     }
     fetchData()
   }
@@ -28,7 +28,7 @@ const App = () => {
         <User user = {user} setUser = {setUser} guestUser = {guestUser}/>
       </div>
       {user.isAdmin && <ImageUpload setImageList = {setImageList}/>}
-      <Images imageList={imageList} />
+      <Images imageList={imageList} setImageList = {setImageList} user = {user}/>
       <h1>F</h1>
       <h1>F</h1>
       <h1>F</h1>

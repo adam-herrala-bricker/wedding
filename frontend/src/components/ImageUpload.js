@@ -24,12 +24,12 @@ const ImageUpload = ({setImageList}) => {
         //AND THEN ONCE IT'S WORKING, TAKE ANOTHER LOOK AT WHICH STATES AND FUNCTIONS NEED TO LIVE WHERE
         const newImageList = await imageServices.getImageData()
             console.log(newImageList)
-            setImageList(newImageList.map(i => i.fileName))
+            setImageList(newImageList)
     }
 
     return(
         <div>
-            <h2>upload images</h2>
+            <h2>Upload images</h2>
             <input type = "file" id = "file" name = "testName" accept = "image/png" encType = "multipart/form-data" multiple onChange = {handleUpload}/>
             <button onClick={handleSubmit}>submit</button>
         </div>

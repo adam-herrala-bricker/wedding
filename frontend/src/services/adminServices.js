@@ -28,4 +28,12 @@ const postImage = async (imageFile) => {
     return response.data
 }
 
-export default {postImage, setAdminToken}
+//DELETE request for deleting a single image
+const deleteImage = async (imageID) => {
+    //will add authentication later
+
+    const response = await axios.delete(`/api/image-data/${imageID}`)
+    return response.data
+}
+
+export default {postImage, deleteImage, setAdminToken}
