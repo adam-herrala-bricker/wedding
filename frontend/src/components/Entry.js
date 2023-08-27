@@ -40,7 +40,7 @@ const Entry = ({setEntryKey}) => {
 
     return(
         <div>
-            <h1>Herrala Bricker wedding entry page</h1>
+            <h1>Herrala Bricker Wedding Entry Page</h1>
             <h4>entry key</h4>
             <form onSubmit = {checkKey}>
                 <input name='entry' type = 'password' value = {enteredKey} onChange = {handleEntry} />

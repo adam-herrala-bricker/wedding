@@ -1,4 +1,5 @@
 import adminServices from '../services/adminServices'
+import text from '../resources/text.js'
 
 //component for rendering each image
 const Image = ({imagePath}) => {
@@ -44,13 +45,13 @@ const ImageGroup = ({imageList, setImageList, setHighlight, user}) => {
 }
 
 //root component for this module
-const Images = ({imageList, setImageList, user, setHighlight}) => {
+const Images = ({imageList, setImageList, user, setHighlight, lan}) => {
 
 
 
     return(
         <div>
-            <h2>Images</h2>
+            <h2>{text.photos[lan]}</h2>
             <ImageGroup imageList = {imageList} setImageList = {setImageList} user = {user} setHighlight = {setHighlight}/>
         </div>
     )

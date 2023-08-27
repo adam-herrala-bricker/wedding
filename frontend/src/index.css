@@ -11,6 +11,12 @@
     padding: 1em;
 }
 
+.user-input {
+    display: grid;
+    margin-bottom: 5px;
+}
+
+
 .highlight-image {
     height: 80vh;
     
@@ -55,4 +61,29 @@
 
     row-gap: 15px;
     column-gap: 10px;
+}
+
+.language-container {
+    display: grid;
+    row-gap: 5px;
+}
+
+.flag-icon {
+    width: 30px;
+}
+
+.flag-button {
+    border-style: hidden;
+
+    background-color: transparent;
+
+    padding: 0px;
+}
+
+.flag-button:hover {
+    opacity: .7;
+}
+
+.flag-button:active {
+    opacity: .5;
 }

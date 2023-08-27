@@ -1,17 +1,19 @@
 import { useState, useEffect} from 'react'
+import text from './resources/text.js'
 import ImageUpload from './components/ImageUpload'
 import User from './components/User'
 import Images from './components/Images'
 import Entry from './components/Entry'
+import Language from './components/Language'
 import imageServices from './services/imageServices'
 
 //component for highlighting a single image
 //NOTE: may want to eventually move to own module to add under-image features
-const HighlightView = ({highlight, setHighlight}) => {
+const HighlightView = ({highlight, setHighlight, lan}) => {
   const baseURL = '/api/images'
   return(
     <div className = 'highlight-background'>
-      <button onClick = {() => setHighlight(null)}>exit</button>
+      <button onClick = {() => setHighlight(null)}>{text.exit[lan]}</button>
       <img className = 'highlight-image' alt = '' src = {`${baseURL}/${highlight.fileName}`}/>
     </div>
   )
@@ -19,7 +21,7 @@ const HighlightView = ({highlight, setHighlight}) => {
 }
 
 //component for regular view
-const RegularView = ({setHighlight, setEntryKey}) => {
+const RegularView = ({setHighlight, setEntryKey, lan, setLan}) => {
   const guestUser = {displayname: 'guest', username: 'guest'}
   const [user, setUser] = useState(guestUser) //here bc will need to pass this to basically every component
   const [imageList, setImageList] = useState([])
@@ -39,11 +41,14 @@ const RegularView = ({setHighlight, setEntryKey}) => {
   return(
     <div>
       <div className='flexbox-header'>
-        <h1>Herrala Bricker Wedding</h1>
-        <User user = {user} setUser = {setUser} guestUser = {guestUser} setEntryKey = {setEntryKey}/>
+        <h1>{text.header[lan]}</h1>
+        <h2>{text.music[lan]}</h2>
+        <h2>{text.photos[lan]}</h2>
+        <Language setLan = {setLan}/>
+        <User user = {user} setUser = {setUser} guestUser = {guestUser} setEntryKey = {setEntryKey} lan = {lan}/>
       </div>
       {user.isAdmin && <ImageUpload setImageList = {setImageList}/>}
-      <Images imageList={imageList} setImageList = {setImageList} user = {user} setHighlight = {setHighlight}/>
+      <Images imageList={imageList} setImageList = {setImageList} user = {user} setHighlight = {setHighlight} lan = {lan}/>
       <h1>F</h1>
       <h1>F</h1>
       <h1>F</h1>
@@ -71,14 +76,15 @@ const RegularView = ({setHighlight, setEntryKey}) => {
 const App = () => {
   const [highlight, setHighlight] = useState(null)
   const [entryKey, setEntryKey] = useState(null)
+  const [lan, setLan] = useState('suo')
 
 
   return(
     <>
       {entryKey
         ? highlight === null
-          ? <RegularView setHighlight = {setHighlight} setEntryKey = {setEntryKey}/>
-          : <HighlightView highlight = {highlight} setHighlight = {setHighlight}/>
+          ? <RegularView setHighlight = {setHighlight} setEntryKey = {setEntryKey} lan = {lan} setLan = {setLan}/>
+          : <HighlightView highlight = {highlight} setHighlight = {setHighlight} lan = {lan}/>
         : <Entry setEntryKey = {setEntryKey}/>
       }
       

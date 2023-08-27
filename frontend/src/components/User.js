@@ -1,17 +1,20 @@
 import {useState, useEffect} from 'react'
+import text from '../resources/text'
 import userServices from '../services/userServices'
 import adminServices from '../services/adminServices'
 
 //component to display current user
-const DisplayUser = ({user}) => {
+const DisplayUser = ({user, lan}) => {
     return(
         <div>
-            {user.username}
+            {user.username === 'guest'
+                ? text.guest[lan]
+                : user.username}
         </div>
     )
 }
 
-const LoginForm = ({setUser}) => {
+const LoginForm = ({setUser, lan}) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
@@ -45,22 +48,22 @@ const LoginForm = ({setUser}) => {
     }
 
     return(
-        <div>
-            <h2>log in</h2>
+        <div >
+            <h2>{text.login[lan]}</h2>
             <form autoComplete='off' onSubmit = {handleLogin}>
-                <div>
-                    username <input name='Username' value={username} onChange = {handleFormChange}/>
+                <div className = 'user-input'>
+                    {text.username[lan]} <input name='Username' value={username} onChange = {handleFormChange}/>
                  </div>
-                <div>
-                    password <input name='Password' type='password' value={password} onChange = {handleFormChange}/>
+                <div className = 'user-input'>
+                    {text.password[lan]} <input name='Password' type='password' value={password} onChange = {handleFormChange}/>
                 </div>
-                <button id = 'login-button'type='submit'>login</button>  
+                <button id = 'login-button'type='submit'>{text.login[lan]}</button>  
             </form>
         </div>
     )
 }
 
-const LoggerOuter = ({setUser, guestUser}) => {
+const LoggerOuter = ({setUser, guestUser, lan}) => {
     //event handler
     const handleLogout = () => {
         setUser(guestUser)
@@ -68,13 +71,13 @@ const LoggerOuter = ({setUser, guestUser}) => {
     }
 
     return(
-        <button onClick = {handleLogout}>logout</button>
+        <button onClick = {handleLogout}>{text.logout[lan]}</button>
     )
 }
 
 //root component for this module
 //full user info component --> guest: login or create. logged in: display name + log out
-const Login = ({user, setUser, guestUser, setEntryKey}) => {
+const Login = ({user, setUser, guestUser, setEntryKey, lan}) => {
     //event handler
     const handleExit = () => {
         setUser(guestUser)
@@ -97,11 +100,11 @@ const Login = ({user, setUser, guestUser, setEntryKey}) => {
 
     return(
         <div>
-            <DisplayUser user= {user}/>
+            <DisplayUser user= {user} lan = {lan}/>
             {user.username === 'guest'
-            ? <LoginForm setUser = {setUser}/>
-            : <LoggerOuter setUser = {setUser} guestUser = {guestUser}/>}
-            <button onClick = {handleExit}>exit</button>
+            ? <LoginForm setUser = {setUser} lan = {lan}/>
+            : <LoggerOuter setUser = {setUser} guestUser = {guestUser} lan = {lan}/>}
+            <button onClick = {handleExit}>{text.exit[lan]}</button>
         </div>
     )
 }
