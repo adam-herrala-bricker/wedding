@@ -2,6 +2,7 @@ import { useState, useEffect} from 'react'
 import text from './resources/text.js'
 import ImageUpload from './components/ImageUpload'
 import User from './components/User'
+import Music from './components/Music'
 import Images from './components/Images'
 import Entry from './components/Entry'
 import Language from './components/Language'
@@ -42,13 +43,19 @@ const RegularView = ({setHighlight, setEntryKey, lan, setLan}) => {
     <div>
       <div className='flexbox-header'>
         <h1>{text.header[lan]}</h1>
-        <h2>{text.music[lan]}</h2>
-        <h2>{text.photos[lan]}</h2>
+        <h2><a href = '#music' className = 'header-link'>{text.music[lan]}</a></h2>
+        <h2><a href = '#images' className = 'header-link'>{text.photos[lan]}</a></h2>
         <Language setLan = {setLan}/>
         <User user = {user} setUser = {setUser} guestUser = {guestUser} setEntryKey = {setEntryKey} lan = {lan}/>
       </div>
       {user.isAdmin && <ImageUpload setImageList = {setImageList}/>}
-      <Images imageList={imageList} setImageList = {setImageList} user = {user} setHighlight = {setHighlight} lan = {lan}/>
+      <section id = 'music'>
+        <Music  lan = {lan} />
+      </section>
+      <section id = 'images'>
+        <Images imageList={imageList} setImageList = {setImageList} user = {user} setHighlight = {setHighlight} lan = {lan}/>
+      </section>
+      
       <h1>F</h1>
       <h1>F</h1>
       <h1>F</h1>

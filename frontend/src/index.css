@@ -1,3 +1,7 @@
+html {
+    scroll-padding-top: 270px;
+  }
+
 .flexbox-header {
     position: sticky;
     top: 10px;
@@ -11,11 +15,15 @@
     padding: 1em;
 }
 
+.header-link {
+    text-decoration: none;
+    color:black;
+}
+
 .user-input {
     display: grid;
     margin-bottom: 5px;
 }
-
 
 .highlight-image {
     height: 80vh;
