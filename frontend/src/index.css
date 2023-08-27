@@ -95,3 +95,10 @@ html {
 .flag-button:active {
     opacity: .5;
 }
+
+.error-message {
+    color: red;
+    font-style: italic;
+
+    margin-bottom: 10px;
+}

@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react'
 import text from '../resources/text'
+import Notifier from './Notifier'
 import userServices from '../services/userServices'
 import adminServices from '../services/adminServices'
 
@@ -17,6 +18,7 @@ const DisplayUser = ({user, lan}) => {
 const LoginForm = ({setUser, lan}) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [errorMessage, setErrorMessage] = useState(null)
 
     //event handlers
     const handleFormChange = (event) => {
@@ -42,7 +44,10 @@ const LoginForm = ({setUser, lan}) => {
             setPassword('')
         }
         catch (exception) {
-            //notifier('error', 'username or password incorrect')
+            setErrorMessage(text.loginError[lan])
+            setTimeout(() => {
+                setErrorMessage(null)
+            },  5000)
             console.log('username or password is incorrect')
         }
     }
@@ -50,6 +55,7 @@ const LoginForm = ({setUser, lan}) => {
     return(
         <div >
             <h2>{text.login[lan]}</h2>
+            {errorMessage && <Notifier message = {errorMessage}/>}
             <form autoComplete='off' onSubmit = {handleLogin}>
                 <div className = 'user-input'>
                     {text.username[lan]} <input name='Username' value={username} onChange = {handleFormChange}/>

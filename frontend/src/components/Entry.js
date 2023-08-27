@@ -1,10 +1,18 @@
 import { useState, useEffect } from 'react'
+import text from '../resources/text'
+import Notifier from './Notifier'
 import imageServices from '../services/imageServices'
 import userServices from '../services/userServices'
 
 //root component for entry page
 const Entry = ({setEntryKey}) => {
     const [enteredKey, setEnteredKey] = useState('')
+    const [errorMessage, setErrorMessage] = useState(null)
+
+    //helper function for dual-lan text
+    const duoLingo = (phrase) => {
+        return(`${text[phrase].suo} // ${text[phrase].eng}`)
+    }
 
     //event handers
     const handleEntry = (event) => {
@@ -24,8 +32,11 @@ const Entry = ({setEntryKey}) => {
             setEntryKey(thisKey)
         }
         catch (exception) {
-            //notifier('error', 'username or password incorrect')
-            console.log('username or password is incorrect')
+            setErrorMessage(duoLingo('entryError'))
+            setTimeout(() => {
+                setErrorMessage(null)
+            }, 5000)
+            console.log('entry key is incorrect')
         }
     }
     //effect hook to load entry token on refresh (just like loading a user)
@@ -40,8 +51,9 @@ const Entry = ({setEntryKey}) => {
 
     return(
         <div>
-            <h1>Herrala Bricker Wedding Entry Page</h1>
-            <h4>entry key</h4>
+            <h1>{duoLingo('header')}</h1>
+            <h4>{duoLingo('entryKey')}</h4>
+            <Notifier message = {errorMessage} />
             <form onSubmit = {checkKey}>
                 <input name='entry' type = 'password' value = {enteredKey} onChange = {handleEntry} />
                 <button type = 'submit'>enter</button>
