@@ -20,6 +20,14 @@ html {
     color:black;
 }
 
+.header-link:hover{
+    color:brown;
+}
+
+.header-link:active{
+    color:chocolate;
+}
+
 .user-input {
     display: grid;
     margin-bottom: 5px;
@@ -101,4 +109,12 @@ html {
     font-style: italic;
 
     margin-bottom: 10px;
+}
+
+.scene-linked {
+    opacity: 1
+}
+
+.scene-unlinked {
+    opacity : .5
 }

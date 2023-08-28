@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import text from '../resources/text'
 import Notifier from './Notifier'
 import imageServices from '../services/imageServices'
+import sceneServices from '../services/sceneServices'
 import userServices from '../services/userServices'
 
 //root component for entry page
@@ -29,6 +30,7 @@ const Entry = ({setEntryKey}) => {
             const thisKey = await userServices.login({username, password})
             window.localStorage.setItem('entryKey', JSON.stringify(thisKey))
             imageServices.setEntryToken(thisKey.token)
+            sceneServices.setEntryToken(thisKey.token)
             setEntryKey(thisKey)
         }
         catch (exception) {
@@ -45,6 +47,7 @@ const Entry = ({setEntryKey}) => {
         if (entryKeyJSON) {
             const thisKey = JSON.parse(entryKeyJSON)
             imageServices.setEntryToken(thisKey.token)
+            sceneServices.setEntryToken(thisKey.token)
             setEntryKey(thisKey)
         }
     }, [])

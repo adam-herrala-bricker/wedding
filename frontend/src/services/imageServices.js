@@ -20,4 +20,7 @@ const getImageData = async () => {
     return response.data
 }
 
+//PUT request to update image (meta)data
+
+
 export default {getImageData, setEntryToken}
