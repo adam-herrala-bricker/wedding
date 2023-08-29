@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import sceneServices from '../services/sceneServices'
+import imageServices from '../services/imageServices'
 import text from '../resources/text'
 
 const InactiveView = ({setIsActive, lan}) => {
@@ -13,8 +14,15 @@ const InactiveView = ({setIsActive, lan}) => {
 
 const CurrentScenes = ({scenes, setScenes, setImageList, lan, user}) => {
     //event handlers
-    const handleSceneChange = (sceneID) => {
-        setImageList(scenes.filter(i => i.id == sceneID)[0].images)
+    const handleSceneChange = async (sceneID) => {
+        //may be overkill to fetch every time, but easiest sol'n I could think of
+        const allImages = await imageServices.getImageData()
+        //for admin user, 'all/kaikki' --> everything, even hidden images with no tags
+        const filteredImages = (user.isAdmin && scenes.filter(i => i.id === sceneID)[0]['sceneName'] === 'scene-0')
+         ? allImages
+         : allImages.filter(i => Object.values(i.scenes).map(i => i.id).includes(sceneID))
+        
+        setImageList(filteredImages)
        
         //snap back to standard position
         const element = document.getElementById('scenes')
@@ -84,6 +92,7 @@ const ActiveView = ({setIsActive, scenes, setScenes, setImageList, user, lan}) =
     return(
         <div id = 'scenes' className = 'scene-filter-container'>
             <button onClick = {() => setIsActive(false)}>{text.done[lan]}</button>
+            {user.isAdmin && <button onClick = {() => setImageList(scenes)}>{text.clear[lan]}</button>}
             <CurrentScenes scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} lan = {lan} user = {user}/>
             {user.isAdmin && <CreateNewScene scenes = {scenes} setScenes = {setScenes} lan = {lan}/>}
         </div>

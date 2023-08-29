@@ -50,7 +50,9 @@ uploadRouter.post('/images', uploadImages.array('adminUpload'), authorizeUser, (
 
     filesNames.forEach( async (i) => {
         //will need to change so all's id isn't hard coded in
-        const sceneAllID = '64eda84d96e691d0cc0776ca'
+        //NOTE: When starting from stratch, need to create a new scene for 'all' (can do this from FE)
+        //AND put its id here BEFORE adding any images
+        const sceneAllID = '64ee336805aebd76bb279013'
 
         //image DB
         const imageMetadata = new Image({fileName: i, scenes : [sceneAllID]})

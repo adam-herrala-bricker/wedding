@@ -39,7 +39,11 @@ imagesRouter.delete('/:id', async (request, response, next) => {
   
   const thisFile = image.fileName
 
+  //remove from image DB
   await Image.findByIdAndRemove(thisID)
+
+
+  //remove from server
   try {
     fs.unlinkSync(`${imagePath}/${thisFile}`)
     console.log(`file deleted from server: ${thisFile}`)

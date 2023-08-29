@@ -30,6 +30,10 @@ const BelowImage = ({lan, imageID, imageList, setImageList, user, scenes, setSce
     //event handlers
     const handleDelete = async (imageID) => {
         if (window.confirm('Are you sure you want to delete?')) {
+            //image object that's being deleted
+            const contentToDelete = imageList.filter(i => i.id === imageID)[0]
+
+            //then actually delete it from the images DB
             await adminServices.deleteImage(imageID)
             const newFileList = imageList.filter(i => i.id !== imageID)
             setImageList(newFileList)
@@ -110,8 +114,8 @@ const ImageGroup = ({lan, imageList, setImageList, setHighlight, user, scenes, s
 }
 
 //root component for this module
-const Images = ({imageList, setImageList, user, setHighlight, lan}) => {
-    const [scenes, setScenes] = useState([]) //list of all the scenes
+const Images = ({scenes, setScenes, imageList, setImageList, user, setHighlight, lan}) => {
+    
 
     //helper function for sorting scenes
     //this will work for final version, but need to name scene1, scene2, etc.
@@ -135,6 +139,8 @@ const Images = ({imageList, setImageList, user, setHighlight, lan}) => {
         }
         fetchData()
     }, [imageList])
+
+    console.log('scenes', scenes)
 
 
     return(

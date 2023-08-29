@@ -19,6 +19,7 @@ const text = {
     filter : {suo : 'suodata', eng : 'filter'},
     done : {suo: 'valmis', eng: 'done'},
     new: {suo : 'uusi', eng : 'create'},
+    clear: {suo : 'tyhjennä', eng : 'clear'},
 
     scene0 : {suo : 'kaikki', eng: 'all'},
 

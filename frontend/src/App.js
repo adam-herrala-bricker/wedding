@@ -31,6 +31,7 @@ const RegularView = ({highlight, setHighlight, setEntryKey, lan, setLan}) => {
   const guestUser = {displayname: 'guest', username: 'guest'}
   const [user, setUser] = useState(guestUser) //here bc will need to pass this to basically every component
   const [imageList, setImageList] = useState([])
+  const [scenes, setScenes] = useState([]) //list of all the scenes
 
   //effect hook to load image list on first render, plus whenever the upload images change
   //(need to put the async inside so it doesn't throw an error)
@@ -50,6 +51,7 @@ const RegularView = ({highlight, setHighlight, setEntryKey, lan, setLan}) => {
   }
 
   useEffect(setImageFiles, [user])
+  console.log('imageList', imageList)
 
   return(
     <div>
@@ -65,7 +67,7 @@ const RegularView = ({highlight, setHighlight, setEntryKey, lan, setLan}) => {
         <Music  lan = {lan} />
       </section>
       
-      <Images id = 'images' imageList={imageList} setImageList = {setImageList} user = {user} setHighlight = {setHighlight} lan = {lan}/>
+      <Images id = 'images' scenes = {scenes} setScenes = {setScenes} imageList={imageList} setImageList = {setImageList} user = {user} setHighlight = {setHighlight} lan = {lan}/>
       
       
       <h1>F</h1>
