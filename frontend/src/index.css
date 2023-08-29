@@ -111,6 +111,32 @@ html {
     margin-bottom: 10px;
 }
 
+.scene-filter-container {
+    display: flex;
+    
+    justify-content: flex-start;
+    align-items: center;
+
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.scene-filter-container button {
+    background-color: transparent;
+    border-style: none;
+
+    font-size: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.scene-filter-container button:hover {
+    color: brown
+}
+
+.scene-filter-container button:active {
+    color: chocolate;
+}
+
 .scene-linked {
     opacity: 1
 }

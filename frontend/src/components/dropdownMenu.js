@@ -4,27 +4,20 @@ import text from '../resources/text'
 
 const InactiveView = ({setIsActive, lan}) => {
     return(
-        <button onClick = {() => setIsActive(true)}>{text.filter[lan]}</button>
+        <div className = 'scene-filter-container'>
+            <button onClick = {() => setIsActive(true)}>{text.filter[lan]}</button>
+        </div>
+        
     )
 }
 
-const CurrentScenes = ({scenes, setImageList, lan}) => {
-    //event handler
+const CurrentScenes = ({scenes, setScenes, setImageList, lan, user}) => {
+    //event handlers
     const handleSceneChange = (sceneID) => {
         setImageList(scenes.filter(i => i.id == sceneID)[0].images)
+        window.location.replace('/#images') //snap back to top
     }
 
-    return(
-        scenes.map(i => 
-            <button key = {i.id} onClick = {() => {handleSceneChange(i.id)}}>
-                {text[i.sceneName.replace('-','')] ? text[i.sceneName.replace('-','')][lan] : i.sceneName}
-            </button>
-            )
-    )
-}
-
-const DeleteScenes = ({scenes, setScenes}) => {
-    //event handler
     const deleteScene = async (scene) => {
         if (window.confirm(`Are you sure you want to delete scene ${scene.sceneName}?`)) {
             await sceneServices.deleteScene(scene)
@@ -35,11 +28,21 @@ const DeleteScenes = ({scenes, setScenes}) => {
         }
     }
 
+
     return(
-            scenes.map(i => 
-            <button key = {i.id} onClick = {() => deleteScene(i)}>
-                -
-            </button>)
+        scenes.map(i => 
+            <div key = {i.id}>
+                <button key = {`${i.id}-fil`} onClick = {() => {handleSceneChange(i.id)}}>
+                    {text[i.sceneName.replace('-','')] ? text[i.sceneName.replace('-','')][lan] : i.sceneName}
+                </button>
+                {user.Admin &&
+                <button key = {`${i.id}-del`} onClick = {() => deleteScene(i)}>
+                    -
+                </button>
+                }
+            </div>
+            
+            )
     )
 }
 
@@ -72,14 +75,11 @@ const CreateNewScene = ({scenes, setScenes, lan}) => {
 
 }
 
-const ActiveView = ({setIsActive, scenes, setScene, setScenes, setImageList, user, lan}) => {
+const ActiveView = ({setIsActive, scenes, setScenes, setImageList, user, lan}) => {
     return(
-        <div>
+        <div className = 'scene-filter-container'>
             <button onClick = {() => setIsActive(false)}>{text.done[lan]}</button>
-            <CurrentScenes scenes = {scenes} setScene = {setScene} setImageList = {setImageList} lan = {lan}/>
-            <div>
-                {user.isAdmin && <DeleteScenes scenes = {scenes} setScenes = {setScenes}/>}
-            </div>
+            <CurrentScenes scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} lan = {lan} user = {user}/>
             {user.isAdmin && <CreateNewScene scenes = {scenes} setScenes = {setScenes} lan = {lan}/>}
         </div>
     )
