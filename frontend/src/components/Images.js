@@ -16,7 +16,7 @@ const Image = ({imagePath}) => {
 }
 
 //component for rendering everything below an image
-const BelowImage = ({imageID, imageList, setImageList, user, scenes, setScenes}) => {
+const BelowImage = ({imageID, imageList, setImageList, user, scenes, setScenes, compareScenes}) => {
     //helper function for testing whether the image is aleady linked to a scene
     const isLinked = (scene, imageID) => {
         if (scene.images.map(i => i.id).includes(imageID)) {
@@ -46,6 +46,8 @@ const BelowImage = ({imageID, imageList, setImageList, user, scenes, setScenes})
         //const newScenes = await sceneServices.getScenes() //too much lag this way
         const newScenes = [...scenes.filter(i => i.sceneName !== thisScene), updatedScene]
 
+        newScenes.sort(compareScenes)
+
         setScenes(newScenes)
         
     }
@@ -68,7 +70,7 @@ const BelowImage = ({imageID, imageList, setImageList, user, scenes, setScenes})
 }
 
 //component for grouping together each rendered image
-const ImageGroup = ({imageList, setImageList, setHighlight, user, scenes, setScenes}) => {
+const ImageGroup = ({imageList, setImageList, setHighlight, user, scenes, setScenes, compareScenes}) => {
     return(
         <div className = 'image-grouping'>
             {imageList.map(i =>
@@ -76,7 +78,7 @@ const ImageGroup = ({imageList, setImageList, setHighlight, user, scenes, setSce
                     <button className = 'image-button' onClick = {() => setHighlight(i)}>
                         <Image key = {`${i.id}-img`} imagePath={i.fileName} />
                     </button>
-                   {user.isAdmin && <BelowImage key = {`${i.id}-bel`} imageID = {i.id} imageList = {imageList} setImageList = {setImageList} user = {user} scenes = {scenes} setScenes = {setScenes}/>}
+                   {user.isAdmin && <BelowImage key = {`${i.id}-bel`} imageID = {i.id} imageList = {imageList} setImageList = {setImageList} user = {user} scenes = {scenes} setScenes = {setScenes} compareScenes = {compareScenes}/>}
                 </div>
                 )}
         </div>
@@ -87,10 +89,24 @@ const ImageGroup = ({imageList, setImageList, setHighlight, user, scenes, setSce
 const Images = ({imageList, setImageList, user, setHighlight, lan}) => {
     const [scenes, setScenes] = useState([]) //list of all the scenes
 
+    //helper function for sorting scenes
+    //this will work for final version, but need to name scene1, scene2, etc.
+    //then use the suo-eng dict for their actual names
+    const compareScenes = (scene1, scene2) => {
+        if (scene1.sceneName > scene2.sceneName) {
+            return 1
+        } else if (scene1.sceneName < scene2.sceneName) {
+            return -1
+        } else {
+            return 0
+        }
+    }
+
     //effect hook to get scenes at first render
     useEffect(() => {
         const fetchData = async () => {
             const scenes = await sceneServices.getScenes()
+            scenes.sort(compareScenes)
             setScenes(scenes)
         }
         fetchData()
@@ -104,7 +120,7 @@ const Images = ({imageList, setImageList, user, setHighlight, lan}) => {
         <div>
             <h2>{text.photos[lan]}</h2>
             <DropDown scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} user = {user}/>
-            <ImageGroup imageList = {imageList} setImageList = {setImageList} user = {user} setHighlight = {setHighlight} scenes = {scenes} setScenes = {setScenes}/>
+            <ImageGroup imageList = {imageList} setImageList = {setImageList} user = {user} setHighlight = {setHighlight} scenes = {scenes} setScenes = {setScenes} compareScenes = {compareScenes}/>
         </div>
     )
 }

@@ -53,7 +53,6 @@ uploadRouter.post('/images', upload.array('testName'), authorizeUser, (request, 
         //scenes DB (adding to 'all' as default)
         const sceneAllData = await Scene.findById(sceneAllID)
 
-        //const updatedSceneData = new Scene({...sceneAllData, sceneName : 'all', images : sceneAllData.images.concat(sceneAllID)})
         sceneAllData.images = sceneAllData.images.concat(savedMetadata._id)
         
         console.log(sceneAllData)
