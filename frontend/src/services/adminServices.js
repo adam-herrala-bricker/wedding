@@ -18,12 +18,25 @@ const postImage = async (imageFile) => {
     //need to do files as form data
     const formData = new FormData()
 
-    formData.append('testName', imageFile)
+    formData.append('adminUpload', imageFile)
 
     const response = await axios.post(`${baseURL}/images`, formData, config)
-    console.log(response)
 
     return response.data
+}
+
+//POST request for uploading audio files
+const postAudio = async (audioFile) => {
+    const config = {
+        headers: {Authorization: adminToken}
+    }
+
+    const formData = new FormData()
+    formData.append('adminUpload', audioFile)
+
+    const response = await axios.post(`${baseURL}/audio`, formData, config)
+    return response.data
+
 }
 
 //DELETE request for deleting a single image
@@ -36,4 +49,4 @@ const deleteImage = async (imageID) => {
     return response.data
 }
 
-export default {postImage, deleteImage, setAdminToken}
+export default {postImage, postAudio, deleteImage, setAdminToken}

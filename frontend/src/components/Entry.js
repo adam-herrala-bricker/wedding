@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import text from '../resources/text'
 import Notifier from './Notifier'
 import imageServices from '../services/imageServices'
+import audioServices from '../services/audioServices'
 import sceneServices from '../services/sceneServices'
 import userServices from '../services/userServices'
 
@@ -30,6 +31,7 @@ const Entry = ({setEntryKey}) => {
             const thisKey = await userServices.login({username, password})
             window.localStorage.setItem('entryKey', JSON.stringify(thisKey))
             imageServices.setEntryToken(thisKey.token)
+            audioServices.setEntryToken(thisKey.token)
             sceneServices.setEntryToken(thisKey.token)
             setEntryKey(thisKey)
         }
@@ -47,6 +49,7 @@ const Entry = ({setEntryKey}) => {
         if (entryKeyJSON) {
             const thisKey = JSON.parse(entryKeyJSON)
             imageServices.setEntryToken(thisKey.token)
+            audioServices.setEntryToken(thisKey.token)
             sceneServices.setEntryToken(thisKey.token)
             setEntryKey(thisKey)
         }

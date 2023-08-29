@@ -7,6 +7,7 @@ const usersRouter = require('./controllers/usersRouter')
 const loginRouter = require('./controllers/loginRouter')
 const uploadRouter = require('./controllers/uploadRouter')
 const imagesRouter = require('./controllers/imagesRouter')
+const audioRouter = require ('./controllers/audioRouter')
 const sceneRouter = require('./controllers/sceneRouter')
 const middleware = require('./utils/middleware')
 const morgan = require('morgan')
@@ -29,6 +30,7 @@ app.use(cors())
 app.use(express.json())
 //using this to serve static png files
 app.use('/api/images', express.static('media/images')) //virtual path to images folder
+app.use('/api/audio', express.static('media/audio'))
 /* would put connection to static FE and custom middleware here too, e.g.:
 app.use(express.static('build))
 app.use(middleWare.requestLogger)
@@ -46,6 +48,7 @@ app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/admin/upload', uploadRouter)
 app.use('/api/image-data', imagesRouter)
+app.use('/api/audio-data', audioRouter)
 app.use('/api/scenes', sceneRouter)
 
 app.use(middleware.errorHandler)
