@@ -94,7 +94,7 @@ const Images = ({imageList, setImageList, user, setHighlight, lan}) => {
             setScenes(scenes)
         }
         fetchData()
-    }, [])
+    }, [imageList])
 
     console.log(scenes)
 

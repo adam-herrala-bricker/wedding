@@ -1,5 +1,6 @@
 const uploadRouter = require('express').Router()
 const Image = require('../models/imageModel')
+const Scene = require('../models/sceneModel')
 
 //middleware for handling multipart form data (aka files)
 const multer = require('multer')
@@ -42,10 +43,22 @@ uploadRouter.post('/images', upload.array('testName'), authorizeUser, (request, 
  
 
     filesNames.forEach( async (i) => {
-        const imageMetadata = new Image({fileName: i})
-        await imageMetadata.save()
+        //will need to change so all's id isn't hard coded in
+        const sceneAllID = '64ece00cd18048ba03f52932'
 
-        //populating and adding to people will go here
+        //image DB
+        const imageMetadata = new Image({fileName: i, scenes : [sceneAllID]})
+        const savedMetadata = await imageMetadata.save()
+
+        //scenes DB (adding to 'all' as default)
+        const sceneAllData = await Scene.findById(sceneAllID)
+
+        //const updatedSceneData = new Scene({...sceneAllData, sceneName : 'all', images : sceneAllData.images.concat(sceneAllID)})
+        sceneAllData.images = sceneAllData.images.concat(savedMetadata._id)
+        
+        console.log(sceneAllData)
+
+        await sceneAllData.save()
 
     })
 
