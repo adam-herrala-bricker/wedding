@@ -49,7 +49,7 @@ const RegularView = ({highlight, setHighlight, setEntryKey, lan, setLan}) => {
       <div className='flexbox-header'>
         <h1>{text.header[lan]}</h1>
         <h2><a href = '#music' className = 'header-link'>{text.music[lan]}</a></h2>
-        <h2><a href = '#images' className = 'header-link'>{text.photos[lan]}</a></h2>
+        <h2><a href = '#image-top' className = 'header-link'>{text.photos[lan]}</a></h2>
         <Language setLan = {setLan}/>
         <User user = {user} setUser = {setUser} guestUser = {guestUser} setEntryKey = {setEntryKey} lan = {lan}/>
       </div>

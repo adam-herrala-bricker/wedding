@@ -89,7 +89,7 @@ const ImageGroup = ({lan, imageList, setImageList, setHighlight, user, scenes, s
     const handleSetHighlight = (i) => {
         setHighlight({current : i, outgoing: null})
         }
-        
+
     return(
         <div className = 'image-grouping'>
             {imageList.map(i =>
@@ -134,7 +134,7 @@ const Images = ({imageList, setImageList, user, setHighlight, lan}) => {
 
     return(
         <div>
-            <h2>{text.photos[lan]}</h2>
+            <h2 id = 'image-top'>{text.photos[lan]}</h2>
             <DropDown scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} user = {user} lan = {lan}/>
             <ImageGroup lan = {lan} imageList = {imageList} setImageList = {setImageList} user = {user} setHighlight = {setHighlight} scenes = {scenes} setScenes = {setScenes} compareScenes = {compareScenes}/>
         </div>
