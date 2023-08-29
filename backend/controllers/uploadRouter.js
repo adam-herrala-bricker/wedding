@@ -49,6 +49,7 @@ uploadRouter.post('/images', upload.array('testName'), authorizeUser, (request, 
         //image DB
         const imageMetadata = new Image({fileName: i, scenes : [sceneAllID]})
         const savedMetadata = await imageMetadata.save()
+        await savedMetadata.populate('scenes')
 
         //scenes DB (adding to 'all' as default)
         const sceneAllData = await Scene.findById(sceneAllID)

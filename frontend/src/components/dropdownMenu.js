@@ -10,8 +10,6 @@ const InactiveView = ({setIsActive}) => {
 const CurrentScenes = ({scenes, setImageList}) => {
     //event handler
     const handleSceneChange = (sceneID) => {
-        const temp = scenes.filter(i => i.id == sceneID)[0].images
-        console.log(temp)
         setImageList(scenes.filter(i => i.id == sceneID)[0].images)
     }
 
@@ -24,8 +22,27 @@ const CurrentScenes = ({scenes, setImageList}) => {
     )
 }
 
+const DeleteScenes = ({scenes, setScenes}) => {
+    //event handler
+    const deleteScene = async (scene) => {
+        if (window.confirm(`Are you sure you want to delete scene ${scene.sceneName}?`)) {
+            await sceneServices.deleteScene(scene)
+
+            const newScenes = scenes.filter(i => i.id !== scene.id)
+            setScenes(newScenes) // WATCH OUT TO SEE IF WE NEED TO ADD SORTING HERE!!
+
+        }
+    }
+
+    return(
+            scenes.map(i => 
+            <button key = {i.id} onClick = {() => deleteScene(i)}>
+                delete
+            </button>)
+    )
+}
+
 const CreateNewScene = ({scenes, setScenes}) => {
-    const [toggleView, setToggleView] = useState(true) //deal w toggling later
     const [newScene, setNewScene] = useState('')
     //event handlers
     const handleNewSceneChange = (event) => {
@@ -60,6 +77,9 @@ const ActiveView = ({setIsActive, scenes, setScene, setScenes, setImageList, use
         <div>
             <button onClick = {() => setIsActive(false)}>done</button>
             <CurrentScenes scenes = {scenes} setScene = {setScene} setImageList = {setImageList}/>
+            <div>
+                {user.isAdmin && <DeleteScenes scenes = {scenes} setScenes = {setScenes}/>}
+            </div>
             {user.isAdmin && <CreateNewScene scenes = {scenes} setScenes = {setScenes}/>}
         </div>
     )
@@ -67,7 +87,7 @@ const ActiveView = ({setIsActive, scenes, setScene, setScenes, setImageList, use
 
 const DropDown = ({scenes, setScenes, setImageList, user}) => {
     const [isActive, setIsActive] = useState(false)
-
+    
 
     return(
         <div>

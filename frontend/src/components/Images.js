@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import adminServices from '../services/adminServices'
 import sceneServices from '../services/sceneServices'
+import imageServices from '../services/imageServices'
 import text from '../resources/text.js'
 import DropDown from './dropdownMenu.js'
 
@@ -49,6 +50,17 @@ const BelowImage = ({imageID, imageList, setImageList, user, scenes, setScenes, 
         newScenes.sort(compareScenes)
 
         setScenes(newScenes)
+
+        /*
+        //update image DB too
+        const thisImage = imageList.filter(i => i.id === imageID)[0]
+        thisImage.scenes = isLinked(scene, imageID)
+            ? thisImage.scenes.filter(i => i !== scene.id)
+            : thisImage.scenes.map(i => i.id).concat(scene.id)
+        console.log(thisImage)
+        
+        await imageServices.updateImageData(thisImage)
+        */
         
     }
 
@@ -111,9 +123,6 @@ const Images = ({imageList, setImageList, user, setHighlight, lan}) => {
         }
         fetchData()
     }, [imageList])
-
-    console.log(scenes)
-
 
 
     return(

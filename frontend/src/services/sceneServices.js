@@ -46,4 +46,17 @@ const updateScene = async (updatedScene) => {
 
 }
 
-export default {setEntryToken, getScenes, updateScene, addScene}
+//DELETE request to remove a scene from the DB
+const deleteScene = async (sceneToRemove) => {
+    const config = {
+        headers : {Authorization : entryToken}
+    }
+
+    const id = sceneToRemove.id
+    const response = await axios.delete(`${baseURL}/${id}`, config)
+
+    return response.data
+
+}
+
+export default {setEntryToken, getScenes, updateScene, addScene, deleteScene}

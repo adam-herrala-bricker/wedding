@@ -21,6 +21,17 @@ const getImageData = async () => {
 }
 
 //PUT request to update image (meta)data
+const updateImageData = async (newData) => {
+    const config = {
+        headers : {Authorization: entryToken}
+    }
 
+    const thisID = newData.id
 
-export default {getImageData, setEntryToken}
+    const response = axios.put(`${baseURL}/${thisID}`, newData, config)
+
+    return response.data
+
+}
+
+export default {getImageData, updateImageData, setEntryToken}

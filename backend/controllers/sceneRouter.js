@@ -63,6 +63,26 @@ sceneRouter.put('/:id', async (request, response, next) => {
 
 })
 
-//deleting entire scene (add if necessary)
+//deleting entire scene
+sceneRouter.delete('/:id', async (request, response, next) => {
+    if (!request.user) {
+        return response.status(401).json({ error: 'valid token required' })
+      }
+    
+    const thisID = request.params.id
+
+    //scene isn't there
+    const scene = await Scene.findById(thisID)
+    if (!scene) {
+        return response.status(404).json({error : 'scene not found'})
+    }
+
+    await Scene.findByIdAndDelete(thisID)
+
+    response.status(204).end()
+
+    next()
+
+})
 
 module.exports = sceneRouter
