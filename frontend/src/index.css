@@ -69,6 +69,10 @@ html {
     background-color: blue;
 }
 
+.hidden-image {
+    opacity : .5;
+}
+
 .image-grouping {
     display: flex;
     align-content:flex-start;

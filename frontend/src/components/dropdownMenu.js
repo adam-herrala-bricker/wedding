@@ -20,7 +20,7 @@ const CurrentScenes = ({scenes, setScenes, setImageList, lan, user}) => {
         //for admin user, 'all/kaikki' --> everything, even hidden images with no tags
         const filteredImages = (user.isAdmin && scenes.filter(i => i.id === sceneID)[0]['sceneName'] === 'scene-0')
          ? allImages
-         : allImages.filter(i => Object.values(i.scenes).map(i => i.id).includes(sceneID))
+         : allImages.filter(i => (Object.values(i.scenes).map(i => i.id).includes(sceneID) & Object.values(i.scenes).map(i => i.sceneName).includes('scene-0'))) //'all/kakki' tag is required for visibilty on non-admin view
         
         setImageList(filteredImages)
        
@@ -92,7 +92,6 @@ const ActiveView = ({setIsActive, scenes, setScenes, setImageList, user, lan}) =
     return(
         <div id = 'scenes' className = 'scene-filter-container'>
             <button onClick = {() => setIsActive(false)}>{text.done[lan]}</button>
-            {user.isAdmin && <button onClick = {() => setImageList(scenes)}>{text.clear[lan]}</button>}
             <CurrentScenes scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} lan = {lan} user = {user}/>
             {user.isAdmin && <CreateNewScene scenes = {scenes} setScenes = {setScenes} lan = {lan}/>}
         </div>

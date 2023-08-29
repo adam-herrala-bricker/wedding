@@ -103,8 +103,9 @@ const ImageGroup = ({lan, imageList, setImageList, setHighlight, user, scenes, s
         <div className = 'image-grouping'>
             {imageList.map(i =>
                 <div id = {i.id} key = {i.id}>
-                    <button className = 'image-button' onClick = {() => handleSetHighlight(i)}>
-                        <Image key = {`${i.id}-img`} imagePath={i.fileName} />
+                    <button className = {i.scenes.map(i => i.sceneName).includes('scene-0') ? 'image-button' : 'hidden-image'}
+                            onClick = {() => handleSetHighlight(i)}>
+                        <Image key = {`${i.id}-img`} imagePath={i.fileName}/>
                     </button>
                    {user.isAdmin && <BelowImage key = {`${i.id}-bel`} lan = {lan} imageID = {i.id} imageList = {imageList} setImageList = {setImageList} user = {user} scenes = {scenes} setScenes = {setScenes} compareScenes = {compareScenes}/>}
                 </div>
