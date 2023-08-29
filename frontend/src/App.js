@@ -11,18 +11,23 @@ import imageServices from './services/imageServices'
 //component for highlighting a single image
 //NOTE: may want to eventually move to own module to add under-image features
 const HighlightView = ({highlight, setHighlight, lan}) => {
+  //event handler
+  const handleBack = () => {
+    setHighlight({current : null, outgoing : highlight.current})
+  }
+
   const baseURL = '/api/images'
   return(
     <div className = 'highlight-background'>
-      <button onClick = {() => setHighlight(null)}>{text.back[lan]}</button>
-      <img className = 'highlight-image' alt = '' src = {`${baseURL}/${highlight.fileName}`}/>
+      <button onClick = {handleBack}>{text.back[lan]}</button>
+      <img className = 'highlight-image' alt = '' src = {`${baseURL}/${highlight.current.fileName}`}/>
     </div>
   )
 
 }
 
 //component for regular view
-const RegularView = ({setHighlight, setEntryKey, lan, setLan}) => {
+const RegularView = ({highlight, setHighlight, setEntryKey, lan, setLan}) => {
   const guestUser = {displayname: 'guest', username: 'guest'}
   const [user, setUser] = useState(guestUser) //here bc will need to pass this to basically every component
   const [imageList, setImageList] = useState([])
@@ -52,9 +57,9 @@ const RegularView = ({setHighlight, setEntryKey, lan, setLan}) => {
       <section id = 'music'>
         <Music  lan = {lan} />
       </section>
-      <section id = 'images'>
-        <Images imageList={imageList} setImageList = {setImageList} user = {user} setHighlight = {setHighlight} lan = {lan}/>
-      </section>
+      
+      <Images id = 'images' imageList={imageList} setImageList = {setImageList} user = {user} setHighlight = {setHighlight} lan = {lan}/>
+      
       
       <h1>F</h1>
       <h1>F</h1>
@@ -81,16 +86,29 @@ const RegularView = ({setHighlight, setEntryKey, lan, setLan}) => {
 
 //root component
 const App = () => {
-  const [highlight, setHighlight] = useState(null)
+  const [highlight, setHighlight] = useState({current : null, outgoing : null})
   const [entryKey, setEntryKey] = useState(null)
   const [lan, setLan] = useState('suo')
+
+  //effect hook for scolling back to the right part of the page
+  useEffect(() => {
+    if (highlight.outgoing) {
+      //my cheating way of avoiding the issue with calling the element before it's rendered
+      setTimeout(() => {
+        const elementID = highlight.outgoing.id
+        const element = document.getElementById(elementID)
+        element.scrollIntoView({behavior : 'smooth'})
+      }, 100)
+      
+    }
+  }, [highlight])
 
 
   return(
     <>
       {entryKey
-        ? highlight === null
-          ? <RegularView setHighlight = {setHighlight} setEntryKey = {setEntryKey} lan = {lan} setLan = {setLan}/>
+        ? highlight.current === null
+          ? <RegularView highlight = {highlight} setHighlight = {setHighlight} setEntryKey = {setEntryKey} lan = {lan} setLan = {setLan}/>
           : <HighlightView highlight = {highlight} setHighlight = {setHighlight} lan = {lan}/>
         : <Entry setEntryKey = {setEntryKey}/>
       }

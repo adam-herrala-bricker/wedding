@@ -15,7 +15,12 @@ const CurrentScenes = ({scenes, setScenes, setImageList, lan, user}) => {
     //event handlers
     const handleSceneChange = (sceneID) => {
         setImageList(scenes.filter(i => i.id == sceneID)[0].images)
-        window.location.replace('/#images') //snap back to top
+       
+        //snap back to standard position
+        const element = document.getElementById('scenes')
+        element.scrollIntoView({behavior: 'smooth'})
+        
+        
     }
 
     const deleteScene = async (scene) => {
@@ -35,7 +40,7 @@ const CurrentScenes = ({scenes, setScenes, setImageList, lan, user}) => {
                 <button key = {`${i.id}-fil`} onClick = {() => {handleSceneChange(i.id)}}>
                     {text[i.sceneName.replace('-','')] ? text[i.sceneName.replace('-','')][lan] : i.sceneName}
                 </button>
-                {user.Admin &&
+                {user.isAdmin &&
                 <button key = {`${i.id}-del`} onClick = {() => deleteScene(i)}>
                     -
                 </button>
@@ -77,7 +82,7 @@ const CreateNewScene = ({scenes, setScenes, lan}) => {
 
 const ActiveView = ({setIsActive, scenes, setScenes, setImageList, user, lan}) => {
     return(
-        <div className = 'scene-filter-container'>
+        <div id = 'scenes' className = 'scene-filter-container'>
             <button onClick = {() => setIsActive(false)}>{text.done[lan]}</button>
             <CurrentScenes scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} lan = {lan} user = {user}/>
             {user.isAdmin && <CreateNewScene scenes = {scenes} setScenes = {setScenes} lan = {lan}/>}

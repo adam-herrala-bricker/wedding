@@ -85,11 +85,16 @@ const BelowImage = ({lan, imageID, imageList, setImageList, user, scenes, setSce
 
 //component for grouping together each rendered image
 const ImageGroup = ({lan, imageList, setImageList, setHighlight, user, scenes, setScenes, compareScenes}) => {
+    //event handler
+    const handleSetHighlight = (i) => {
+        setHighlight({current : i, outgoing: null})
+        }
+        
     return(
         <div className = 'image-grouping'>
             {imageList.map(i =>
-                <div key = {i.id}>
-                    <button className = 'image-button' onClick = {() => setHighlight(i)}>
+                <div id = {i.id} key = {i.id}>
+                    <button className = 'image-button' onClick = {() => handleSetHighlight(i)}>
                         <Image key = {`${i.id}-img`} imagePath={i.fileName} />
                     </button>
                    {user.isAdmin && <BelowImage key = {`${i.id}-bel`} lan = {lan} imageID = {i.id} imageList = {imageList} setImageList = {setImageList} user = {user} scenes = {scenes} setScenes = {setScenes} compareScenes = {compareScenes}/>}
