@@ -16,15 +16,13 @@ const Music = ({lan}) => {
         fetchData()
     },[])
 
-    console.log(music)
-
     return(
         <div>
             <h2>
                 {text.music[lan]}
             </h2>
             {music.map(i => 
-                <div>
+                <div key = {i.id}>
                     <audio controls src = {`/api/audio/${i.fileName}`}/>
                 </div>
                 )}  

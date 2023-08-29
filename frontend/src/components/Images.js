@@ -53,16 +53,21 @@ const BelowImage = ({lan, imageID, imageList, setImageList, user, scenes, setSce
 
         setScenes(newScenes)
 
-        /*
-        //update image DB too
+        //update image DB too (also needs object in same format as scene)
         const thisImage = imageList.filter(i => i.id === imageID)[0]
-        thisImage.scenes = isLinked(scene, imageID)
-            ? thisImage.scenes.filter(i => i !== scene.id)
-            : thisImage.scenes.map(i => i.id).concat(scene.id)
         console.log(thisImage)
+        thisImage.scenes = isLinked(scene, imageID)
+            ? thisImage.scenes.map(i => i.id).filter(i => i !== scene.id)
+            : thisImage.scenes.map(i => i.id).concat(scene.id)
+        console.log(thisImage.scenes)
         
-        await imageServices.updateImageData(thisImage)
-        */
+        const returnedImage = await imageServices.updateImageData({id: imageID, scenes : thisImage.scenes})
+        console.log('returned image', returnedImage)
+
+        const newImageList = [...imageList.filter(i => i.id !==imageID), returnedImage]
+
+        console.log(newImageList)
+        setImageList(newImageList)
         
     }
 

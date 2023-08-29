@@ -37,12 +37,19 @@ const RegularView = ({highlight, setHighlight, setEntryKey, lan, setLan}) => {
   const setImageFiles = () => {
     const fetchData = async () => {
         const response = await imageServices.getImageData()
-        setImageList(response)
+        console.log(response)
+
+        //allows for 'hidden' files only visible to admin by removing from 'all' scene
+        const newImageList = user.isAdmin
+          ? response
+          : response.filter(i => i.scenes.map(i => i.sceneName).includes('scene-0'))
+        
+        setImageList(newImageList)
     }
     fetchData()
   }
 
-  useEffect(setImageFiles, [])
+  useEffect(setImageFiles, [user])
 
   return(
     <div>

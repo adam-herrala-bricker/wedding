@@ -1,5 +1,6 @@
 const sceneRouter = require('express').Router()
 const Scene = require('../models/sceneModel')
+const Image = require('../models/imageModel')
 
 //creating new scene (requires ADMIN token)
 sceneRouter.post('/', async (request, response, next) => {
@@ -52,7 +53,8 @@ sceneRouter.put('/:id', async (request, response, next) => {
     const thisID = request.params.id
     const body = request.body
     const updates = {images: body.imageIDs}
-
+    
+    //update scenes in DB
     const savedUpdates = await Scene.findByIdAndUpdate(thisID, updates, {new: true})
 
     await savedUpdates.populate('images', {fileName : 1})

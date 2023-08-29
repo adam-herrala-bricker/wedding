@@ -63,6 +63,8 @@ imagesRouter.put('/:id', async (request, response, next) => {
 
   const savedUpdates = await Image.findByIdAndUpdate(thisID, updates, {new: true})
 
+  console.log(savedUpdates)
+
   await savedUpdates.populate('scenes', {sceneName : 1})
 
   response.json(savedUpdates)

@@ -28,7 +28,7 @@ const updateImageData = async (newData) => {
 
     const thisID = newData.id
 
-    const response = axios.put(`${baseURL}/${thisID}`, newData, config)
+    const response = await axios.put(`${baseURL}/${thisID}`, newData, config)
 
     return response.data
 
