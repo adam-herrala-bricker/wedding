@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
 import sceneServices from '../services/sceneServices'
+import text from '../resources/text'
 
-const InactiveView = ({setIsActive}) => {
+const InactiveView = ({setIsActive, lan}) => {
     return(
-        <button onClick = {() => setIsActive(true)}>filter</button>
+        <button onClick = {() => setIsActive(true)}>{text.filter[lan]}</button>
     )
 }
 
-const CurrentScenes = ({scenes, setImageList}) => {
+const CurrentScenes = ({scenes, setImageList, lan}) => {
     //event handler
     const handleSceneChange = (sceneID) => {
         setImageList(scenes.filter(i => i.id == sceneID)[0].images)
@@ -16,7 +17,7 @@ const CurrentScenes = ({scenes, setImageList}) => {
     return(
         scenes.map(i => 
             <button key = {i.id} onClick = {() => {handleSceneChange(i.id)}}>
-                {i.sceneName}
+                {text[i.sceneName.replace('-','')] ? text[i.sceneName.replace('-','')][lan] : i.sceneName}
             </button>
             )
     )
@@ -37,63 +38,62 @@ const DeleteScenes = ({scenes, setScenes}) => {
     return(
             scenes.map(i => 
             <button key = {i.id} onClick = {() => deleteScene(i)}>
-                delete
+                -
             </button>)
     )
 }
 
-const CreateNewScene = ({scenes, setScenes}) => {
-    const [newScene, setNewScene] = useState('')
-    //event handlers
-    const handleNewSceneChange = (event) => {
-        setNewScene(event.target.value)
+const CreateNewScene = ({scenes, setScenes, lan}) => {
+    //helper function for new scene name
+    const newSceneName = () => {
+        //currently no scenes
+        if (scenes.length === 0 ) {
+            return 'scene-0'
+        }
+
+        //scene with the largest number
+        const maxScene = Math.max(...scenes.map(i => Number(i.sceneName.split('-')[1])))
+
+        
+        return(`scene-${maxScene + 1}`)
+
     }
 
-    const handleCreateNew = async (event) => {
-        event.preventDefault()
+    //event handler
+    const handleCreateNew = async () => {
 
-        const addedScene = await sceneServices.addScene({sceneName : newScene})
+        const addedScene = await sceneServices.addScene({sceneName : newSceneName()})
 
         setScenes(scenes.concat(addedScene))
 
-        setNewScene('')
-
-
     }
 
-    return(
-       
-            <form onSubmit = {handleCreateNew}>
-                <input value = {newScene} onChange = {handleNewSceneChange}/>
-                <button type = 'submit'>create</button>
-            </form>
- 
-    )
+    return(<button onClick = {handleCreateNew}>{text.new[lan]}</button>)
 
 }
 
-const ActiveView = ({setIsActive, scenes, setScene, setScenes, setImageList, user}) => {
+const ActiveView = ({setIsActive, scenes, setScene, setScenes, setImageList, user, lan}) => {
     return(
         <div>
-            <button onClick = {() => setIsActive(false)}>done</button>
-            <CurrentScenes scenes = {scenes} setScene = {setScene} setImageList = {setImageList}/>
+            <button onClick = {() => setIsActive(false)}>{text.done[lan]}</button>
+            <CurrentScenes scenes = {scenes} setScene = {setScene} setImageList = {setImageList} lan = {lan}/>
             <div>
                 {user.isAdmin && <DeleteScenes scenes = {scenes} setScenes = {setScenes}/>}
             </div>
-            {user.isAdmin && <CreateNewScene scenes = {scenes} setScenes = {setScenes}/>}
+            {user.isAdmin && <CreateNewScene scenes = {scenes} setScenes = {setScenes} lan = {lan}/>}
         </div>
     )
 }
 
-const DropDown = ({scenes, setScenes, setImageList, user}) => {
+const DropDown = ({scenes, setScenes, setImageList, user, lan}) => {
     const [isActive, setIsActive] = useState(false)
     
 
     return(
         <div>
             {isActive
-            ? <ActiveView setIsActive = {setIsActive} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} user = {user}/>
-            : <InactiveView setIsActive = {setIsActive}/>
+            ? <ActiveView setIsActive = {setIsActive} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} user = {user} lan = {lan}/>
+            : <InactiveView setIsActive = {setIsActive} lan = {lan}/>
         }
         </div>
     )

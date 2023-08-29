@@ -44,7 +44,7 @@ uploadRouter.post('/images', upload.array('testName'), authorizeUser, (request, 
 
     filesNames.forEach( async (i) => {
         //will need to change so all's id isn't hard coded in
-        const sceneAllID = '64ece00cd18048ba03f52932'
+        const sceneAllID = '64eda84d96e691d0cc0776ca'
 
         //image DB
         const imageMetadata = new Image({fileName: i, scenes : [sceneAllID]})

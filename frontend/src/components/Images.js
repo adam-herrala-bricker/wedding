@@ -17,7 +17,7 @@ const Image = ({imagePath}) => {
 }
 
 //component for rendering everything below an image
-const BelowImage = ({imageID, imageList, setImageList, user, scenes, setScenes, compareScenes}) => {
+const BelowImage = ({lan, imageID, imageList, setImageList, user, scenes, setScenes, compareScenes}) => {
     //helper function for testing whether the image is aleady linked to a scene
     const isLinked = (scene, imageID) => {
         if (scene.images.map(i => i.id).includes(imageID)) {
@@ -29,11 +29,13 @@ const BelowImage = ({imageID, imageList, setImageList, user, scenes, setScenes, 
     
     //event handlers
     const handleDelete = async (imageID) => {
-        await adminServices.deleteImage(imageID)
-        const newFileList = imageList.filter(i => i.id !== imageID)
-        setImageList(newFileList)
+        if (window.confirm('Are you sure you want to delete?')) {
+            await adminServices.deleteImage(imageID)
+            const newFileList = imageList.filter(i => i.id !== imageID)
+            setImageList(newFileList)
+        }
     }
-
+       
     //handles linking/unlinking scenes to images
     const handleSceneLink = async (scene, imageID) => {
         //single object with value = array of list of IDs!
@@ -66,14 +68,14 @@ const BelowImage = ({imageID, imageList, setImageList, user, scenes, setScenes, 
 
     return(
         <div>
-            <button onClick = {() => handleDelete(imageID)}>delete</button>
+            <button onClick = {() => handleDelete(imageID)}>-</button>
             {scenes.map(i => 
                 <button className = {isLinked(i, imageID)
                     ? 'scene-linked'
                     : 'scene-unlinked'
                 }
                 key = {i.id} onClick = {() => handleSceneLink(i, imageID)}>
-                    {i.sceneName}
+                    {text[i.sceneName.replace('-','')] ? text[i.sceneName.replace('-','')][lan] : i.sceneName}
                 </button>
                 )
             }
@@ -82,7 +84,7 @@ const BelowImage = ({imageID, imageList, setImageList, user, scenes, setScenes, 
 }
 
 //component for grouping together each rendered image
-const ImageGroup = ({imageList, setImageList, setHighlight, user, scenes, setScenes, compareScenes}) => {
+const ImageGroup = ({lan, imageList, setImageList, setHighlight, user, scenes, setScenes, compareScenes}) => {
     return(
         <div className = 'image-grouping'>
             {imageList.map(i =>
@@ -90,7 +92,7 @@ const ImageGroup = ({imageList, setImageList, setHighlight, user, scenes, setSce
                     <button className = 'image-button' onClick = {() => setHighlight(i)}>
                         <Image key = {`${i.id}-img`} imagePath={i.fileName} />
                     </button>
-                   {user.isAdmin && <BelowImage key = {`${i.id}-bel`} imageID = {i.id} imageList = {imageList} setImageList = {setImageList} user = {user} scenes = {scenes} setScenes = {setScenes} compareScenes = {compareScenes}/>}
+                   {user.isAdmin && <BelowImage key = {`${i.id}-bel`} lan = {lan} imageID = {i.id} imageList = {imageList} setImageList = {setImageList} user = {user} scenes = {scenes} setScenes = {setScenes} compareScenes = {compareScenes}/>}
                 </div>
                 )}
         </div>
@@ -128,8 +130,8 @@ const Images = ({imageList, setImageList, user, setHighlight, lan}) => {
     return(
         <div>
             <h2>{text.photos[lan]}</h2>
-            <DropDown scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} user = {user}/>
-            <ImageGroup imageList = {imageList} setImageList = {setImageList} user = {user} setHighlight = {setHighlight} scenes = {scenes} setScenes = {setScenes} compareScenes = {compareScenes}/>
+            <DropDown scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} user = {user} lan = {lan}/>
+            <ImageGroup lan = {lan} imageList = {imageList} setImageList = {setImageList} user = {user} setHighlight = {setHighlight} scenes = {scenes} setScenes = {setScenes} compareScenes = {compareScenes}/>
         </div>
     )
 }

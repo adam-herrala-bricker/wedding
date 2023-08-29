@@ -14,7 +14,7 @@ const HighlightView = ({highlight, setHighlight, lan}) => {
   const baseURL = '/api/images'
   return(
     <div className = 'highlight-background'>
-      <button onClick = {() => setHighlight(null)}>{text.exit[lan]}</button>
+      <button onClick = {() => setHighlight(null)}>{text.back[lan]}</button>
       <img className = 'highlight-image' alt = '' src = {`${baseURL}/${highlight.fileName}`}/>
     </div>
   )
