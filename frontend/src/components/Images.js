@@ -18,7 +18,7 @@ const Image = ({imagePath}) => {
 }
 
 //component for rendering everything below an image
-const BelowImage = ({lan, imageID, imageList, setImageList, user, scenes, setScenes, compareScenes}) => {
+const BelowImage = ({lan, imageID, imageList, setImageList, user, scenes, setScenes}) => {
     //helper function for testing whether the image is aleady linked to a scene
     const isLinked = (scene, imageID) => {
         if (scene.images.map(i => i.id).includes(imageID)) {
@@ -56,7 +56,7 @@ const BelowImage = ({lan, imageID, imageList, setImageList, user, scenes, setSce
         //const newScenes = await sceneServices.getScenes() //too much lag this way
         const newScenes = [...scenes.filter(i => i.sceneName !== thisScene), updatedScene]
 
-        newScenes.sort(compareScenes)
+        newScenes.sort(helpers.compareScenes)
 
         setScenes(newScenes)
 
@@ -93,52 +93,14 @@ const BelowImage = ({lan, imageID, imageList, setImageList, user, scenes, setSce
 }
 
 //component for grouping together each rendered image
-const ImageGroup = forwardRef(({lan, imageList, setImageList, highlight, setHighlight, user, scenes, setScenes, compareScenes}, highlightRef) => {
-    const [scroll, setScroll] = useState(0) //setting Y scroll of image for returning to same place after highlight view
-    const scrollRef = useRef(0)
+const ImageGroup = forwardRef(({lan, imageList, setImageList, highlight, setHighlight, user, scenes, setScenes}, highlightRef) => {
     //event handler
     const handleSetHighlight = (i) => {
-        setScroll(window.scrollY)
         highlightRef.current = window.scrollY
-       
-        
-        
-        
-        
-        
-        
         setHighlight({current : i, outgoing: null})
-
-        //going to try this
-        //highlightRef.current = document.getElementById(i.id)
-        const element = document.getElementById(i.id)
-        
     }
 
-    //going to try something else
-    useEffect(() => {
-      
-
-        /*
-        if (highlight.outgoing) {
-            setTimeout(() => {
-                
-                const elementID = highlight.outgoing.id
-                const element = document.getElementById(elementID)
-                element?.scrollIntoView({behavior : 'smooth'})
-                
-
-                //highlightRef.current.scrollIntoView({behavior : 'smooth'})
-                //console.log(highlightRef.current)
-                console.log(element.scrollTop)
-            }, 100)
-        }
-        */
-    }, [])
-
-    //window.scroll(0, scrollRef.current)
-    console.log('highlightRef',highlightRef.current)
-    console.log('scroll', scroll)
+    //note the scroll just goes here
     window.scroll(0, highlightRef.current)
     
     return(
@@ -149,7 +111,7 @@ const ImageGroup = forwardRef(({lan, imageList, setImageList, highlight, setHigh
                             onClick = {() => handleSetHighlight(i)}>
                         <Image key = {`${i.id}-img`} imagePath={i.fileName}/>
                     </button>
-                   {user.isAdmin && <BelowImage key = {`${i.id}-bel`} lan = {lan} imageID = {i.id} imageList = {imageList} setImageList = {setImageList} user = {user} scenes = {scenes} setScenes = {setScenes} compareScenes = {compareScenes}/>}
+                   {user.isAdmin && <BelowImage key = {`${i.id}-bel`} lan = {lan} imageID = {i.id} imageList = {imageList} setImageList = {setImageList} user = {user} scenes = {scenes} setScenes = {setScenes}/>}
                 </div>
                 )}
         </div>
@@ -158,24 +120,11 @@ const ImageGroup = forwardRef(({lan, imageList, setImageList, highlight, setHigh
 
 //root component for this module
 const Images = forwardRef(({scenes, setScenes, imageList, setImageList, user, highlight, setHighlight, lan}, highlightRef) => {
-    //helper function for sorting scenes
-    //this will work for final version, but need to name scene1, scene2, etc.
-    //then use the suo-eng dict for their actual names
-    const compareScenes = (scene1, scene2) => {
-        if (scene1.sceneName > scene2.sceneName) {
-            return 1
-        } else if (scene1.sceneName < scene2.sceneName) {
-            return -1
-        } else {
-            return 0
-        }
-    }
-
     //effect hook to get scenes at first render
     useEffect(() => {
         const fetchData = async () => {
             const scenes = await sceneServices.getScenes()
-            scenes.sort(compareScenes)
+            scenes.sort(helpers.compareScenes)
             setScenes(scenes)
         }
         fetchData()
@@ -187,7 +136,7 @@ const Images = forwardRef(({scenes, setScenes, imageList, setImageList, user, hi
         <div>
             <h2 id = 'image-top'>{text.photos[lan]}</h2>
             <DropDown scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} user = {user} lan = {lan}/>
-            <ImageGroup ref = {highlightRef} lan = {lan} imageList = {imageList} setImageList = {setImageList} user = {user} highlight = {highlight} setHighlight = {setHighlight} scenes = {scenes} setScenes = {setScenes} compareScenes = {compareScenes}/>
+            <ImageGroup ref = {highlightRef} lan = {lan} imageList = {imageList} setImageList = {setImageList} user = {user} highlight = {highlight} setHighlight = {setHighlight} scenes = {scenes} setScenes = {setScenes}/>
         </div>
     )
 })

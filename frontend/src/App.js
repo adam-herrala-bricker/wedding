@@ -67,15 +67,6 @@ const RegularView = forwardRef(({highlight, setHighlight, setEntryKey, lan, setL
       <section id = 'music'>
         <Music  lan = {lan} />
       </section>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
       <Images ref = {highlightRef} id = 'images' scenes = {scenes} setScenes = {setScenes} imageList={imageList} setImageList = {setImageList} user = {user} highlight = {highlight} setHighlight = {setHighlight} lan = {lan}/>
       <h1>F</h1>
       <h1>F</h1>
@@ -85,9 +76,15 @@ const RegularView = forwardRef(({highlight, setHighlight, setEntryKey, lan, setL
       <h1>F</h1>
       <h1>F</h1>
       <h1>F</h1>
-      
-      
-
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
     </div>
     
   )
@@ -99,41 +96,6 @@ const App = () => {
   const [entryKey, setEntryKey] = useState(null)
   const [lan, setLan] = useState('suo')
   const highlightRef = useRef(0)
-
-  
-  
-  
-  
-
-
-  //effect hook for scolling back to the right part of the page
-  useEffect(() => {
-    if (highlight.outgoing) {
-      
-      
-      //going to try this
-      //highlightRef.current.scrollIntoView({behavior : 'smooth'})
-      //console.log(highlightRef.current)
-      
-    
-      
-      
-
-
-      /*
-      //my cheating way of avoiding the issue with calling the element before it's rendered
-      setTimeout(() => {
-        const elementID = highlight.outgoing.id
-        const element = document.getElementById(elementID)
-        console.log(element)
-        element.scrollIntoView({behavior : 'smooth'})
-      }, 100)
-      */
-      
-      
-    }
-  }, [highlight])
-
 
   return(
     <>
