@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, forwardRef} from 'react'
 import adminServices from '../services/adminServices'
 import sceneServices from '../services/sceneServices'
 import imageServices from '../services/imageServices'
@@ -93,12 +93,54 @@ const BelowImage = ({lan, imageID, imageList, setImageList, user, scenes, setSce
 }
 
 //component for grouping together each rendered image
-const ImageGroup = ({lan, imageList, setImageList, setHighlight, user, scenes, setScenes, compareScenes}) => {
+const ImageGroup = forwardRef(({lan, imageList, setImageList, highlight, setHighlight, user, scenes, setScenes, compareScenes}, highlightRef) => {
+    const [scroll, setScroll] = useState(0) //setting Y scroll of image for returning to same place after highlight view
+    const scrollRef = useRef(0)
     //event handler
     const handleSetHighlight = (i) => {
+        setScroll(window.scrollY)
+        highlightRef.current = window.scrollY
+       
+        
+        
+        
+        
+        
+        
         setHighlight({current : i, outgoing: null})
-        }
 
+        //going to try this
+        //highlightRef.current = document.getElementById(i.id)
+        const element = document.getElementById(i.id)
+        
+    }
+
+    //going to try something else
+    useEffect(() => {
+      
+
+        /*
+        if (highlight.outgoing) {
+            setTimeout(() => {
+                
+                const elementID = highlight.outgoing.id
+                const element = document.getElementById(elementID)
+                element?.scrollIntoView({behavior : 'smooth'})
+                
+
+                //highlightRef.current.scrollIntoView({behavior : 'smooth'})
+                //console.log(highlightRef.current)
+                console.log(element.scrollTop)
+            }, 100)
+        }
+        */
+    }, [])
+
+    //window.scroll(0, scrollRef.current)
+    console.log('highlightRef',highlightRef.current)
+    console.log('scroll', scroll)
+    window.scroll(0, highlightRef.current)
+    
     return(
         <div className = 'image-grouping'>
             {imageList.map(i =>
@@ -112,10 +154,10 @@ const ImageGroup = ({lan, imageList, setImageList, setHighlight, user, scenes, s
                 )}
         </div>
     )
-}
+})
 
 //root component for this module
-const Images = ({scenes, setScenes, imageList, setImageList, user, setHighlight, lan}) => {
+const Images = forwardRef(({scenes, setScenes, imageList, setImageList, user, highlight, setHighlight, lan}, highlightRef) => {
     //helper function for sorting scenes
     //this will work for final version, but need to name scene1, scene2, etc.
     //then use the suo-eng dict for their actual names
@@ -140,13 +182,14 @@ const Images = ({scenes, setScenes, imageList, setImageList, user, setHighlight,
     }, [imageList])
 
 
+
     return(
         <div>
             <h2 id = 'image-top'>{text.photos[lan]}</h2>
             <DropDown scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} user = {user} lan = {lan}/>
-            <ImageGroup lan = {lan} imageList = {imageList} setImageList = {setImageList} user = {user} setHighlight = {setHighlight} scenes = {scenes} setScenes = {setScenes} compareScenes = {compareScenes}/>
+            <ImageGroup ref = {highlightRef} lan = {lan} imageList = {imageList} setImageList = {setImageList} user = {user} highlight = {highlight} setHighlight = {setHighlight} scenes = {scenes} setScenes = {setScenes} compareScenes = {compareScenes}/>
         </div>
     )
-}
+})
 
 export default Images

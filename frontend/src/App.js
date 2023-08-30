@@ -1,4 +1,4 @@
-import { useState, useEffect} from 'react'
+import { useState, useEffect, useRef, forwardRef} from 'react'
 import text from './resources/text.js'
 import ImageUpload from './components/ImageUpload'
 import User from './components/User'
@@ -28,7 +28,7 @@ const HighlightView = ({highlight, setHighlight, lan}) => {
 }
 
 //component for regular view
-const RegularView = ({highlight, setHighlight, setEntryKey, lan, setLan}) => {
+const RegularView = forwardRef(({highlight, setHighlight, setEntryKey, lan, setLan}, highlightRef) => {
   const guestUser = {displayname: 'guest', username: 'guest'}
   const [user, setUser] = useState(guestUser) //here bc will need to pass this to basically every component
   const [imageList, setImageList] = useState([])
@@ -53,6 +53,7 @@ const RegularView = ({highlight, setHighlight, setEntryKey, lan, setLan}) => {
 
   useEffect(setImageFiles, [user])
 
+
   return(
     <div>
       <div className='flexbox-header'>
@@ -66,48 +67,69 @@ const RegularView = ({highlight, setHighlight, setEntryKey, lan, setLan}) => {
       <section id = 'music'>
         <Music  lan = {lan} />
       </section>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <Images ref = {highlightRef} id = 'images' scenes = {scenes} setScenes = {setScenes} imageList={imageList} setImageList = {setImageList} user = {user} highlight = {highlight} setHighlight = {setHighlight} lan = {lan}/>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
+      <h1>F</h1>
       
-      <Images id = 'images' scenes = {scenes} setScenes = {setScenes} imageList={imageList} setImageList = {setImageList} user = {user} setHighlight = {setHighlight} lan = {lan}/>
       
-      
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
 
     </div>
     
   )
-}
+})
 
 //root component
 const App = () => {
   const [highlight, setHighlight] = useState({current : null, outgoing : null})
   const [entryKey, setEntryKey] = useState(null)
   const [lan, setLan] = useState('suo')
+  const highlightRef = useRef(0)
+
+  
+  
+  
+  
+
 
   //effect hook for scolling back to the right part of the page
   useEffect(() => {
     if (highlight.outgoing) {
+      
+      
+      //going to try this
+      //highlightRef.current.scrollIntoView({behavior : 'smooth'})
+      //console.log(highlightRef.current)
+      
+    
+      
+      
+
+
+      /*
       //my cheating way of avoiding the issue with calling the element before it's rendered
       setTimeout(() => {
         const elementID = highlight.outgoing.id
         const element = document.getElementById(elementID)
+        console.log(element)
         element.scrollIntoView({behavior : 'smooth'})
       }, 100)
+      */
+      
       
     }
   }, [highlight])
@@ -117,7 +139,7 @@ const App = () => {
     <>
       {entryKey
         ? highlight.current === null
-          ? <RegularView highlight = {highlight} setHighlight = {setHighlight} setEntryKey = {setEntryKey} lan = {lan} setLan = {setLan}/>
+          ? <RegularView ref = {highlightRef} highlight = {highlight} setHighlight = {setHighlight} setEntryKey = {setEntryKey} lan = {lan} setLan = {setLan}/>
           : <HighlightView highlight = {highlight} setHighlight = {setHighlight} lan = {lan}/>
         : <Entry setEntryKey = {setEntryKey}/>
       }
