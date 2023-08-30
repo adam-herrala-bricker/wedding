@@ -22,15 +22,15 @@ const text = {
     clear: {suo : 'tyhjennä', eng : 'clear'},
 
     scene0 : {suo : 'kaikki', eng: 'all'},
-
-    scene4: {suo : 'juhlat', eng : 'party'},
+    scene1 : {suo : '', eng : 'our favorites'},
+    scene2 : {suo : '', eng : 'portraits'},
+    scene3 : {suo : '', eng : 'group photos'},
+    scene4 : {suo : '', eng : 'ceremony'},
+    scene5 : {suo : '', eng : 'food'},
+    scene6 : {suo : 'juhlat', eng : 'party'},
 
     back : {suo : 'takaisin', eng : 'back'},
     exit : {suo : 'ulos', eng : 'exit'},
-
-    
-    
-
 
 }
 

@@ -26,6 +26,18 @@ const BelowImage = ({lan, imageID, imageList, setImageList, user, scenes, setSce
             return false
         }
     }
+
+    //helper function for sorting images (their names are in chrono order)
+    //NOTE: repeate fron App, but made more sense than string through like 15 components
+    const compareImages = (image1, image2) => {
+    if (image1.fileName > image2.fileName) {
+        return 1
+    } else if (image1.fileName < image2.fileName) {
+        return -1
+    } else {
+        return 0
+    }
+    } 
     
     //event handlers
     const handleDelete = async (imageID) => {
@@ -36,6 +48,8 @@ const BelowImage = ({lan, imageID, imageList, setImageList, user, scenes, setSce
             //then actually delete it from the images DB
             await adminServices.deleteImage(imageID)
             const newFileList = imageList.filter(i => i.id !== imageID)
+            
+            newFileList.sort(compareImages)
             setImageList(newFileList)
         }
     }
@@ -59,24 +73,21 @@ const BelowImage = ({lan, imageID, imageList, setImageList, user, scenes, setSce
 
         //update image DB too (also needs object in same format as scene)
         const thisImage = imageList.filter(i => i.id === imageID)[0]
-        console.log(thisImage)
         thisImage.scenes = isLinked(scene, imageID)
             ? thisImage.scenes.map(i => i.id).filter(i => i !== scene.id)
             : thisImage.scenes.map(i => i.id).concat(scene.id)
-        console.log(thisImage.scenes)
         
         const returnedImage = await imageServices.updateImageData({id: imageID, scenes : thisImage.scenes})
-        console.log('returned image', returnedImage)
 
         const newImageList = [...imageList.filter(i => i.id !==imageID), returnedImage]
 
-        console.log(newImageList)
+        newImageList.sort(compareImages)
         setImageList(newImageList)
         
     }
 
     return(
-        <div>
+        <div className='under-image-container'>
             <button onClick = {() => handleDelete(imageID)}>-</button>
             {scenes.map(i => 
                 <button className = {isLinked(i, imageID)
@@ -116,8 +127,6 @@ const ImageGroup = ({lan, imageList, setImageList, setHighlight, user, scenes, s
 
 //root component for this module
 const Images = ({scenes, setScenes, imageList, setImageList, user, setHighlight, lan}) => {
-    
-
     //helper function for sorting scenes
     //this will work for final version, but need to name scene1, scene2, etc.
     //then use the suo-eng dict for their actual names
@@ -140,8 +149,6 @@ const Images = ({scenes, setScenes, imageList, setImageList, user, setHighlight,
         }
         fetchData()
     }, [imageList])
-
-    console.log('scenes', scenes)
 
 
     return(

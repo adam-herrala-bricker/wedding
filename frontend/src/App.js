@@ -33,25 +33,35 @@ const RegularView = ({highlight, setHighlight, setEntryKey, lan, setLan}) => {
   const [imageList, setImageList] = useState([])
   const [scenes, setScenes] = useState([]) //list of all the scenes
 
+  //helper function for sorting images (their names are in chrono order)
+  const compareImages = (image1, image2) => {
+    if (image1.fileName > image2.fileName) {
+        return 1
+    } else if (image1.fileName < image2.fileName) {
+        return -1
+    } else {
+        return 0
+    }
+  } 
+
   //effect hook to load image list on first render, plus whenever the upload images change
   //(need to put the async inside so it doesn't throw an error)
   const setImageFiles = () => {
     const fetchData = async () => {
         const response = await imageServices.getImageData()
-        console.log(response)
 
         //allows for 'hidden' files only visible to admin by removing from 'all' scene
         const newImageList = user.isAdmin
           ? response
           : response.filter(i => i.scenes.map(i => i.sceneName).includes('scene-0'))
         
+        newImageList.sort(compareImages)
         setImageList(newImageList)
     }
     fetchData()
   }
 
   useEffect(setImageFiles, [user])
-  console.log('imageList', imageList)
 
   return(
     <div>

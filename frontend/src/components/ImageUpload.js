@@ -6,7 +6,7 @@ import imageServices from '../services/imageServices'
 //NOTE: The name is a bit unfortunate, since we're using this to handle uploading audio files as well
 //and it could be easily expanded to handle video if needed
 const ImageUpload = ({setImageList}) => {
-    const acceptedFiles = ["image/png", "image/jpg", "audio/wav", "audio/mp3"]
+    const acceptedFiles = ["image/png", "image/jpeg", "audio/wav", "audio/mp3"]
     const [images, setImages] = useState([''])
     
 
@@ -23,7 +23,7 @@ const ImageUpload = ({setImageList}) => {
         images.forEach(async (i) => {
         
             //route for image upload
-            if (i.type === 'image/png' | i.type === 'image/jpg') {
+            if (i.type === 'image/png' | i.type === 'image/jpeg') {
                 await adminServices.postImage(i)
                 //FINALLY got it to consistently reload after uploading new images
                 //Think the original problem was it was fetching the new server data too quickly to load the updates

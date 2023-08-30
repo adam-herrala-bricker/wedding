@@ -15,8 +15,7 @@ const storageImage = multer.diskStorage({
         cb(null, './media/images/')
     },
     filename: (req, file, cb) => {
-        const uniqueBody = Date.now() + '-' + Math.round(Math.random() * 1E9)
-        cb(null, `${uniqueBody}.png`) //may consider using original file name --> can check for dulicates that way?
+        cb(null, file.originalname)
     }
 })
 
