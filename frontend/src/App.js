@@ -7,6 +7,7 @@ import Images from './components/Images'
 import Entry from './components/Entry'
 import Language from './components/Language'
 import imageServices from './services/imageServices'
+import helpers from './utilities/helpers'
 
 //component for highlighting a single image
 //NOTE: may want to eventually move to own module to add under-image features
@@ -33,17 +34,6 @@ const RegularView = ({highlight, setHighlight, setEntryKey, lan, setLan}) => {
   const [imageList, setImageList] = useState([])
   const [scenes, setScenes] = useState([]) //list of all the scenes
 
-  //helper function for sorting images (their names are in chrono order)
-  const compareImages = (image1, image2) => {
-    if (image1.fileName > image2.fileName) {
-        return 1
-    } else if (image1.fileName < image2.fileName) {
-        return -1
-    } else {
-        return 0
-    }
-  } 
-
   //effect hook to load image list on first render, plus whenever the upload images change
   //(need to put the async inside so it doesn't throw an error)
   const setImageFiles = () => {
@@ -55,7 +45,7 @@ const RegularView = ({highlight, setHighlight, setEntryKey, lan, setLan}) => {
           ? response
           : response.filter(i => i.scenes.map(i => i.sceneName).includes('scene-0'))
         
-        newImageList.sort(compareImages)
+        newImageList.sort(helpers.compareImages)
         setImageList(newImageList)
     }
     fetchData()

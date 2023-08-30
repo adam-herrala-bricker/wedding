@@ -15,7 +15,7 @@ const DisplayUser = ({user, lan}) => {
     )
 }
 
-const LoginForm = ({setUser, lan}) => {
+const LoginForm = ({setUser, lan, setShowLogin}) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState(null)
@@ -63,7 +63,8 @@ const LoginForm = ({setUser, lan}) => {
                 <div className = 'user-input'>
                     {text.password[lan]} <input name='Password' type='password' value={password} onChange = {handleFormChange}/>
                 </div>
-                <button id = 'login-button'type='submit'>{text.login[lan]}</button>  
+                <button id = 'login-button' type='submit'>{text.login[lan]}</button>
+                <button onClick = {() => setShowLogin(false)}>{text.cancel[lan]}</button>  
             </form>
         </div>
     )
@@ -78,6 +79,17 @@ const LoggerOuter = ({setUser, guestUser, lan}) => {
 
     return(
         <button onClick = {handleLogout}>{text.logout[lan]}</button>
+    )
+}
+
+//group where login can be selected/displayed
+const LoginSelect = ({setUser, lan}) => {
+    const [showLogin, setShowLogin] = useState(false)
+
+    return(
+            showLogin
+            ? <LoginForm setUser = {setUser} lan = {lan} setShowLogin = {setShowLogin}/>
+            : <button onClick = {() => setShowLogin(true)}>{text.login[lan]}</button>
     )
 }
 
@@ -108,7 +120,7 @@ const Login = ({user, setUser, guestUser, setEntryKey, lan}) => {
         <div>
             <DisplayUser user= {user} lan = {lan}/>
             {user.username === 'guest'
-            ? <LoginForm setUser = {setUser} lan = {lan}/>
+            ? <LoginSelect lan = {lan} setUser = {setUser}/>
             : <LoggerOuter setUser = {setUser} guestUser = {guestUser} lan = {lan}/>}
             <button onClick = {handleExit}>{text.exit[lan]}</button>
         </div>

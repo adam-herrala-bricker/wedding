@@ -13,6 +13,7 @@ const text = {
     password : {suo : 'salasana', eng: 'password'},
     login : {suo : 'kirjaudu sisään', eng : 'log in'},
     logout : {suo : 'kirjaudu ulos', eng : 'log out'},
+    cancel : {suo : 'perutta', eng : 'cancel'},
 
     loginError : {suo : 'väärä käyttäjätunnus tai salasana', eng : 'username or password is incorrect'},
 
@@ -22,11 +23,11 @@ const text = {
     clear: {suo : 'tyhjennä', eng : 'clear'},
 
     scene0 : {suo : 'kaikki', eng: 'all'},
-    scene1 : {suo : '', eng : 'our favorites'},
-    scene2 : {suo : '', eng : 'portraits'},
-    scene3 : {suo : '', eng : 'group photos'},
-    scene4 : {suo : '', eng : 'ceremony'},
-    scene5 : {suo : '', eng : 'food'},
+    scene1 : {suo : 'meidän suosikkejamme', eng : 'our favorites'},
+    scene2 : {suo : 'muotokuvat', eng : 'portraits'},
+    scene3 : {suo : 'perhekuvat', eng : 'group photos'},
+    scene4 : {suo : 'vihkiminen', eng : 'ceremony'},
+    scene5 : {suo : 'ruoka', eng : 'food'},
     scene6 : {suo : 'juhlat', eng : 'party'},
 
     back : {suo : 'takaisin', eng : 'back'},

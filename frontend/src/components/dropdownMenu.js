@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import sceneServices from '../services/sceneServices'
 import imageServices from '../services/imageServices'
 import text from '../resources/text'
+import helpers from '../utilities/helpers'
 
 const InactiveView = ({setIsActive, lan}) => {
     return(
@@ -22,6 +23,7 @@ const CurrentScenes = ({scenes, setScenes, setImageList, lan, user}) => {
          ? allImages
          : allImages.filter(i => (Object.values(i.scenes).map(i => i.id).includes(sceneID) & Object.values(i.scenes).map(i => i.sceneName).includes('scene-0'))) //'all/kakki' tag is required for visibilty on non-admin view
         
+        filteredImages.sort(helpers.compareImages)
         setImageList(filteredImages)
        
         //snap back to standard position

@@ -4,6 +4,7 @@ import sceneServices from '../services/sceneServices'
 import imageServices from '../services/imageServices'
 import text from '../resources/text.js'
 import DropDown from './dropdownMenu.js'
+import helpers from '../utilities/helpers'
 
 //component for rendering each image
 const Image = ({imagePath}) => {
@@ -26,18 +27,6 @@ const BelowImage = ({lan, imageID, imageList, setImageList, user, scenes, setSce
             return false
         }
     }
-
-    //helper function for sorting images (their names are in chrono order)
-    //NOTE: repeate fron App, but made more sense than string through like 15 components
-    const compareImages = (image1, image2) => {
-    if (image1.fileName > image2.fileName) {
-        return 1
-    } else if (image1.fileName < image2.fileName) {
-        return -1
-    } else {
-        return 0
-    }
-    } 
     
     //event handlers
     const handleDelete = async (imageID) => {
@@ -49,7 +38,7 @@ const BelowImage = ({lan, imageID, imageList, setImageList, user, scenes, setSce
             await adminServices.deleteImage(imageID)
             const newFileList = imageList.filter(i => i.id !== imageID)
             
-            newFileList.sort(compareImages)
+            newFileList.sort(helpers.compareImages)
             setImageList(newFileList)
         }
     }
@@ -81,7 +70,7 @@ const BelowImage = ({lan, imageID, imageList, setImageList, user, scenes, setSce
 
         const newImageList = [...imageList.filter(i => i.id !==imageID), returnedImage]
 
-        newImageList.sort(compareImages)
+        newImageList.sort(helpers.compareImages)
         setImageList(newImageList)
         
     }
