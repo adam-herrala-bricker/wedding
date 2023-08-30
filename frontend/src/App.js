@@ -28,7 +28,7 @@ const HighlightView = ({highlight, setHighlight, lan}) => {
 }
 
 //component for regular view
-const RegularView = forwardRef(({highlight, setHighlight, setEntryKey, lan, setLan}, highlightRef) => {
+const RegularView = ({lastScroll, setLastScroll, highlight, setHighlight, setEntryKey, lan, setLan}) => {
   const guestUser = {displayname: 'guest', username: 'guest'}
   const [user, setUser] = useState(guestUser) //here bc will need to pass this to basically every component
   const [imageList, setImageList] = useState([])
@@ -67,7 +67,7 @@ const RegularView = forwardRef(({highlight, setHighlight, setEntryKey, lan, setL
       <section id = 'music'>
         <Music  lan = {lan} />
       </section>
-      <Images ref = {highlightRef} id = 'images' scenes = {scenes} setScenes = {setScenes} imageList={imageList} setImageList = {setImageList} user = {user} highlight = {highlight} setHighlight = {setHighlight} lan = {lan}/>
+      <Images lastScroll = {lastScroll} setLastScroll = {setLastScroll} id = 'images' scenes = {scenes} setScenes = {setScenes} imageList={imageList} setImageList = {setImageList} user = {user} highlight = {highlight} setHighlight = {setHighlight} lan = {lan}/>
       <h1>F</h1>
       <h1>F</h1>
       <h1>F</h1>
@@ -88,20 +88,20 @@ const RegularView = forwardRef(({highlight, setHighlight, setEntryKey, lan, setL
     </div>
     
   )
-})
+}
 
 //root component
 const App = () => {
   const [highlight, setHighlight] = useState({current : null, outgoing : null})
   const [entryKey, setEntryKey] = useState(null)
   const [lan, setLan] = useState('suo')
-  const highlightRef = useRef(0)
+  const [lastScroll, setLastScroll] = useState(0)//for scrolling to same part of page after highlight
 
   return(
     <>
       {entryKey
         ? highlight.current === null
-          ? <RegularView ref = {highlightRef} highlight = {highlight} setHighlight = {setHighlight} setEntryKey = {setEntryKey} lan = {lan} setLan = {setLan}/>
+          ? <RegularView lastScroll = {lastScroll} setLastScroll = {setLastScroll} highlight = {highlight} setHighlight = {setHighlight} setEntryKey = {setEntryKey} lan = {lan} setLan = {setLan}/>
           : <HighlightView highlight = {highlight} setHighlight = {setHighlight} lan = {lan}/>
         : <Entry setEntryKey = {setEntryKey}/>
       }

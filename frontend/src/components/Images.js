@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, forwardRef} from 'react'
+import { useState, useEffect} from 'react'
 import adminServices from '../services/adminServices'
 import sceneServices from '../services/sceneServices'
 import imageServices from '../services/imageServices'
@@ -93,15 +93,17 @@ const BelowImage = ({lan, imageID, imageList, setImageList, user, scenes, setSce
 }
 
 //component for grouping together each rendered image
-const ImageGroup = forwardRef(({lan, imageList, setImageList, highlight, setHighlight, user, scenes, setScenes}, highlightRef) => {
+const ImageGroup = ({lastScroll, setLastScroll, lan, imageList, setImageList, highlight, setHighlight, user, scenes, setScenes}) => {
     //event handler
     const handleSetHighlight = (i) => {
-        highlightRef.current = window.scrollY
+        setLastScroll(window.scrollY)
         setHighlight({current : i, outgoing: null})
     }
 
     //note the scroll just goes here
-    window.scroll(0, highlightRef.current)
+    //window.scroll(0, highlightRef.current)
+    console.log(lastScroll)
+    window.scroll(0, lastScroll)
     
     return(
         <div className = 'image-grouping'>
@@ -116,10 +118,10 @@ const ImageGroup = forwardRef(({lan, imageList, setImageList, highlight, setHigh
                 )}
         </div>
     )
-})
+}
 
 //root component for this module
-const Images = forwardRef(({scenes, setScenes, imageList, setImageList, user, highlight, setHighlight, lan}, highlightRef) => {
+const Images = ({lastScroll, setLastScroll, scenes, setScenes, imageList, setImageList, user, highlight, setHighlight, lan}) => {
     //effect hook to get scenes at first render
     useEffect(() => {
         const fetchData = async () => {
@@ -135,10 +137,10 @@ const Images = forwardRef(({scenes, setScenes, imageList, setImageList, user, hi
     return(
         <div>
             <h2 id = 'image-top'>{text.photos[lan]}</h2>
-            <DropDown scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} user = {user} lan = {lan}/>
-            <ImageGroup ref = {highlightRef} lan = {lan} imageList = {imageList} setImageList = {setImageList} user = {user} highlight = {highlight} setHighlight = {setHighlight} scenes = {scenes} setScenes = {setScenes}/>
+            <DropDown setLastScroll = {setLastScroll} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} user = {user} lan = {lan}/>
+            <ImageGroup lastScroll = {lastScroll} setLastScroll = {setLastScroll} lan = {lan} imageList = {imageList} setImageList = {setImageList} user = {user} highlight = {highlight} setHighlight = {setHighlight} scenes = {scenes} setScenes = {setScenes}/>
         </div>
     )
-})
+}
 
 export default Images

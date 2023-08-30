@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState} from 'react'
 import sceneServices from '../services/sceneServices'
 import imageServices from '../services/imageServices'
 import text from '../resources/text'
@@ -13,7 +13,7 @@ const InactiveView = ({setIsActive, lan}) => {
     )
 }
 
-const CurrentScenes = ({scenes, setScenes, setImageList, lan, user}) => {
+const CurrentScenes = ({setLastScroll, scenes, setScenes, setImageList, lan, user}) => {
     //event handlers
     const handleSceneChange = async (sceneID) => {
         //may be overkill to fetch every time, but easiest sol'n I could think of
@@ -25,12 +25,7 @@ const CurrentScenes = ({scenes, setScenes, setImageList, lan, user}) => {
         
         filteredImages.sort(helpers.compareImages)
         setImageList(filteredImages)
-       
-        //snap back to standard position
-        const element = document.getElementById('scenes')
-        element.scrollIntoView({behavior: 'smooth'})
-        
-        
+        setLastScroll(window.scrollY)
     }
 
     const deleteScene = async (scene) => {
@@ -90,24 +85,24 @@ const CreateNewScene = ({scenes, setScenes, lan}) => {
 
 }
 
-const ActiveView = ({setIsActive, scenes, setScenes, setImageList, user, lan}) => {
+const ActiveView = ({setLastScroll, setIsActive, scenes, setScenes, setImageList, user, lan}) => {
     return(
         <div id = 'scenes' className = 'scene-filter-container'>
             <button onClick = {() => setIsActive(false)}>{text.done[lan]}</button>
-            <CurrentScenes scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} lan = {lan} user = {user}/>
+            <CurrentScenes setLastScroll = {setLastScroll} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} lan = {lan} user = {user}/>
             {user.isAdmin && <CreateNewScene scenes = {scenes} setScenes = {setScenes} lan = {lan}/>}
         </div>
     )
 }
 
-const DropDown = ({scenes, setScenes, setImageList, user, lan}) => {
+const DropDown = ({setLastScroll, scenes, setScenes, setImageList, user, lan}) => {
     const [isActive, setIsActive] = useState(false)
     
 
     return(
         <div>
             {isActive
-            ? <ActiveView setIsActive = {setIsActive} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} user = {user} lan = {lan}/>
+            ? <ActiveView setLastScroll = {setLastScroll} setIsActive = {setIsActive} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} user = {user} lan = {lan}/>
             : <InactiveView setIsActive = {setIsActive} lan = {lan}/>
         }
         </div>
