@@ -28,6 +28,8 @@ const HighlightView = ({imageList, highlight, setHighlight, lan}) => {
     //direct = left (doesn't move if at beginning)
     } else if (direction === 'ArrowLeft') {
       return thisIndex === 0 ? thisIndex : thisIndex -1
+    } else {
+      return thisIndex
     }
   }
 
