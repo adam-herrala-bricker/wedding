@@ -24,7 +24,7 @@ const DeleteSong = ({songID, setMusic}) => {
 }
 
 const Music = ({lan, user}) => {
-    const fileToName = {'test36.1c.wav' : 'song0'} //to get the right song names for the right files
+    const fileToName = {'waiting.mp3' : 'song0', 'transition.mp3' : 'song1', 'down-the-aisle.mp3' : 'song2', 'Mia2.1.mp3' : 'song3'} //to get the right song names for the right files
     const [music, setMusic] = useState([])
 
     //effect hook to load music metadata from DB
@@ -45,8 +45,9 @@ const Music = ({lan, user}) => {
             </h2>
             {music.map(i => 
                 <div className = 'music-container' key = {i.id}>
-                    <h2>{text[fileToName[i.fileName]][lan] || 'song title missing'}</h2>
                     <audio controls src = {`/api/audio/${i.fileName}`}/>
+                    <h2>{fileToName[i.fileName] ? text[fileToName[i.fileName]][lan] : 'song title missing'}</h2>
+                    
                     {user.isAdmin && <DeleteSong songID = {i.id} setMusic = {setMusic}/>}
                 </div>
                 )}  

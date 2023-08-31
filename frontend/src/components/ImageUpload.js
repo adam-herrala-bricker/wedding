@@ -21,6 +21,7 @@ const ImageUpload = ({setImageList}) => {
     const handleSubmit = async (event) => {
         event.preventDefault()
         images.forEach(async (i) => {
+            console.log(i.type)
         
             //route for image upload
             if (i.type === 'image/png' | i.type === 'image/jpeg') {
@@ -33,7 +34,7 @@ const ImageUpload = ({setImageList}) => {
                     setImageList(newImageList)
                 }, 1000)
             //route for audio upload     
-            } else if (i.type === 'audio/wav' | i.type === 'audio/x-wav' |i.type === 'audio/mp3') {
+            } else if (i.type === 'audio/wav' | i.type === 'audio/x-wav' |i.type === 'audio/mp3' | i.type === 'audio/mpeg') {
                 console.log('audio upload')
                 await adminServices.postAudio(i)
             }
