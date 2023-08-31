@@ -1,8 +1,12 @@
 const audioRouter = require('express').Router()
+const fs = require('fs')
 const Audio = require('../models/audioModel')
+
+const audioPath = './media/audio'
 
 //getting all the audio data
 audioRouter.get('/', async (request, response) => {
+    //token bits handled by MW
     if (!request.user) {
         return response.status(401).json({ error: 'valid token required' })
     }
@@ -13,6 +17,38 @@ audioRouter.get('/', async (request, response) => {
         response.json(audioData)
     } else {
         response.status(404).end()
+    }
+
+})
+
+//delete a single audio file
+audioRouter.delete('/:id', async (request, response, next) => {
+    //token bits handled by MW
+    if (!request.user) {
+        return response.status(401).json({ error: 'valid token required' })
+    }
+
+    //DB bits
+    const thisID = request.params.id
+    const audio = await Audio.findById(thisID)
+
+    //something goes wrong
+    if (!audio) {
+        return response.status(404).json({ error: 'requested audio not found' })
+    }
+  
+    const thisFile = audio.fileName
+
+    //remove from DB
+    await Audio.findByIdAndRemove(thisID)
+
+    //server + file bits
+    try {
+        fs.unlinkSync(`${audioPath}/${thisFile}`)
+        console.log(`file deleted from server: ${thisFile}`)
+        response.status(204).end()
+    } catch (error) {
+        next(error)
     }
 
 })

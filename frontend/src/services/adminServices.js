@@ -49,4 +49,14 @@ const deleteImage = async (imageID) => {
     return response.data
 }
 
-export default {postImage, postAudio, deleteImage, setAdminToken}
+//DELETE request for deleting a single audio file
+const deleteAudio = async (audioID) => {
+    const config = {
+        headers: {Authorization : adminToken}
+    }
+
+    const response = await axios.delete(`/api/audio-data/${audioID}`, config)
+    return response.data
+}
+
+export default {postImage, postAudio, deleteImage, deleteAudio, setAdminToken}
