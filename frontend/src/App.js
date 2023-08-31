@@ -67,6 +67,25 @@ const HighlightView = ({imageList, highlight, setHighlight, lan}) => {
 const RegularView = ({guestUser, user, setUser, imageList, setImageList, lastScroll, setLastScroll, highlight, setHighlight, setEntryKey, lan, setLan}) => {
   const [scenes, setScenes] = useState([]) //list of all the scenes
 
+  //effect hook to load image list on first render, plus whenever the upload images change
+  //(need to put the async inside so it doesn't throw an error)
+  const setImageFiles = () => {
+    const fetchData = async () => {
+        const response = await imageServices.getImageData()
+
+        //allows for 'hidden' files only visible to admin by removing from 'all' scene
+        const newImageList = user.isAdmin
+          ? response
+          : response.filter(i => i.scenes.map(i => i.sceneName).includes('scene-0'))
+        
+        newImageList.sort(helpers.compareImages)
+        setImageList(newImageList)
+    }
+    fetchData()
+  }
+
+  useEffect(setImageFiles, [user])
+
 
   return(
     <div>
@@ -114,24 +133,6 @@ const App = () => {
   const [imageList, setImageList] = useState([])
   const [user, setUser] = useState(guestUser)
 
-  //effect hook to load image list on first render, plus whenever the upload images change
-  //(need to put the async inside so it doesn't throw an error)
-  const setImageFiles = () => {
-    const fetchData = async () => {
-        const response = await imageServices.getImageData()
-
-        //allows for 'hidden' files only visible to admin by removing from 'all' scene
-        const newImageList = user.isAdmin
-          ? response
-          : response.filter(i => i.scenes.map(i => i.sceneName).includes('scene-0'))
-        
-        newImageList.sort(helpers.compareImages)
-        setImageList(newImageList)
-    }
-    fetchData()
-  }
-
-  useEffect(setImageFiles, [user])
 
   return(
     <>
