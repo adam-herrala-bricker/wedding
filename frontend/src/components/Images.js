@@ -101,7 +101,7 @@ const ImageGroup = ({lastScroll, setLastScroll, lan, imageList, setImageList, hi
     }
 
     //note the scroll just goes here
-    window.scroll(0, lastScroll)
+    window.scroll({left: 0, top: lastScroll, behavior: 'instant'})
     
     return(
         <div className = 'image-grouping'>
@@ -120,6 +120,7 @@ const ImageGroup = ({lastScroll, setLastScroll, lan, imageList, setImageList, hi
 
 //root component for this module
 const Images = ({lastScroll, setLastScroll, scenes, setScenes, imageList, setImageList, user, highlight, setHighlight, lan}) => {
+    
     //effect hook to get scenes at first render
     useEffect(() => {
         const fetchData = async () => {

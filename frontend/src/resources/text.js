@@ -30,6 +30,11 @@ const text = {
     scene5 : {suo : 'ruoka', eng : 'food'},
     scene6 : {suo : 'juhlat', eng : 'party'},
 
+    song0 : {suo : 'odotus', eng: 'waiting'},
+    song1 : {suo : 'siirtyminen', eng : 'transition'},
+    song2 : {suo : '????', eng : 'down the aisle'},
+    song3 : {suo : 'a sunday kind of love', eng : 'a sunday kind of love'},
+
     back : {suo : 'takaisin', eng : 'back'},
     exit : {suo : 'ulos', eng : 'exit'},
 

@@ -4,6 +4,7 @@ import text from '../resources/text'
 //import testAudio from '../resources/test36.1c.wav'
 
 const Music = ({lan}) => {
+    const fileToName = {'test36.1c.wav' : 'song0'} //to get the right song names for the right files
     const [music, setMusic] = useState([])
 
     //effect hook to load music metadata from DB
@@ -23,6 +24,7 @@ const Music = ({lan}) => {
             </h2>
             {music.map(i => 
                 <div key = {i.id}>
+                    <h2>{text[fileToName[i.fileName]][lan] || 'song title missing'}</h2>
                     <audio controls src = {`/api/audio/${i.fileName}`}/>
                 </div>
                 )}  
