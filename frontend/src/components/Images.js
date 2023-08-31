@@ -101,8 +101,6 @@ const ImageGroup = ({lastScroll, setLastScroll, lan, imageList, setImageList, hi
     }
 
     //note the scroll just goes here
-    //window.scroll(0, highlightRef.current)
-    console.log(lastScroll)
     window.scroll(0, lastScroll)
     
     return(
