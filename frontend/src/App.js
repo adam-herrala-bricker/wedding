@@ -11,13 +11,47 @@ import helpers from './utilities/helpers'
 
 //component for highlighting a single image
 //NOTE: may want to eventually move to own module to add under-image features
-const HighlightView = ({highlight, setHighlight, lan}) => {
+const HighlightView = ({imageList, highlight, setHighlight, lan}) => {
+  
+  //helper function to get adjoining index in imageList
+  const adjoiningImage = (highlight, direction) => {
+    const thisIndex = imageList.map(i => i.fileName).indexOf(highlight.current.fileName)
+    console.log(thisIndex)
+    const totalLength = imageList.length
+
+    //only one entry --> return 0 (bugs out otherwise)
+    if (totalLength === 1) {
+      return 0
+    //direction = right (doesn't move if at the end)
+    }else if (direction === 'ArrowRight') {
+      return thisIndex === totalLength - 1 ? thisIndex : thisIndex + 1
+    //direct = left (doesn't move if at beginning)
+    } else if (direction === 'ArrowLeft') {
+      return thisIndex === 0 ? thisIndex : thisIndex -1
+    }
+  }
+
   //event handler
   const handleBack = () => {
     setHighlight({current : null, outgoing : highlight.current})
+    window.removeEventListener('keydown', handleArrow, {once : true})
   }
 
-  const baseURL = '/api/images'
+  //also an event handler??
+  const handleArrow = (event) => {
+    console.log(event.key)
+      console.log(adjoiningImage(highlight, event.key ))
+      setHighlight({current : imageList[adjoiningImage(highlight, event.key)], outgoing : null})
+  }
+
+  //effect hook for listening to keyboard
+  useEffect(() => {
+    window.addEventListener('keydown', handleArrow, {once : true})
+  }, [highlight])
+
+  console.log(imageList)
+
+  const baseURL = '/api/images' //this has to live down here for some reason
   return(
     <div className = 'highlight-background'>
       <button onClick = {handleBack}>{text.back[lan]}</button>
@@ -102,7 +136,7 @@ const App = () => {
       {entryKey
         ? highlight.current === null
           ? <RegularView guestUser = {guestUser} user = {user} setUser = {setUser} imageList = {imageList} setImageList = {setImageList} lastScroll = {lastScroll} setLastScroll = {setLastScroll} highlight = {highlight} setHighlight = {setHighlight} setEntryKey = {setEntryKey} lan = {lan} setLan = {setLan}/>
-          : <HighlightView highlight = {highlight} setHighlight = {setHighlight} lan = {lan}/>
+          : <HighlightView imageList = {imageList} highlight = {highlight} setHighlight = {setHighlight} lan = {lan}/>
         : <Entry setEntryKey = {setEntryKey}/>
       }
       
