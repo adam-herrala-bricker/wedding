@@ -18,7 +18,7 @@ const Image = ({imagePath}) => {
 }
 
 //component for rendering everything below an image
-const BelowImage = ({lan, imageID, imageList, setImageList, user, scenes, setScenes}) => {
+const BelowImage = ({setLastScroll, lan, imageID, imageList, setImageList, user, scenes, setScenes}) => {
     //helper function for testing whether the image is aleady linked to a scene
     const isLinked = (scene, imageID) => {
         if (scene.images.map(i => i.id).includes(imageID)) {
@@ -45,6 +45,8 @@ const BelowImage = ({lan, imageID, imageList, setImageList, user, scenes, setSce
        
     //handles linking/unlinking scenes to images
     const handleSceneLink = async (scene, imageID) => {
+        setLastScroll(window.scrollY) //keep from jumping around afterwards
+
         //single object with value = array of list of IDs!
         const updatedIDs = isLinked(scene, imageID)
             ? [...scene.images.filter(i => i.id !== imageID).map(i => i.id)]
@@ -111,7 +113,7 @@ const ImageGroup = ({lastScroll, setLastScroll, lan, imageList, setImageList, hi
                             onClick = {() => handleSetHighlight(i)}>
                         <Image key = {`${i.id}-img`} imagePath={i.fileName}/>
                     </button>
-                   {user.isAdmin && <BelowImage key = {`${i.id}-bel`} lan = {lan} imageID = {i.id} imageList = {imageList} setImageList = {setImageList} user = {user} scenes = {scenes} setScenes = {setScenes}/>}
+                   {user.isAdmin && <BelowImage key = {`${i.id}-bel`} setLastScroll = {setLastScroll} lan = {lan} imageID = {i.id} imageList = {imageList} setImageList = {setImageList} user = {user} scenes = {scenes} setScenes = {setScenes}/>}
                 </div>
                 )}
         </div>
