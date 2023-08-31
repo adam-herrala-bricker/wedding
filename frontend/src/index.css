@@ -1,9 +1,19 @@
 html {
-    scroll-padding-top: 100px;
+    scroll-padding-top: 120px;
+    font-family: Helvetica, sans-serif;
+    font-weight: lighter;
   }
 
 h1 {
     margin: 15px;
+    font-weight: 100;
+    font-size: 50px;
+}
+
+h2 {
+    font-weight: 100;
+    font-size: 30px;
+
 }
 
 .flexbox-header {
@@ -12,14 +22,13 @@ h1 {
 
     display: flex;
     flex-direction: row;
-    align-items: top;
+    align-items: flex-start;
     justify-content: space-between;
 
     background-color: white;
     
     padding: 15px;
-    height: 55px;
-
+    height: 60px;
 
 }
 
@@ -82,7 +91,7 @@ h1 {
 }
 
 .image-button:active {
-    background-color: blue;
+    background-color: darkblue;
 }
 
 .hidden-image {
@@ -107,6 +116,7 @@ h1 {
 }
 
 .language-container {
+    align-self: center;
     display: grid;
     row-gap: 5px;
 }
@@ -116,7 +126,7 @@ h1 {
 }
 
 .flag-button {
-    border-style: hidden;
+    border-style:hidden;
 
     background-color: transparent;
 
@@ -161,6 +171,16 @@ h1 {
 
 .scene-filter-container button:active {
     color: chocolate;
+}
+
+.scene-name-highlight {
+    color: darkblue;
+    font-weight: 300;
+}
+
+.scene-name-regular {
+    color: black;
+    font-weight: 200;
 }
 
 .scene-linked {

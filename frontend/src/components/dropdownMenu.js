@@ -13,9 +13,11 @@ const InactiveView = ({setIsActive, lan}) => {
     )
 }
 
-const CurrentScenes = ({setLastScroll, scenes, setScenes, setImageList, lan, user}) => {
+const CurrentScenes = ({loadedScene, setLoadedScene, setLastScroll, scenes, setScenes, setImageList, lan, user}) => {
     //event handlers
-    const handleSceneChange = async (sceneID) => {
+    const handleSceneChange = async (scene) => {
+        const sceneID = scene.id
+        const sceneName = scene.sceneName
         //may be overkill to fetch every time, but easiest sol'n I could think of
         const allImages = await imageServices.getImageData()
         //for admin user, 'all/kaikki' --> everything, even hidden images with no tags
@@ -25,6 +27,7 @@ const CurrentScenes = ({setLastScroll, scenes, setScenes, setImageList, lan, use
         
         filteredImages.sort(helpers.compareImages)
         setImageList(filteredImages)
+        setLoadedScene(sceneName)
         setLastScroll(window.scrollY)
     }
 
@@ -38,11 +41,10 @@ const CurrentScenes = ({setLastScroll, scenes, setScenes, setImageList, lan, use
         }
     }
 
-
     return(
         scenes.map(i => 
             <div key = {i.id}>
-                <button key = {`${i.id}-fil`} onClick = {() => {handleSceneChange(i.id)}}>
+                <button key = {`${i.id}-fil`} className = {i.sceneName === loadedScene ? 'scene-name-highlight' : 'scene-name-regular'} onClick = {() => {handleSceneChange(i)}}>
                     {text[i.sceneName.replace('-','')] ? text[i.sceneName.replace('-','')][lan] : i.sceneName}
                 </button>
                 {user.isAdmin &&
@@ -85,11 +87,11 @@ const CreateNewScene = ({scenes, setScenes, lan}) => {
 
 }
 
-const ActiveView = ({setLastScroll, setIsActive, scenes, setScenes, setImageList, user, lan}) => {
+const ActiveView = ({loadedScene, setLoadedScene, setLastScroll, setIsActive, scenes, setScenes, setImageList, user, lan}) => {
     return(
         <div id = 'scenes' className = 'scene-filter-container'>
             <button onClick = {() => setIsActive(false)}>{text.done[lan]}</button>
-            <CurrentScenes setLastScroll = {setLastScroll} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} lan = {lan} user = {user}/>
+            <CurrentScenes loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} setLastScroll = {setLastScroll} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} lan = {lan} user = {user}/>
             {user.isAdmin && <CreateNewScene scenes = {scenes} setScenes = {setScenes} lan = {lan}/>}
         </div>
     )
@@ -97,12 +99,13 @@ const ActiveView = ({setLastScroll, setIsActive, scenes, setScenes, setImageList
 
 const DropDown = ({setLastScroll, scenes, setScenes, setImageList, user, lan}) => {
     const [isActive, setIsActive] = useState(false)
+    const [loadedScene, setLoadedScene] = useState(null)
     
 
     return(
         <div>
             {isActive
-            ? <ActiveView setLastScroll = {setLastScroll} setIsActive = {setIsActive} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} user = {user} lan = {lan}/>
+            ? <ActiveView loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} setLastScroll = {setLastScroll} setIsActive = {setIsActive} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} user = {user} lan = {lan}/>
             : <InactiveView setIsActive = {setIsActive} lan = {lan}/>
         }
         </div>
