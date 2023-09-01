@@ -60,6 +60,18 @@ h2 {
 
 .hightlight-group {
     display: flex;
+    justify-content: center;
+}
+
+.highlight-button {
+    flex-grow: 1;
+
+    background-color: transparent;
+    border-style: none;
+}
+
+.highlight-button:hover {
+    font-size: larger;
 }
 
 .highlight-image {

@@ -54,9 +54,9 @@ const HighlightView = ({imageList, highlight, setHighlight, lan}) => {
       <div className = 'highlight-background'>
         <button onClick = {handleBack}>{text.back[lan]}</button>
         <div className = 'hightlight-group'>
-            <button onClick = {() => handleScrollClick('ArrowLeft')}>left</button>
+            <button className = 'highlight-button' onClick = {() => handleScrollClick('ArrowLeft')}>{'<--'}</button>
             <img className = 'highlight-image' alt = '' src = {`${baseURL}/${highlight.current.fileName}`}/>
-            <button onClick = {() => handleScrollClick('ArrowRight')}>right</button>
+            <button className = 'highlight-button' onClick = {() => handleScrollClick('ArrowRight')}>{'-->'}</button>
         </div>
         
       </div>
