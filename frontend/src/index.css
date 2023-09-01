@@ -58,6 +58,10 @@ h2 {
     font-size: 20px;
 }
 
+.hightlight-group {
+    display: flex;
+}
+
 .highlight-image {
     height: 90vh;
     
