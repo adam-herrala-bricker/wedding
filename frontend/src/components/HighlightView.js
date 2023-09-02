@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { Button} from 'react-bootstrap'
 import text from '../resources/text'
 
 //component for highlighting a single image
@@ -52,7 +53,7 @@ const HighlightView = ({imageList, highlight, setHighlight, lan}) => {
     const baseURL = '/api/images' //this has to live down here for some reason
     return(
       <div className = 'highlight-background'>
-        <button onClick = {handleBack}>{text.back[lan]}</button>
+        <Button variant = 'dark' onClick = {handleBack}>{text.back[lan]}</Button>
         <div className = 'hightlight-group'>
             <button className = 'highlight-button' onClick = {() => handleScrollClick('ArrowLeft')}>{'<--'}</button>
             <img className = 'highlight-image' alt = '' src = {`${baseURL}/${highlight.current.fileName}`}/>
