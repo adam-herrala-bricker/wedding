@@ -82,7 +82,7 @@ const App = () => {
 
 
   return(
-    <>
+    <div className = 'container'>
       {entryKey
         ? highlight.current === null
           ? <RegularView guestUser = {guestUser} user = {user} setUser = {setUser} imageList = {imageList} setImageList = {setImageList} lastScroll = {lastScroll} setLastScroll = {setLastScroll} highlight = {highlight} setHighlight = {setHighlight} setEntryKey = {setEntryKey} lan = {lan} setLan = {setLan}/>
@@ -90,7 +90,7 @@ const App = () => {
         : <Entry setEntryKey = {setEntryKey}/>
       }
       
-    </>
+    </div>
 
   )
 
