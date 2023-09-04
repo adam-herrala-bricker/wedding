@@ -13,28 +13,6 @@ const userExtractor = (request, response, next) => {
 
         //note: removed the jwt.verify(...) check from the MW because we now need to verify with different SECRETs for different routes
 
-       /*
-        try {
-            //entry token
-            const decodedEntryToken = jwt.verify(token, process.env.SECRET_ENTER)
-
-            if (!decodedEntryToken.id) {
-                request.entry = false
-            } else {
-                request.entry = decodedEntryToken
-            }
-        
-        } catch {
-            //user token (don't think this is actually used for anything right now)
-            const decodedUserToken = jwt.verify(token, process.env.SECRET_USER)
-            if (!decodedUserToken) {
-            request.user = null
-            } else {
-            request.user = decodedUserToken
-            }
-        }
-        */
-
           
     }
     

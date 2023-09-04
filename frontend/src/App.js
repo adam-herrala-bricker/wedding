@@ -41,7 +41,7 @@ const RegularView = ({guestUser, user, setUser, imageList, setImageList, lastScr
         <h2><a href = '#music' className = 'header-link'>{text.music[lan]}</a></h2>
         <h2><a href = '#image-top' className = 'header-link'>{text.photos[lan]}</a></h2>
         <Language setLan = {setLan}/>
-        <User user = {user} setUser = {setUser} guestUser = {guestUser} setEntryKey = {setEntryKey} lan = {lan}/>
+        <User user = {user} setUser = {setUser} guestUser = {guestUser} setEntryKey = {setEntryKey} lan = {lan} setLastScroll = {setLastScroll}/>
       </div>
       {user.isAdmin && <ImageUpload setImageList = {setImageList}/>}
       <section id = 'music'>

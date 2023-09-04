@@ -96,12 +96,12 @@ const LoginSelect = ({setUser, lan}) => {
 
 //root component for this module
 //full user info component --> guest: login or create. logged in: display name + log out
-const Login = ({user, setUser, guestUser, setEntryKey, lan}) => {
+const Login = ({user, setUser, guestUser, setEntryKey, lan, setLastScroll}) => {
     //event handler
     const handleExit = () => {
         setUser(guestUser)
         setEntryKey(null)
-        
+        setLastScroll(window.scroll(0,0))
         window.localStorage.clear()
     }
 
