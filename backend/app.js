@@ -31,10 +31,11 @@ app.use(express.json())
 //using this to serve static png files
 app.use('/api/images', express.static('media/images')) //virtual path to images folder
 app.use('/api/audio', express.static('media/audio'))
-/* would put connection to static FE and custom middleware here too, e.g.:
-app.use(express.static('build))
-app.use(middleWare.requestLogger)
-*/
+//connection to static FE (not moving it to backend)
+app.use(express.static('../frontend/build'))
+
+//app.use(middleWare.requestLogger)
+
 
 //morgan for outputting requests to consol
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))

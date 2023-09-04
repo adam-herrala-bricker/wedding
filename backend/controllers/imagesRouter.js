@@ -1,15 +1,18 @@
 const imagesRouter = require('express').Router()
+const jwt = require('jsonwebtoken')
 const fs = require('fs')
 const Image = require('../models/imageModel')
+const {SECRET_ADMIN, SECRET_ENTER} = require('../utils/config')
 
 const imagePath = './media/images'
 
 //getting all the image data (now requires ENTRY authentication)
 imagesRouter.get('/', async (request, response) => {
-  const entryTokenFound = request.user //all done in the custon MW
+  //token bit
+  const entryTokenFound = jwt.verify(request.token, SECRET_ENTER).id
 
   if (!entryTokenFound) {
-    return response.status(401).json({ error: 'valid token required' })
+    return response.status(401).json({ error: 'valid entry token required' })
   }
 
   const imageData = await Image.find({}).populate('scenes', {sceneName : 1})
@@ -21,11 +24,12 @@ imagesRouter.get('/', async (request, response) => {
     }
 })
 
-//delete a single image
+//delete a single image (requires ADMIN authentication)
 imagesRouter.delete('/:id', async (request, response, next) => {
   //token bit
-  if (!request.user) {
-    return response.status(401).json({ error: 'valid token required' })
+  const adminTokenFound = jwt.verify(request.token, SECRET_ADMIN).id
+  if (!adminTokenFound) {
+    return response.status(401).json({ error: 'valid admin token required' })
   }
   
   //regular bits
@@ -54,10 +58,12 @@ imagesRouter.delete('/:id', async (request, response, next) => {
 
 })
 
-//tagging images as specific scenes
+//tagging images as specific scenes (requires ADMIN token)
 //NOTE: this can handle any kind of update, so need to pass EVERY property of the image, not just scene
 imagesRouter.put('/:id', async (request, response, next) => {
-  if (!request.user) {
+  const adminTokenFound = jwt.verify(request.token, SECRET_ADMIN).id
+
+  if (!adminTokenFound) {
     return response.status(401).json({ error: 'valid token required' })
   }
 

@@ -13,6 +13,7 @@ import helpers from './utilities/helpers'
 //component for regular view
 const RegularView = ({guestUser, user, setUser, imageList, setImageList, lastScroll, setLastScroll, highlight, setHighlight, setEntryKey, lan, setLan}) => {
   const [scenes, setScenes] = useState([]) //list of all the scenes
+  const [music, setMusic] = useState([]) //metadata for the music
 
   //effect hook to load image list on first render, plus whenever the upload images change
   //(need to put the async inside so it doesn't throw an error)
@@ -41,11 +42,11 @@ const RegularView = ({guestUser, user, setUser, imageList, setImageList, lastScr
         <h2><a href = '#music' className = 'header-link'>{text.music[lan]}</a></h2>
         <h2><a href = '#image-top' className = 'header-link'>{text.photos[lan]}</a></h2>
         <Language setLan = {setLan}/>
-        <User user = {user} setUser = {setUser} guestUser = {guestUser} setEntryKey = {setEntryKey} lan = {lan}/>
+        <User user = {user} setUser = {setUser} guestUser = {guestUser} setEntryKey = {setEntryKey} lan = {lan} setLastScroll = {setLastScroll}/>
       </div>
-      {user.isAdmin && <ImageUpload setImageList = {setImageList}/>}
+      {user.isAdmin && <ImageUpload setImageList = {setImageList} setMusic = {setMusic}/>}
       <section id = 'music'>
-        <Music  user = {user} lan = {lan} />
+        <Music  user = {user} lan = {lan} music = {music} setMusic = {setMusic}/>
       </section>
       <Images lastScroll = {lastScroll} setLastScroll = {setLastScroll} id = 'images' scenes = {scenes} setScenes = {setScenes} imageList={imageList} setImageList = {setImageList} user = {user} highlight = {highlight} setHighlight = {setHighlight} lan = {lan}/>
       <h1>F</h1>

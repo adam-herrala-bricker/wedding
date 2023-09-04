@@ -1,5 +1,4 @@
 const logger = require('./logger')
-const jwt = require('jsonwebtoken')
 
 //for use with blog router
 const userExtractor = (request, response, next) => {
@@ -10,17 +9,11 @@ const userExtractor = (request, response, next) => {
     if (authorization && authorization.startsWith('Bearer ')) { //watch out! at places in fullstack its "bearer" in lowercase
         const token = authorization.replace('Bearer ', '')
 
-        const decodedToken = jwt.verify(token, process.env.SECRET)
+        request.token = token
 
-        if (!decodedToken.id) {
+        //note: removed the jwt.verify(...) check from the MW because we now need to verify with different SECRETs for different routes
 
-            request.user = false
-
-          } else {
-
-            request.user = decodedToken
-
-          }
+          
     }
     
     next()

@@ -1,13 +1,18 @@
 const sceneRouter = require('express').Router()
+const jwt = require('jsonwebtoken')
 const Scene = require('../models/sceneModel')
-const Image = require('../models/imageModel')
+const Image = require('../models/imageModel') //not needed after all?
+const {SECRET_ADMIN, SECRET_ENTER} = require('../utils/config')
 
 //creating new scene (requires ADMIN token)
 sceneRouter.post('/', async (request, response, next) => {
     const {sceneName} = request.body
+
+    //token bits
+    const adminTokenFound = jwt.verify(request.token, SECRET_ADMIN)
    
-    if (!request.user) {
-        return response.status(401).json({ error: 'valid token required' })
+    if (!adminTokenFound) {
+        return response.status(401).json({ error: 'valid admin token required' })
     }
 
     const scene = new Scene({
@@ -26,7 +31,9 @@ sceneRouter.post('/', async (request, response, next) => {
 
 //getting all scenes (requires ENTRY token)
 sceneRouter.get('/', async (request, response, next) => {
-    if (!request.user) {
+    const entryTokenFound = jwt.verify(request.token, SECRET_ENTER).id
+    
+    if (!entryTokenFound) {
         return response.status(401).json({ error: 'valid token required' })
       }
     
@@ -42,11 +49,13 @@ sceneRouter.get('/', async (request, response, next) => {
 })
 
 
-//adding/removing new image to scene
+//adding/removing new image to scene (also requires ADMIN token)
 //this is accomplished by passing the ENTIRE NEW list of images (by id) in the scene
 //logic for adding or removing is done on the FE
 sceneRouter.put('/:id', async (request, response, next) => {
-    if (!request.user) {
+    const adminTokenFound = jwt.verify(request.token, SECRET_ADMIN).id
+
+    if (!adminTokenFound) {
         return response.status(401).json({ error: 'valid token required' })
       }
 
@@ -65,10 +74,12 @@ sceneRouter.put('/:id', async (request, response, next) => {
 
 })
 
-//deleting entire scene
+//deleting entire scene (requires ADMIN token)
 sceneRouter.delete('/:id', async (request, response, next) => {
-    if (!request.user) {
-        return response.status(401).json({ error: 'valid token required' })
+    const adminTokenFound = jwt.verify(request.token, SECRET_ADMIN).id
+
+    if (!adminTokenFound) {
+        return response.status(401).json({ error: 'valid admin required' })
       }
     
     const thisID = request.params.id

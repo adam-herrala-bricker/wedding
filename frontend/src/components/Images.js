@@ -12,7 +12,7 @@ const Image = ({imagePath}) => {
 
     return(
         <div>
-            <img className = 'single-image' alt = '' src = {`${baseURL}/${imagePath}`}/> 
+            <img className = 'single-image' alt = '' loading = 'lazy' src = {`${baseURL}/${imagePath}`}/> 
         </div>
     )
 }
