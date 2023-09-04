@@ -34,6 +34,7 @@ const LoginForm = ({setUser, lan, setShowLogin}) => {
             window.localStorage.setItem('userData', JSON.stringify(thisUser))
             
             //userServices.setToken(thisUser.token)
+            console.log('this user', thisUser)
            
             if (thisUser.isAdmin) {
                 adminServices.setAdminToken(thisUser.adminToken)
@@ -100,6 +101,7 @@ const Login = ({user, setUser, guestUser, setEntryKey, lan}) => {
     const handleExit = () => {
         setUser(guestUser)
         setEntryKey(null)
+        
         window.localStorage.clear()
     }
 

@@ -2,9 +2,11 @@
 //on refactor, see if they can't be merged into a single one
 
 const uploadRouter = require('express').Router()
+const jwt = require('jsonwebtoken')
 const Image = require('../models/imageModel')
 const Scene = require('../models/sceneModel')
 const Audio = require('../models/audioModel')
+const {SECRET_ADMIN} = require('../utils/config')
 
 //middleware for handling multipart form data (aka files)
 const multer = require('multer')
@@ -31,13 +33,14 @@ const storageAudio = multer.diskStorage({
 const uploadImages = multer({storage : storageImage}) //simpler method, but leaves off extension: const upload = multer({dest: './media/images/'}) 
 const uploadAudio = multer({storage : storageAudio})
 
-//authentication function for multer
+//authentication function for multer (requires ADMIN token)
 const authorizeUser = (request, response, next) => {
-   if (!request.user) {
-    return response.status(401).json({ error: 'valid token required' })
-   }
-    
-   next()
+    const adminTokenFound = jwt.verify(request.token, SECRET_ADMIN).id
+    if (!adminTokenFound) {
+        return response.status(401).json({ error: 'valid token required' })
+    }
+        
+    next()
 }
 
 

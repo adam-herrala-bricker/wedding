@@ -1,13 +1,16 @@
 const audioRouter = require('express').Router()
+const jwt = require('jsonwebtoken')
 const fs = require('fs')
 const Audio = require('../models/audioModel')
+const {SECRET_ADMIN, SECRET_ENTER} = require('../utils/config')
 
 const audioPath = './media/audio'
 
 //getting all the audio data
 audioRouter.get('/', async (request, response) => {
-    //token bits handled by MW
-    if (!request.user) {
+    const entryTokenFound = jwt.verify(request.token, SECRET_ENTER).id
+
+    if (!entryTokenFound) {
         return response.status(401).json({ error: 'valid token required' })
     }
 
@@ -23,8 +26,9 @@ audioRouter.get('/', async (request, response) => {
 
 //delete a single audio file
 audioRouter.delete('/:id', async (request, response, next) => {
-    //token bits handled by MW
-    if (!request.user) {
+    const adminTokenFound = jwt.verify(request.token, SECRET_ADMIN)
+
+    if (!adminTokenFound) {
         return response.status(401).json({ error: 'valid token required' })
     }
 

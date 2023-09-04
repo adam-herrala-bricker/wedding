@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {adminToken} from './adminServices'
 
 const baseURL = '/api/scenes'
 
@@ -8,7 +9,7 @@ const setEntryToken = (newToken) => {
     entryToken = `Bearer ${newToken}`
 }
 
-//GET request for loading all the scenes
+//GET request for loading all the scenes (requires ENTRY token)
 const getScenes = async () => {
     const config = {
         headers : {Authorization : entryToken}
@@ -20,10 +21,10 @@ const getScenes = async () => {
 
 }
 
-//POST request to add new scene
+//POST request to add new scene (requires ADMIN token)
 const addScene = async (newScene) => {
     const config = {
-        headers : {Authorization : entryToken}
+        headers : {Authorization : adminToken}
     }
     
     const response = await axios.post(baseURL, newScene, config)
@@ -32,10 +33,10 @@ const addScene = async (newScene) => {
 
 }
 
-//PUT request to update scenes
+//PUT request to update scenes (requires ADMIN token)
 const updateScene = async (updatedScene) => {
     const config = {
-        headers : {Authorization : entryToken}
+        headers : {Authorization : adminToken}
     }
 
     const id = updatedScene.id
@@ -46,10 +47,10 @@ const updateScene = async (updatedScene) => {
 
 }
 
-//DELETE request to remove a scene from the DB
+//DELETE request to remove a scene from the DB (requires ADMIN token)
 const deleteScene = async (sceneToRemove) => {
     const config = {
-        headers : {Authorization : entryToken}
+        headers : {Authorization : adminToken}
     }
 
     const id = sceneToRemove.id

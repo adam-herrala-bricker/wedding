@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const baseURL = '/api/admin/upload'
 
-let adminToken = null
+export let adminToken = null
 
 const setAdminToken = (newToken) => {
     adminToken = `Bearer ${newToken}`

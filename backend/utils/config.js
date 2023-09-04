@@ -5,8 +5,9 @@ const PORT = process.env.PORT
 const TOKEN = process.env.TOKEN
 const RANDY_HASH = process.env.RANDY_HASH
 
-const SECRET = process.env.SECRET
-const SECRET2 = process.env.SECRET2
+const SECRET_ENTER = process.env.SECRET_ENTER
+const SECRET_USER = process.env.SECRET_USER
+const SECRET_ADMIN = process.env.SECRET_ADMIN
 
 const ADMIN_KEY = process.env.ADMIN_KEY
 
@@ -33,4 +34,4 @@ const mongourl = NODE_ENV === 'development'
 */
 
 
-module.exports = {mongourl, ADMIN_KEY, PORT, TOKEN, RANDY_HASH, NODE_ENV, SECRET, SECRET2}
+module.exports = {mongourl, ADMIN_KEY, PORT, TOKEN, RANDY_HASH, NODE_ENV, SECRET_ENTER, SECRET_USER, SECRET_ADMIN}
