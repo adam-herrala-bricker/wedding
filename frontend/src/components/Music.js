@@ -2,18 +2,19 @@ import {useState, useEffect} from 'react'
 import audioServices from '../services/audioServices'
 import adminServices from '../services/adminServices'
 import text from '../resources/text'
+import helpers from '../utilities/helpers'
 //import testAudio from '../resources/test36.1c.wav'
 
 const DeleteSong = ({songID, setMusic}) => {
     //event handler
     const handleDelete = async () => {
-        console.log(songID)
-        await adminServices.deleteAudio(songID)
+        if (window.confirm('comfirm delete')) {
+            await adminServices.deleteAudio(songID)
 
-        //reload and reset songs
-        const audioData = await audioServices.getAudioData()
-        setMusic(audioData)
-
+            //reload and reset songs
+            const audioData = await audioServices.getAudioData()
+            setMusic(audioData)
+        }
     }
 
     return(
@@ -23,14 +24,14 @@ const DeleteSong = ({songID, setMusic}) => {
     )
 }
 
-const Music = ({lan, user}) => {
-    const fileToName = {'waiting.mp3' : 'song0', 'transition.mp3' : 'song1', 'down-the-aisle.mp3' : 'song2', 'Mia2.1.mp3' : 'song3'} //to get the right song names for the right files
-    const [music, setMusic] = useState([])
+const Music = ({lan, user, music, setMusic}) => {
+    //note: fileToName lives in utilities/helpers now
 
     //effect hook to load music metadata from DB
     useEffect(() => {
         const fetchData = async () => {
             const audioData = await audioServices.getAudioData()
+            audioData.sort(helpers.compareSongs)
             setMusic(audioData)
         }
 
@@ -46,8 +47,7 @@ const Music = ({lan, user}) => {
             {music.map(i => 
                 <div className = 'music-container' key = {i.id}>
                     <audio controls src = {`/api/audio/${i.fileName}`}/>
-                    <h2>{fileToName[i.fileName] ? text[fileToName[i.fileName]][lan] : 'song title missing'}</h2>
-                    
+                    <h2>{helpers.fileToName(i) ? text[helpers.fileToName(i)][lan] : 'song title missing'}</h2>
                     {user.isAdmin && <DeleteSong songID = {i.id} setMusic = {setMusic}/>}
                 </div>
                 )}  
