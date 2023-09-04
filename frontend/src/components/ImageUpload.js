@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import adminServices from '../services/adminServices'
 import imageServices from '../services/imageServices'
+import helpers from '../utilities/helpers'
 
 
 //NOTE: The name is a bit unfortunate, since we're using this to handle uploading audio files as well
@@ -31,6 +32,7 @@ const ImageUpload = ({setImageList}) => {
                 //idk if this is the correct solution, but slowing it down seems to work at least
                 setTimeout(async () => {
                     const newImageList = await imageServices.getImageData()
+                    newImageList.sort(helpers.compareImages)
                     setImageList(newImageList)
                 }, 1000)
             //route for audio upload     
