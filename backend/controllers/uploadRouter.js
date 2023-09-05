@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 const Image = require('../models/imageModel')
 const Scene = require('../models/sceneModel')
 const Audio = require('../models/audioModel')
-const {SECRET_ADMIN} = require('../utils/config')
+const {SECRET_ADMIN, sceneAllID} = require('../utils/config')
 
 //middleware for handling multipart form data (aka files)
 const multer = require('multer')
@@ -51,10 +51,7 @@ uploadRouter.post('/images', uploadImages.array('adminUpload'), authorizeUser, (
     const filesNames = request.files.map(i => i.filename)
 
     filesNames.forEach( async (i) => {
-        //will need to change so all's id isn't hard coded in
-        //NOTE: When starting from stratch, need to create a new scene for 'all' (can do this from FE)
-        //AND put its id here BEFORE adding any images
-        const sceneAllID = '64ee336805aebd76bb279013'
+        //ID for scene all moved to .env
 
         //image DB
         const imageMetadata = new Image({fileName: i, scenes : [sceneAllID]})

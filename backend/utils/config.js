@@ -26,6 +26,8 @@ const dbFinder = () => {
 
 const mongourl = dbFinder()
 
+const sceneAllID = process.env.SCENE_ALL_ID
+
 
 /*
 const mongourl = NODE_ENV === 'development'
@@ -34,4 +36,4 @@ const mongourl = NODE_ENV === 'development'
 */
 
 
-module.exports = {mongourl, ADMIN_KEY, PORT, TOKEN, RANDY_HASH, NODE_ENV, SECRET_ENTER, SECRET_USER, SECRET_ADMIN}
+module.exports = {mongourl, sceneAllID, ADMIN_KEY, PORT, TOKEN, RANDY_HASH, NODE_ENV, SECRET_ENTER, SECRET_USER, SECRET_ADMIN}
