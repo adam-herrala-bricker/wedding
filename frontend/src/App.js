@@ -49,23 +49,6 @@ const RegularView = ({guestUser, user, setUser, imageList, setImageList, lastScr
         <Music  user = {user} lan = {lan} music = {music} setMusic = {setMusic}/>
       </section>
       <Images lastScroll = {lastScroll} setLastScroll = {setLastScroll} id = 'images' scenes = {scenes} setScenes = {setScenes} imageList={imageList} setImageList = {setImageList} user = {user} highlight = {highlight} setHighlight = {setHighlight} lan = {lan}/>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
     </div>
     
   )

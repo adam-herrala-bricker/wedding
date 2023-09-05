@@ -35,9 +35,9 @@ const compareSongs = (song1, song2) => {
     if (fileToName[song1] & fileToName[song2]) {
         const name1 = fileToName(song1)
         const name2 = fileToName(song2)
-        if (song1 > song2) {
+        if (name1 > name2) {
             return 1
-        } else if (song1 < song2) {
+        } else if (name1 < name2) {
             return -1
         } else {
             return 0

@@ -52,7 +52,7 @@ const HighlightView = ({imageList, highlight, setHighlight, lan}) => {
     const baseURL = '/api/images' //this has to live down here for some reason
     return(
       <div className = 'highlight-background'>
-        <button onClick = {handleBack}>{text.back[lan]}</button>
+        <button className = 'generic-button' onClick = {handleBack}>{text.back[lan]}</button>
         <div className = 'hightlight-group'>
             <button className = 'highlight-button' onClick = {() => handleScrollClick('ArrowLeft')}>{'<--'}</button>
             <img className = 'highlight-image' alt = '' src = {`${baseURL}/${highlight.current.fileName}`}/>

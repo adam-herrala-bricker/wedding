@@ -64,8 +64,8 @@ const LoginForm = ({setUser, lan, setShowLogin}) => {
                 <div className = 'user-input'>
                     {text.password[lan]} <input name='Password' type='password' value={password} onChange = {handleFormChange}/>
                 </div>
-                <button id = 'login-button' type='submit'>{text.login[lan]}</button>
-                <button onClick = {() => setShowLogin(false)}>{text.cancel[lan]}</button>  
+                <button className = 'generic-button' id = 'login-button' type='submit'>{text.login[lan]}</button>
+                <button className = 'generic-button' onClick = {() => setShowLogin(false)}>{text.cancel[lan]}</button>  
             </form>
         </div>
     )
@@ -79,7 +79,7 @@ const LoggerOuter = ({setUser, guestUser, lan}) => {
     }
 
     return(
-        <button onClick = {handleLogout}>{text.logout[lan]}</button>
+        <button className = 'generic-button' onClick = {handleLogout}>{text.logout[lan]}</button>
     )
 }
 
@@ -90,7 +90,7 @@ const LoginSelect = ({setUser, lan}) => {
     return(
             showLogin
             ? <LoginForm setUser = {setUser} lan = {lan} setShowLogin = {setShowLogin}/>
-            : <button onClick = {() => setShowLogin(true)}>{text.login[lan]}</button>
+            : <button className = 'generic-button' onClick = {() => setShowLogin(true)}>{text.login[lan]}</button>
     )
 }
 
@@ -124,7 +124,7 @@ const Login = ({user, setUser, guestUser, setEntryKey, lan, setLastScroll}) => {
             {user.username === 'guest'
             ? <LoginSelect lan = {lan} setUser = {setUser}/>
             : <LoggerOuter setUser = {setUser} guestUser = {guestUser} lan = {lan}/>}
-            <button onClick = {handleExit}>{text.exit[lan]}</button>
+            <button className = 'generic-button' onClick = {handleExit}>{text.exit[lan]}</button>
         </div>
     )
 }
