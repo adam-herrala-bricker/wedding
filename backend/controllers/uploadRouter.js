@@ -14,7 +14,8 @@ const multer = require('multer')
 //so we can have the file extensions on all the file names
 const storageImage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './media/images/')
+        //cb(null, './media/images/')
+        cb(null, '/media/images/')
     },
     filename: (req, file, cb) => {
         cb(null, file.originalname)
