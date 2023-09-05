@@ -29,7 +29,10 @@ mongoose.connect(mongourl)
 app.use(cors())
 app.use(express.json())
 //using this to serve static png files
-app.use('/api/images', express.static('media/images')) //virtual path to images folder
+//app.use('/api/images', express.static('media/images')) //virtual path to images folder
+
+app.use('/api/images', express.static('/media/images'))
+
 app.use('/api/audio', express.static('media/audio'))
 //connection to static FE (not moving it to backend)
 app.use(express.static('../frontend/build'))
