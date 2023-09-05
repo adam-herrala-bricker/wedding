@@ -106,6 +106,17 @@ h2 {
     padding: 10px;
 }
 
+.single-image-hidden {
+    height: 150px;
+    padding: 10px;
+    opacity: 0%;
+
+}
+
+.loading-text {
+    text-align: center;
+}
+
 .image-button {
     background-color: white;
 

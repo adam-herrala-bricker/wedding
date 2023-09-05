@@ -9,12 +9,22 @@ import helpers from '../utilities/helpers'
 //component for rendering each image
 const Image = ({imagePath}) => {
     const baseURL = '/api/images'
+    const [thisClass, setThisClass] = useState('single-image-hidden')
+
+    //event handler
+    const handleLoaded = () => {
+        console.log('loaded!')
+        setThisClass('single-image')
+    }
 
     return(
         <div>
-            <img className = 'single-image' alt = '' loading = 'lazy' src = {`${baseURL}/${imagePath}`}/> 
+            {thisClass === 'single-image-hidden' && <p className = 'loading-text'>loading . . .</p>}
+            <img className = {thisClass} alt = 'single image' loading = 'lazy' src = {`${baseURL}/${imagePath}`} onLoad = {handleLoaded}/>
         </div>
     )
+    
+    
 }
 
 //component for rendering everything below an image
