@@ -56,14 +56,18 @@ const Entry = ({setEntryKey}) => {
     }, [])
 
     return(
-        <div>
+        <div className = 'entry-container'>
             <h1>{duoLingo('header')}</h1>
-            <h4>{duoLingo('entryKey')}</h4>
-            <Notifier message = {errorMessage} />
-            <form onSubmit = {checkKey}>
-                <input name='entry' type = 'password' value = {enteredKey} onChange = {handleEntry} />
-                <button type = 'submit'>enter</button>
-            </form>
+            <div>
+                <h4>{duoLingo('entryKey')}</h4>
+                <Notifier message = {errorMessage} />
+                <form onSubmit = {checkKey}>
+                    <input name='entry' type = 'password' value = {enteredKey} onChange = {handleEntry} />
+                    <div>
+                        <button className = 'generic-button' type = 'submit'>{duoLingo('enter')}</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
     )

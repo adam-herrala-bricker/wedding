@@ -50,6 +50,7 @@ const RegularView = ({ guestUser, user, setUser, imageList, setImageList, lastSc
 
   return (
     <div>
+      <DisplayUser user = {user} lan = {lan}/>
       <CustomNavbar lan={lan} setLan={setLan} user={user} setUser={setUser} guestUser={guestUser} setEntryKey={setEntryKey} setLastScroll = {setLastScroll}></CustomNavbar>
       {user.isAdmin && <ImageUpload setImageList={setImageList} />}
       <section>
@@ -78,7 +79,6 @@ const App = () => {
 
   return (
     <div className='container'>
-      <DisplayUser user = {user} lan = {lan}/>
       {entryKey
         ? highlight.current === null
           ? <RegularView guestUser={guestUser} user={user} setUser={setUser} imageList={imageList} setImageList={setImageList} lastScroll={lastScroll} setLastScroll={setLastScroll} highlight={highlight} setHighlight={setHighlight} setEntryKey={setEntryKey} lan={lan} setLan={setLan} />

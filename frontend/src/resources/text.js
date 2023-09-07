@@ -3,6 +3,7 @@
 const text = {
     entryKey: { suo: 'sivuavain', eng: 'entry key' },
     entryError: { suo: 'väärä sivuavain', eng: 'incorrect entry key' },
+    enter : { suo : 'sisään', eng : 'enter'},
 
     header: { suo: 'Herrala Bricker Häät', eng: 'Herrala Bricker Wedding' },
     photos: { suo: 'Kuvat', eng: 'Photos' },
