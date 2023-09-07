@@ -16,6 +16,20 @@ h2 {
 
 }
 
+.generic-button {
+    background-color: transparent;
+    border-style: none;
+    font-weight: 500;
+}
+
+.generic-button:hover {
+    color: brown;
+}
+
+.generic-button:active {
+    color: chocolate;
+}
+
 .flexbox-header {
     position: sticky;
     top: 10px;
@@ -91,6 +105,17 @@ h2 {
 .single-image {
     height: 150px;
     padding: 10px;
+}
+
+.single-image-hidden {
+    height: 150px;
+    padding: 10px;
+    opacity: 0%;
+
+}
+
+.loading-text {
+    text-align: center;
 }
 
 .image-button {

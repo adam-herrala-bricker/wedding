@@ -15,6 +15,7 @@ import { Button, Navbar } from 'react-bootstrap'
 //component for regular view
 const RegularView = ({ guestUser, user, setUser, imageList, setImageList, lastScroll, setLastScroll, highlight, setHighlight, setEntryKey, lan, setLan }) => {
   const [scenes, setScenes] = useState([]) //list of all the scenes
+  const [music, setMusic] = useState([]) //metadata for the music
 
   //effect hook to load image list on first render, plus whenever the upload images change
   //(need to put the async inside so it doesn't throw an error)
@@ -48,23 +49,6 @@ const RegularView = ({ guestUser, user, setUser, imageList, setImageList, lastSc
         <Music user={user} lan={lan} />
       </section>
       <Images lastScroll={lastScroll} setLastScroll={setLastScroll} id='images' scenes={scenes} setScenes={setScenes} imageList={imageList} setImageList={setImageList} user={user} highlight={highlight} setHighlight={setHighlight} lan={lan} />
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
     </div>
 
   )

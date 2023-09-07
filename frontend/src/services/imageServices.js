@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {adminToken} from './adminServices'
 
 const baseURL = '/api/image-data'
 
@@ -8,7 +9,7 @@ const setEntryToken = (newToken) => {
     entryToken = `Bearer ${newToken}`
 }
 
-//GET request for all image (meta)data
+//GET request for all image (meta)data (requires ENTRY token)
 //authenticated using token given upon entering the site --> prevents accessing images just by manually setting local storage
 const getImageData = async () => {
     const config = {
@@ -20,10 +21,10 @@ const getImageData = async () => {
     return response.data
 }
 
-//PUT request to update image (meta)data
+//PUT request to update image (meta)data (requires ADMIN token)
 const updateImageData = async (newData) => {
     const config = {
-        headers : {Authorization: entryToken}
+        headers : {Authorization: adminToken}
     }
 
     const thisID = newData.id
