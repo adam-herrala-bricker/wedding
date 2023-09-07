@@ -66,63 +66,7 @@ const HighlightView = ({imageList, highlight, setHighlight, lan}) => {
           <Button variant = 'secondary' onClick = {() => handleScrollClick('ArrowRight')}>{'-->'}</Button>
         </div>
       </div>
-      
-
-
-
-
-
-
-
-
-
-      /*
-      <Container>
-        <Row>
-          <Col>
-            <CloseButton onClick = {handleBack}/>
-          </Col>
-        </Row>
-        <Row className="justify-content-center">
-          
-          <Col md = 'auto'>
-            <Image alt = '' src = {`${baseURL}/${highlight.current.fileName}`} className = 'highlight-image'/>
-          </Col>
-          
-          <Row className = 'bs-button-container'>
-            <Col>
-              <Button variant = 'secondary' onClick = {() => handleScrollClick('ArrowLeft')}>{'<--'}</Button>
-            </Col>
-            <Col>
-              <Button variant = 'secondary' onClick = {() => handleScrollClick('ArrowRight')}>{'-->'}</Button>
-            </Col>
-          </Row>
-        </Row>
-      </Container>
-      */
-
-
     )
-
-
-
-
-
-
-    /*
-    return(
-      <div className = 'highlight-background'>
-        <CloseButton onClick = {handleBack}/>
-        <div className = 'container'>
-          <Button onClick = {() => handleScrollClick('ArrowLeft')}>previous</Button>
-          <Image className = 'highlight-image' alt = '' src = {`${baseURL}/${highlight.current.fileName}`}/>
-          <Button onClick = {() => handleScrollClick('ArrowRight')}>next</Button>
-         
-        </div>
-        
-      </div>
-    )
-    */
   
   }
 

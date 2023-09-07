@@ -95,12 +95,13 @@ h2 {
 
 .highlight-image {
    max-width: 100%;
-   max-height: 90vh;
+   max-height: 85vh;
 }
 
 .bs-button-container {
     display:flex;
-    justify-content: space-between;
+    justify-content: center;
+    column-gap: 20px;
 
 }
 
