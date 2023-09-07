@@ -111,12 +111,12 @@ h2 {
 }
 
 .single-image {
-    height: 150px;
-    padding: 10px;
+    height: 200px;
+    padding: 1px;
 }
 
 .single-image-hidden {
-    height: 150px;
+    height: 100px;
     padding: 10px;
     opacity: 0%;
 
@@ -129,19 +129,22 @@ h2 {
 .image-button {
     background-color: white;
 
-    border-style: solid;
-    border-width: 2px;
-    border-color: black;
+    border-style: none;
     
-    margin-bottom: 5px;
+    margin-bottom: 2px;
+
+    filter:grayscale(100%)
+
 }
 
 .image-button:hover {
-    background-color:lightgrey;
+    filter:grayscale(0%);
+    
 }
 
 .image-button:active {
-    background-color: darkblue;
+    filter:grayscale(0%)
+    
 }
 
 .hidden-image {
@@ -154,8 +157,8 @@ h2 {
     flex-wrap: wrap;
     justify-content: flex-start;
 
-    row-gap: 15px;
-    column-gap: 10px;
+    row-gap: 1px;
+    column-gap: 1px;
 }
 
 .under-image-container {
@@ -243,4 +246,16 @@ h2 {
 
 .regular-text {
     color:black;
+    text-decoration: none;
+}
+
+.regular-text:hover {
+    color:white;
+}
+
+.single-image-container {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
 }

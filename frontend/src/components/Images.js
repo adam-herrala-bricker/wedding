@@ -1,4 +1,5 @@
 import { useState, useEffect} from 'react'
+import {Spinner} from 'react-bootstrap'
 import adminServices from '../services/adminServices'
 import sceneServices from '../services/sceneServices'
 import imageServices from '../services/imageServices'
@@ -18,8 +19,8 @@ const Image = ({imagePath}) => {
     }
 
     return(
-        <div>
-            {thisClass === 'single-image-hidden' && <p className = 'loading-text'>loading . . .</p>}
+        <div className = 'single-image-container'>
+            {thisClass === 'single-image-hidden' && <Spinner variant = "primary" animation='border'/>}
             <img className = {thisClass} alt = 'single image' loading = 'lazy' src = {`${baseURL}/${imagePath}`} onLoad = {handleLoaded}/>
         </div>
     )
