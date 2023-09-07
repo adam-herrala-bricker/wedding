@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import text from './resources/text.js'
 import ImageUpload from './components/ImageUpload'
 import User from './components/User'
@@ -79,12 +80,16 @@ const App = () => {
 
   return (
     <div className='container'>
-      {entryKey
-        ? highlight.current === null
-          ? <RegularView guestUser={guestUser} user={user} setUser={setUser} imageList={imageList} setImageList={setImageList} lastScroll={lastScroll} setLastScroll={setLastScroll} highlight={highlight} setHighlight={setHighlight} setEntryKey={setEntryKey} lan={lan} setLan={setLan} />
-          : <HighlightView imageList={imageList} highlight={highlight} setHighlight={setHighlight} lan={lan} />
-        : <Entry setEntryKey={setEntryKey} />
-      }
+      <Routes>
+        <Route path = '/' element = {
+            entryKey
+              ? highlight.current === null
+                ? <RegularView guestUser={guestUser} user={user} setUser={setUser} imageList={imageList} setImageList={setImageList} lastScroll={lastScroll} setLastScroll={setLastScroll} highlight={highlight} setHighlight={setHighlight} setEntryKey={setEntryKey} lan={lan} setLan={setLan} />
+                : <HighlightView imageList={imageList} highlight={highlight} setHighlight={setHighlight} lan={lan} />
+              : <Entry setEntryKey={setEntryKey} />
+        }/>
+      </Routes>
+      
 
     </div>
 
