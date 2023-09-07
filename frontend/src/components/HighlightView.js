@@ -63,7 +63,7 @@ const HighlightView = ({imageList, highlight, setHighlight, lan}) => {
         </div>
         <div className = 'bs-button-container'>
           <Button variant = 'outline-dark' onClick = {() => handleScrollClick('ArrowLeft')}>{'<--'}</Button>
-          <Button variant = 'outline-dark'><a download className = 'regular-text' href = {imagePath}>download</a></Button>
+          <a download className = 'regular-text' href = {imagePath}><Button variant = 'outline-dark'>{text.download[lan]}</Button></a>
           <Button variant = 'outline-dark' onClick = {() => handleScrollClick('ArrowRight')}>{'-->'}</Button>
         </div>
       </div>
