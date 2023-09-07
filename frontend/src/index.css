@@ -84,12 +84,38 @@ h4 {
     margin-bottom: 5px;
 }
 
+#headingsSection{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap:wrap;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+
+    min-width: 765px;
+}
+
+.music-div{
+    margin-bottom: 5vh;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 765px) {
+    .music-div, .music-container {
+      flex-direction: column;
+      column-gap: 0cap;
+      text-align: start;
+      row-gap: 2px;
+      align-items: start;
+    }
+  }
+
 .music-container {
     display: flex;
     align-items: center;
     flex-wrap: wrap-reverse;
-    
-    
     column-gap: 10px;
 
     font-size: 20px;

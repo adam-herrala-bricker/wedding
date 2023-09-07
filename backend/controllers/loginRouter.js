@@ -2,8 +2,10 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const loginRouter = require('express').Router()
 const User = require('../models/userModel')
-const {ADMIN_KEY, SECRET_USER, SECRET_ADMIN, SECRET_ENTER} = require('../utils/config')
+const { ADMIN_KEY, SECRET_USER, SECRET_ADMIN, SECRET_ENTER } = require('../utils/config')
 
+//const { ADMIN_KEY, SECRET } = require('../utils/config')
+const SECRET = "bananaBoatBoyz"
 //POST request to login
 loginRouter.post('/', async (request, response) => {
     const { username, password } = request.body
@@ -15,16 +17,17 @@ loginRouter.post('/', async (request, response) => {
         : await bcrypt.compare(password, user.passwordHash)
 
     if (!(user && passwordCorrect)) {
-        return response.status(401).json({error: 'invalid username or password'})
+        return response.status(401).json({ error: 'invalid username or password' })
     }
 
     const userForToken = {
         username: user.username,
         id: user._id
     }
+    console.log(SECRET)
 
     //different tokens for user vs. 'entry' pseudo-user
-    const token = user.username === 'entry' 
+    const token = user.username === 'entry'
         ? jwt.sign(userForToken, SECRET_ENTER)
         : jwt.sign(userForToken, SECRET_USER)
 
@@ -39,7 +42,7 @@ loginRouter.post('/', async (request, response) => {
         ? jwt.sign(userForToken, SECRET_ADMIN)
         : null
 
-    response.status(200).send({ token, adminToken, isAdmin: user.isAdmin, username: user.username, displayname: user.displayname})
+    response.status(200).send({ token, adminToken, isAdmin: user.isAdmin, username: user.username, displayname: user.displayname })
 
 })
 
