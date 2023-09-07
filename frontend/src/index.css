@@ -240,3 +240,7 @@ h2 {
 .scene-unlinked {
     opacity : .5
 }
+
+.regular-text {
+    color:black;
+}

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Button, CloseButton, Image, Container, Row, Col } from 'react-bootstrap'
+import { Button, CloseButton, Image} from 'react-bootstrap'
 import text from '../resources/text'
 
 //component for highlighting a single image
@@ -51,6 +51,7 @@ const HighlightView = ({imageList, highlight, setHighlight, lan}) => {
     console.log(imageList)
   
     const baseURL = '/api/images' //this has to live down here for some reason
+    const imagePath = `${baseURL}/${highlight.current.fileName}`
 
     return(
       <div className = 'outer-highlight-container'>
@@ -58,12 +59,12 @@ const HighlightView = ({imageList, highlight, setHighlight, lan}) => {
           <CloseButton onClick = {handleBack}/>
         </div>
         <div className = 'highlight-group'>
-          <Image alt = '' src = {`${baseURL}/${highlight.current.fileName}`} className = 'highlight-image'/>
+          <Image alt = '' src = {imagePath} className = 'highlight-image'/>
         </div>
         <div className = 'bs-button-container'>
-          <Button variant = 'secondary' onClick = {() => handleScrollClick('ArrowLeft')}>{'<--'}</Button>
-          <Button>download</Button>
-          <Button variant = 'secondary' onClick = {() => handleScrollClick('ArrowRight')}>{'-->'}</Button>
+          <Button variant = 'outline-dark' onClick = {() => handleScrollClick('ArrowLeft')}>{'<--'}</Button>
+          <Button variant = 'outline-dark'><a download className = 'regular-text' href = {imagePath}>download</a></Button>
+          <Button variant = 'outline-dark' onClick = {() => handleScrollClick('ArrowRight')}>{'-->'}</Button>
         </div>
       </div>
     )
