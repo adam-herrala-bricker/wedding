@@ -12,6 +12,17 @@ import imageServices from './services/imageServices'
 import helpers from './utilities/helpers'
 import { Button, Navbar } from 'react-bootstrap'
 
+//component to display current user
+const DisplayUser = ({user, lan}) => {
+  return(
+      <div className = 'user-container'>
+          {user.username === 'guest'
+              ? text.guest[lan]
+              : user.username}
+      </div>
+  )
+}
+
 //component for regular view
 const RegularView = ({ guestUser, user, setUser, imageList, setImageList, lastScroll, setLastScroll, highlight, setHighlight, setEntryKey, lan, setLan }) => {
   const [scenes, setScenes] = useState([]) //list of all the scenes
@@ -67,6 +78,7 @@ const App = () => {
 
   return (
     <div className='container'>
+      <DisplayUser user = {user} lan = {lan}/>
       {entryKey
         ? highlight.current === null
           ? <RegularView guestUser={guestUser} user={user} setUser={setUser} imageList={imageList} setImageList={setImageList} lastScroll={lastScroll} setLastScroll={setLastScroll} highlight={highlight} setHighlight={setHighlight} setEntryKey={setEntryKey} lan={lan} setLan={setLan} />

@@ -4,17 +4,6 @@ import Notifier from './Notifier'
 import userServices from '../services/userServices'
 import adminServices from '../services/adminServices'
 
-//component to display current user
-const DisplayUser = ({user, lan}) => {
-    return(
-        <div>
-            {user.username === 'guest'
-                ? text.guest[lan]
-                : user.username}
-        </div>
-    )
-}
-
 const LoginForm = ({setUser, lan, setShowLogin}) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -120,7 +109,6 @@ const Login = ({user, setUser, guestUser, setEntryKey, lan, setLastScroll}) => {
 
     return(
         <div>
-            <DisplayUser user= {user} lan = {lan}/>
             {user.username === 'guest'
             ? <LoginSelect lan = {lan} setUser = {setUser}/>
             : <LoggerOuter setUser = {setUser} guestUser = {guestUser} lan = {lan}/>}

@@ -16,6 +16,12 @@ h2 {
 
 }
 
+.user-container {
+    display: flex;
+    justify-content: flex-end;
+    padding : 5px;
+}
+
 .generic-button {
     background-color: transparent;
     border-style: none;
