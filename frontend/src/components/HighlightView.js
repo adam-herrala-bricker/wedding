@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Button} from 'react-bootstrap'
+import { Button, CloseButton, Image, Container, Row, Col } from 'react-bootstrap'
 import text from '../resources/text'
 
 //component for highlighting a single image
@@ -51,18 +51,78 @@ const HighlightView = ({imageList, highlight, setHighlight, lan}) => {
     console.log(imageList)
   
     const baseURL = '/api/images' //this has to live down here for some reason
+
+    return(
+      <div className = 'outer-highlight-container'>
+        <div>
+          <CloseButton onClick = {handleBack}/>
+        </div>
+        <div className = 'highlight-group'>
+          <Image alt = '' src = {`${baseURL}/${highlight.current.fileName}`} className = 'highlight-image'/>
+        </div>
+        <div className = 'bs-button-container'>
+          <Button variant = 'secondary' onClick = {() => handleScrollClick('ArrowLeft')}>{'<--'}</Button>
+          <Button>download</Button>
+          <Button variant = 'secondary' onClick = {() => handleScrollClick('ArrowRight')}>{'-->'}</Button>
+        </div>
+      </div>
+      
+
+
+
+
+
+
+
+
+
+      /*
+      <Container>
+        <Row>
+          <Col>
+            <CloseButton onClick = {handleBack}/>
+          </Col>
+        </Row>
+        <Row className="justify-content-center">
+          
+          <Col md = 'auto'>
+            <Image alt = '' src = {`${baseURL}/${highlight.current.fileName}`} className = 'highlight-image'/>
+          </Col>
+          
+          <Row className = 'bs-button-container'>
+            <Col>
+              <Button variant = 'secondary' onClick = {() => handleScrollClick('ArrowLeft')}>{'<--'}</Button>
+            </Col>
+            <Col>
+              <Button variant = 'secondary' onClick = {() => handleScrollClick('ArrowRight')}>{'-->'}</Button>
+            </Col>
+          </Row>
+        </Row>
+      </Container>
+      */
+
+
+    )
+
+
+
+
+
+
+    /*
     return(
       <div className = 'highlight-background'>
-        <Button variant = 'dark' onClick = {handleBack}>{text.back[lan]}</Button>
-     
-        <div className = 'hightlight-group'>
-            <button className = 'highlight-button' onClick = {() => handleScrollClick('ArrowLeft')}>{'<--'}</button>
-            <img className = 'highlight-image' alt = '' src = {`${baseURL}/${highlight.current.fileName}`}/>
-            <button className = 'highlight-button' onClick = {() => handleScrollClick('ArrowRight')}>{'-->'}</button>
+        <CloseButton onClick = {handleBack}/>
+        <div className = 'container'>
+          <Button onClick = {() => handleScrollClick('ArrowLeft')}>previous</Button>
+          <Image className = 'highlight-image' alt = '' src = {`${baseURL}/${highlight.current.fileName}`}/>
+          <Button onClick = {() => handleScrollClick('ArrowRight')}>next</Button>
+         
         </div>
         
       </div>
     )
+    */
   
   }
 

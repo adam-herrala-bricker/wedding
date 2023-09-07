@@ -4,7 +4,7 @@ import text from '../resources/text'
 
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 
-function CustomNavbar({ lan, setLan, guestUser, user, setUser, setEntryKey }) {
+function CustomNavbar({ lan, setLan, guestUser, user, setUser, setEntryKey, setLastScroll }) {
     return (
         <Navbar expand="lg" sticky="top" className="bg-success p-2 text-dark bg-opacity-10">
             <Container>
@@ -29,7 +29,7 @@ function CustomNavbar({ lan, setLan, guestUser, user, setUser, setEntryKey }) {
                     </Nav>
 
                     <Nav>
-                        <User user={user} setUser={setUser} guestUser={guestUser} setEntryKey={setEntryKey} lan={lan} />
+                        <User user={user} setUser={setUser} guestUser={guestUser} setEntryKey={setEntryKey} lan={lan} setLastScroll = {setLastScroll}/>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

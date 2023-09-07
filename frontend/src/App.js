@@ -39,14 +39,14 @@ const RegularView = ({ guestUser, user, setUser, imageList, setImageList, lastSc
 
   return (
     <div>
-      <CustomNavbar lan={lan} setLan={setLan} user={user} setUser={setUser} guestUser={guestUser} setEntryKey={setEntryKey}></CustomNavbar>
+      <CustomNavbar lan={lan} setLan={setLan} user={user} setUser={setUser} guestUser={guestUser} setEntryKey={setEntryKey} setLastScroll = {setLastScroll}></CustomNavbar>
       {user.isAdmin && <ImageUpload setImageList={setImageList} />}
       <section>
         <h1>Thank you for celebrating with us on July 15th!</h1>
         <h2>Here is a little throwback to the big day.</h2>
       </section>
       <section id='music'>
-        <Music user={user} lan={lan} />
+        <Music user={user} lan={lan} music = {music} setMusic = {setMusic}/>
       </section>
       <Images lastScroll={lastScroll} setLastScroll={setLastScroll} id='images' scenes={scenes} setScenes={setScenes} imageList={imageList} setImageList={setImageList} user={user} highlight={highlight} setHighlight={setHighlight} lan={lan} />
     </div>

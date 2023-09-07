@@ -72,17 +72,21 @@ h2 {
     font-size: 20px;
 }
 
-.hightlight-group {
+.outer-highlight-container {
+    padding:10px;
+}
+
+.highlight-group {
     display: flex;
     justify-content: center;
+
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .highlight-button {
-    flex-grow: 1;
 
-    background-color: transparent;
     border-style: none;
-    
 }
 
 .highlight-button:hover {
@@ -90,11 +94,14 @@ h2 {
 }
 
 .highlight-image {
-    height: 90vh;
-    
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+   max-width: 100%;
+   max-height: 90vh;
+}
+
+.bs-button-container {
+    display:flex;
+    justify-content: space-between;
+
 }
 
 .highlight-background {
