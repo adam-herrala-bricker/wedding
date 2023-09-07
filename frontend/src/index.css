@@ -1,5 +1,5 @@
 html {
-    scroll-padding-top: 120px;
+    scroll-padding-top: 90px;
     font-family: Helvetica, sans-serif;
     font-weight: lighter;
   }
@@ -111,7 +111,7 @@ h2 {
 }
 
 .single-image {
-    height: 200px;
+    height: 180px;
     padding: 1px;
 }
 
@@ -169,9 +169,9 @@ h2 {
 }
 
 .language-container {
-    align-self: center;
-    display: grid;
-    row-gap: 5px;
+    display: flex;
+    
+    column-gap: 5px;
 }
 
 .flag-icon {

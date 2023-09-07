@@ -6,7 +6,7 @@ import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 
 function CustomNavbar({ lan, setLan, guestUser, user, setUser, setEntryKey, setLastScroll }) {
     return (
-        <Navbar expand="lg" sticky="top" className="bg-success p-2 text-dark bg-opacity-10">
+        <Navbar expand="lg" sticky="top" className="p-2 text-dark" style={{backgroundColor : 'rgb(234, 243, 238)'}}>
             <Container>
                 <Navbar.Brand>{text.header[lan]}</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
