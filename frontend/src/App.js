@@ -55,7 +55,9 @@ const RegularView = ({ guestUser, user, setUser, imageList, setImageList, lastSc
       <CustomNavbar lan={lan} setLan={setLan} user={user} setUser={setUser} guestUser={guestUser} setEntryKey={setEntryKey} setLastScroll={setLastScroll}></CustomNavbar>
       {user.isAdmin && <ImageUpload setImageList={setImageList} />}
       <section id='headingsSection'>
-        <h1>{text.welcomeTxt[lan]}</h1>
+        <div>
+          <h1>{text.welcomeTxt[lan]}</h1>
+        </div>
         <h2>{text.welcomeSubTxt[lan]}</h2>
       </section>
       <section id='music'>

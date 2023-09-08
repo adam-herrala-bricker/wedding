@@ -41,7 +41,7 @@ const Music = ({ lan, user, music, setMusic }) => {
 
     return (
         <div className='music-div'>
-            <h2>
+            <h2 className='new-section'>
                 {text.music[lan]}
             </h2>
             {music.map(i =>

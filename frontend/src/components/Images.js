@@ -148,7 +148,7 @@ const Images = ({lastScroll, setLastScroll, scenes, setScenes, imageList, setIma
 
     return(
         <div>
-            <h2 id = 'image-top'>{text.photos[lan]}</h2>
+            <h2 id = 'image-top' className='new-section'>{text.photos[lan]}</h2>
             <DropDown setLastScroll = {setLastScroll} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} user = {user} lan = {lan}/>
             <ImageGroup lastScroll = {lastScroll} setLastScroll = {setLastScroll} lan = {lan} imageList = {imageList} setImageList = {setImageList} user = {user} highlight = {highlight} setHighlight = {setHighlight} scenes = {scenes} setScenes = {setScenes}/>
         </div>
