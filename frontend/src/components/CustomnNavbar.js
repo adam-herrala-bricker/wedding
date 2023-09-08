@@ -25,7 +25,6 @@ function CustomNavbar({ lan, setLan, guestUser, user, setUser, setEntryKey, setL
                                 Separated link
                             </NavDropdown.Item>
                         </NavDropdown> */}
-                        <Language setLan={setLan} />
                     </Nav>
 
                     <Nav>

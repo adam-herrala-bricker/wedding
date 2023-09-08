@@ -1,10 +1,11 @@
 import {useState, useEffect} from 'react'
+import { Offcanvas } from 'react-bootstrap'
 import text from '../resources/text'
 import Notifier from './Notifier'
 import userServices from '../services/userServices'
 import adminServices from '../services/adminServices'
 
-const LoginForm = ({setUser, lan, setShowLogin}) => {
+const LoginForm = ({setUser, lan, setShowLogin, setLastScroll}) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState(null)
@@ -32,6 +33,7 @@ const LoginForm = ({setUser, lan, setShowLogin}) => {
             setUser(thisUser)
             setUsername('')
             setPassword('')
+            setLastScroll(window.scrollY)
         }
         catch (exception) {
             setErrorMessage(text.loginError[lan])
@@ -43,7 +45,7 @@ const LoginForm = ({setUser, lan, setShowLogin}) => {
     }
 
     return(
-        <div >
+        <div className='login-container'>
             <h2>{text.login[lan]}</h2>
             {errorMessage && <Notifier message = {errorMessage}/>}
             <form autoComplete='off' onSubmit = {handleLogin}>
@@ -60,10 +62,11 @@ const LoginForm = ({setUser, lan, setShowLogin}) => {
     )
 }
 
-const LoggerOuter = ({setUser, guestUser, lan}) => {
+const LoggerOuter = ({setUser, setLastScroll, guestUser, lan}) => {
     //event handler
     const handleLogout = () => {
         setUser(guestUser)
+        setLastScroll(window.scroll(0,0))
         window.localStorage.removeItem('userData')
     }
 
@@ -73,12 +76,14 @@ const LoggerOuter = ({setUser, guestUser, lan}) => {
 }
 
 //group where login can be selected/displayed
-const LoginSelect = ({setUser, lan}) => {
+const LoginSelect = ({setUser, setLastScroll, lan}) => {
     const [showLogin, setShowLogin] = useState(false)
 
     return(
             showLogin
-            ? <LoginForm setUser = {setUser} lan = {lan} setShowLogin = {setShowLogin}/>
+            ? <Offcanvas show = {showLogin} placement='end' style={{backgroundColor : 'rgb(234, 243, 238)'}}>
+                <LoginForm setUser = {setUser} lan = {lan} setShowLogin = {setShowLogin} setLastScroll = {setLastScroll}/>
+            </Offcanvas>
             : <button className = 'generic-button' onClick = {() => setShowLogin(true)}>{text.login[lan]}</button>
     )
 }
@@ -110,8 +115,8 @@ const Login = ({user, setUser, guestUser, setEntryKey, lan, setLastScroll}) => {
     return(
         <div>
             {user.username === 'guest'
-            ? <LoginSelect lan = {lan} setUser = {setUser}/>
-            : <LoggerOuter setUser = {setUser} guestUser = {guestUser} lan = {lan}/>}
+            ? <LoginSelect lan = {lan} setUser = {setUser} setLastScroll = {setLastScroll}/>
+            : <LoggerOuter setUser = {setUser} guestUser = {guestUser} lan = {lan} setLastScroll = {setLastScroll}/>}
             <button className = 'generic-button' onClick = {handleExit}>{text.exit[lan]}</button>
         </div>
     )

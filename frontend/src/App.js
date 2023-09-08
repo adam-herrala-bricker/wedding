@@ -14,9 +14,10 @@ import helpers from './utilities/helpers'
 import { Button, Navbar } from 'react-bootstrap'
 
 //component to display current user
-const DisplayUser = ({ user, lan }) => {
+const DisplayUser = ({ user, lan, setLan }) => {
   return (
     <div className='user-container'>
+      <Language setLan = {setLan}/>
       {user.username === 'guest'
         ? text.guest[lan]
         : user.username}
@@ -51,7 +52,7 @@ const RegularView = ({ guestUser, user, setUser, imageList, setImageList, lastSc
 
   return (
     <div>
-      <DisplayUser user={user} lan={lan} />
+      <DisplayUser user={user} lan={lan} setLan = {setLan}/>
       <CustomNavbar lan={lan} setLan={setLan} user={user} setUser={setUser} guestUser={guestUser} setEntryKey={setEntryKey} setLastScroll={setLastScroll}></CustomNavbar>
       {user.isAdmin && <ImageUpload setImageList={setImageList} />}
       <section id='headingsSection'>

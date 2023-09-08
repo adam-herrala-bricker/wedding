@@ -26,7 +26,7 @@ const text = {
     clear: { suo: 'tyhjennä', eng: 'clear' },
 
     welcomeTxt: { suo: 'Kiitos kun juhlit kanssamme 15. heinäkuuta!', eng: 'Thank you for celebrating with us on July 15th!' },
-    welcomeSubTxt: { suo: 'Tässä on katsaus takaisin juhlapäivään', eng: 'Here is a little throwback to the big day.' },
+    welcomeSubTxt: { suo: 'Tässä on katsaus takaisin juhlapäivään.', eng: 'Here is a little throwback to the big day.' },
     photoTxt: { suo: 'Galleran kuvat on ottanut valokuvaajamme Milja Nordgerg. mainitsethan hänet,  jos käytät näitä kuvia jossain. Huomaathan myös, että kuvia ei tule leikata tei editoida millään tavalla.', eng: 'This is a gallery of photos taken by our talented photographer Milja Nordberg. We request that if you use these photos anywhere you credit her. Please also note that as per our agreement with her, the photos should not be cropped or edited in any way.' },
 
     scene0: { suo: 'kaikki', eng: 'all' },
