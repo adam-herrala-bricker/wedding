@@ -12,8 +12,8 @@ const text = {
     guest: { suo: 'vieras', eng: 'guest' },
     username: { suo: 'käyttäjätunnus', eng: 'username' },
     password: { suo: 'salasana', eng: 'password' },
-    login: { suo: 'Kirjaudu sisään', eng: 'Log in' },
-    logout: { suo: 'Kirjaudu ulos', eng: 'Log out' },
+    login: { suo: 'kirjaudu sisään', eng: 'log in' },
+    logout: { suo: 'kirjaudu ulos', eng: 'log out' },
     cancel: { suo: 'peruuta', eng: 'cancel' },
 
     download: { suo: 'lataa', eng: 'download' },
