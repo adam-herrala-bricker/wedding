@@ -119,6 +119,7 @@ h4 {
     margin-bottom: 5vh;
     display: flex;
     flex-direction: column;
+    row-gap: 20px;
 }
 
 /*
