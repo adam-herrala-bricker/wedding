@@ -27,12 +27,14 @@ const HighlightView = ({imageList, highlight, setHighlight, lan}) => {
   
     //event handlers
     const handleBack = () => {
-      setHighlight({current : null, outgoing : highlight.current})
       window.removeEventListener('keydown', handleArrow, {once : true})
+      setHighlight({current : null, outgoing : highlight.current})
+      
     }
 
     const handleScrollClick = (direction) => {
         //uses same direction encoding as the arrow handler since it shares a helper function
+        window.removeEventListener('keydown', handleArrow, {once : true})
         setHighlight({current : imageList[adjoiningImage(highlight, direction)], outgoing : null})
     }
 
