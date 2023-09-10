@@ -32,8 +32,10 @@ p {
 
 .entry-container{
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
 
     margin-top: 50px;
     margin-left: 10px;
