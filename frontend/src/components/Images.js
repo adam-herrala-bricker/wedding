@@ -120,11 +120,13 @@ const ImageGroup = ({lastScroll, setLastScroll, lan, imageList, setImageList, hi
 
     //Note: this seems to trigger on every load in the children elements, not when they're all loaded
     const handleNewLoad = () => {
-        setLastScroll(window.scrollY)
+        if (window.scrollY  > 30 ) { //prevent from setting too quickly when coming back from highlight view
+            console.log('scroll', window.scrollY)
+            setLastScroll(window.scrollY)
+        }
         console.log('loaded!')
         progressRef.current ++ //doing this as a ref decouples it from rendering, lets it update multiple times per render
         console.log(progressRef.current)
-        //const newProgress = loadProgress +1 
         setLoadProgress(progressRef.current)
 
         progressRef.current === imageList.length && setGroupClass('image-grouping')
@@ -135,7 +137,7 @@ const ImageGroup = ({lastScroll, setLastScroll, lan, imageList, setImageList, hi
     
     return(
         <div>
-            <div>loading {loadProgress} of {imageList.length}</div>
+            {groupClass === 'group-hidden' && <div>{text.loading[lan]} {loadProgress}/{imageList.length}</div>}
             {groupClass === 'group-hidden' && <ProgressBar now = {loadProgress} max = {imageList.length} style = {{maxWidth : 500}} />}
             <div className = {groupClass} onLoad = {handleNewLoad}>
                 {imageList.map(i =>

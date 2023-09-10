@@ -16,6 +16,8 @@ const text = {
     logout: { suo: 'kirjaudu ulos', eng: 'log out' },
     cancel: { suo: 'peruuta', eng: 'cancel' },
 
+    loading : {suo: 'ladataan', eng : 'loading'},
+
     download: { suo: 'lataa', eng: 'download' },
 
     loginError: { suo: 'Väärä käyttäjätunnus tai salasana', eng: 'Username or password is incorrect' },
