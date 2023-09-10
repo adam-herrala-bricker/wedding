@@ -104,8 +104,8 @@ const BelowImage = ({ setLastScroll, lan, imageID, imageList, setImageList, user
 }
 
 //component for grouping together each rendered image
-const ImageGroup = ({ lastScroll, setLastScroll, lan, imageList, setImageList, highlight, setHighlight, user, scenes, setScenes }) => {
-    const [groupClass, setGroupClass] = useState('group-hidden')
+const ImageGroup = ({ groupClass, setGroupClass, lastScroll, setLastScroll, lan, imageList, setImageList, highlight, setHighlight, user, scenes, setScenes }) => {
+    
     const [loadProgress, setLoadProgress] = useState(0) //how many images have loaded 
     const progressRef = useRef(0)
 
@@ -156,6 +156,8 @@ const ImageGroup = ({ lastScroll, setLastScroll, lan, imageList, setImageList, h
 
 //root component for this module
 const Images = ({ loadedScene, setLoadedScene, lastScroll, setLastScroll, scenes, setScenes, imageList, setImageList, user, highlight, setHighlight, lan }) => {
+    const [groupClass, setGroupClass] = useState('group-hidden') //keeping track of whether the progress bar is hidden
+
 
     //effect hook to get scenes at first render
     useEffect(() => {
@@ -173,8 +175,8 @@ const Images = ({ loadedScene, setLoadedScene, lastScroll, setLastScroll, scenes
         <div>
             <h2 id='image-top' className='new-section'>{text.photos[lan]}</h2>
             <p>{text.photoTxt[lan]}</p>
-            <DropDown loadedScene={loadedScene} setLoadedScene={setLoadedScene} setLastScroll={setLastScroll} scenes={scenes} setScenes={setScenes} setImageList={setImageList} user={user} lan={lan} />
-            <ImageGroup lastScroll={lastScroll} setLastScroll={setLastScroll} lan={lan} imageList={imageList} setImageList={setImageList} user={user} highlight={highlight} setHighlight={setHighlight} scenes={scenes} setScenes={setScenes} />
+            {groupClass !== 'group-hidden' && <DropDown loadedScene={loadedScene} setLoadedScene={setLoadedScene} setLastScroll={setLastScroll} scenes={scenes} setScenes={setScenes} setImageList={setImageList} user={user} lan={lan} />}
+            <ImageGroup groupClass = {groupClass} setGroupClass = {setGroupClass}lastScroll={lastScroll} setLastScroll={setLastScroll} lan={lan} imageList={imageList} setImageList={setImageList} user={user} highlight={highlight} setHighlight={setHighlight} scenes={scenes} setScenes={setScenes} />
         </div>
     )
 }
