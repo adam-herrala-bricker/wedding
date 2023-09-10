@@ -1,5 +1,5 @@
-import { useState, useEffect} from 'react'
-import {Spinner} from 'react-bootstrap'
+import { useState, useEffect, useRef} from 'react'
+import { ProgressBar } from 'react-bootstrap'
 import adminServices from '../services/adminServices'
 import sceneServices from '../services/sceneServices'
 import imageServices from '../services/imageServices'
@@ -8,7 +8,7 @@ import DropDown from './dropdownMenu.js'
 import helpers from '../utilities/helpers'
 
 //component for rendering each image
-const Image = ({imagePath}) => {
+const Image = ({ imagePath }) => {
     const baseURL = '/api/images'
     const [thisClass, setThisClass] = useState('single-image-hidden')
 
@@ -19,8 +19,7 @@ const Image = ({imagePath}) => {
 
     return(
         <div className = 'single-image-container'>
-            {thisClass === 'single-image-hidden' && <Spinner variant = "primary" animation='border'/>}
-            <img className = {thisClass} alt = 'single image' loading = 'lazy' src = {`${baseURL}/${imagePath}`} onLoad = {handleLoaded}/>
+            <img className = {thisClass} alt = 'single image' loading = 'eager' src = {`${baseURL}/${imagePath}`} onLoad = {handleLoaded}/>
         </div>
     )
     
@@ -106,26 +105,49 @@ const BelowImage = ({setLastScroll, lan, imageID, imageList, setImageList, user,
 
 //component for grouping together each rendered image
 const ImageGroup = ({lastScroll, setLastScroll, lan, imageList, setImageList, highlight, setHighlight, user, scenes, setScenes}) => {
-    //event handler
+    const [groupClass, setGroupClass] = useState('group-hidden')
+    const [loadProgress, setLoadProgress] = useState(0) //how many images have loaded 
+    const progressRef = useRef(0)
+
+    //const minLoadNumber = 10 //minimum number of loaded images to display
+
+    
+    //event handlers
     const handleSetHighlight = (i) => {
         setLastScroll(window.scrollY)
         setHighlight({current : i, outgoing: null})
+    }
+
+    //Note: this seems to trigger on every load in the children elements, not when they're all loaded
+    const handleNewLoad = () => {
+        setLastScroll(window.scrollY)
+        console.log('loaded!')
+        progressRef.current ++ //doing this as a ref decouples it from rendering, lets it update multiple times per render
+        console.log(progressRef.current)
+        //const newProgress = loadProgress +1 
+        setLoadProgress(progressRef.current)
+
+        progressRef.current === imageList.length && setGroupClass('image-grouping')
     }
 
     //note the scroll just goes here
     window.scroll({left: 0, top: lastScroll, behavior: 'instant'})
     
     return(
-        <div className = 'image-grouping'>
-            {imageList.map(i =>
-                <div id = {i.id} key = {i.id}>
-                    <button className = {i.scenes.map(i => i.sceneName).includes('scene-0') ? 'image-button' : 'hidden-image'}
-                            onClick = {() => handleSetHighlight(i)}>
-                        <Image key = {`${i.id}-img`} imagePath={i.fileName}/>
-                    </button>
-                   {user.isAdmin && <BelowImage key = {`${i.id}-bel`} setLastScroll = {setLastScroll} lan = {lan} imageID = {i.id} imageList = {imageList} setImageList = {setImageList} user = {user} scenes = {scenes} setScenes = {setScenes}/>}
-                </div>
-                )}
+        <div>
+            <div>loading {loadProgress} of {imageList.length}</div>
+            {groupClass === 'group-hidden' && <ProgressBar now = {loadProgress} max = {imageList.length} style = {{maxWidth : 500}} />}
+            <div className = {groupClass} onLoad = {handleNewLoad}>
+                {imageList.map(i =>
+                    <div id = {i.id} key = {i.id}>
+                        <button className = {i.scenes.map(i => i.sceneName).includes('scene-0') ? 'image-button' : 'hidden-image'}
+                                onClick = {() => handleSetHighlight(i)}>
+                            <Image key = {`${i.id}-img`} imagePath={i.fileName} />
+                        </button>
+                    {user.isAdmin && <BelowImage key = {`${i.id}-bel`} setLastScroll = {setLastScroll} lan = {lan} imageID = {i.id} imageList = {imageList} setImageList = {setImageList} user = {user} scenes = {scenes} setScenes = {setScenes}/>}
+                    </div>
+                    )}
+            </div>
         </div>
     )
 }
