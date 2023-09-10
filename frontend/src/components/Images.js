@@ -120,7 +120,7 @@ const ImageGroup = ({lastScroll, setLastScroll, lan, imageList, setImageList, hi
 
     //Note: this seems to trigger on every load in the children elements, not when they're all loaded
     const handleNewLoad = () => {
-        if (window.scrollY  > 30 ) { //prevent from setting too quickly when coming back from highlight view
+        if (window.scrollY  > 30 & window.scrollY !== 0) { //prevent from setting too quickly when coming back from highlight view (tried to approximate the danger zone)
             console.log('scroll', window.scrollY)
             setLastScroll(window.scrollY)
         }

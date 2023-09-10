@@ -32,7 +32,7 @@ const text = {
     photoTxt: { suo: 'Galleran kuvat on ottanut valokuvaajamme Milja Nordgerg. mainitsethan hänet,  jos käytät näitä kuvia jossain. Huomaathan myös, että kuvia ei tule leikata tei editoida millään tavalla.', eng: 'This is a gallery of photos taken by our talented photographer Milja Nordberg. We request that if you use these photos anywhere you credit her. Please also note that as per our agreement with her, the photos should not be cropped or edited in any way.' },
 
     scene0: { suo: 'kaikki', eng: 'all' },
-    scene1: { suo: 'meidän suosikkejamme', eng: 'our favorites' },
+    scene1: { suo: 'meidän suosikkimme', eng: 'our favorites' },
     scene2: { suo: 'potretit', eng: 'portraits' },
     scene3: { suo: 'ryhmäkuvat', eng: 'group photos' },
     scene4: { suo: 'vihkiminen', eng: 'ceremony' },
