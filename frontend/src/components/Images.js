@@ -129,7 +129,7 @@ const ImageGroup = ({ lastScroll, setLastScroll, lan, imageList, setImageList, h
         console.log(progressRef.current)
         setLoadProgress(progressRef.current)
 
-        progressRef.current === imageList.length && setGroupClass('image-grouping')
+        progressRef.current === imageList.length && setGroupClass('image-grouping') //note: changed to show images while they load
     }
 
     //note the scroll just goes here
@@ -139,7 +139,7 @@ const ImageGroup = ({ lastScroll, setLastScroll, lan, imageList, setImageList, h
         <div>
             {groupClass === 'group-hidden' && <div>{text.loading[lan]} {loadProgress}/{imageList.length}</div>}
             {groupClass === 'group-hidden' && <ProgressBar now={loadProgress} max={imageList.length} style={{ maxWidth: 500 }} />}
-            <div className={groupClass} onLoad={handleNewLoad}>
+            <div className = 'image-grouping' onLoad={handleNewLoad}>
                 {imageList.map(i =>
                     <div id={i.id} key={i.id}>
                         <button className={i.scenes.map(i => i.sceneName).includes('scene-0') ? 'image-button' : 'hidden-image'}
