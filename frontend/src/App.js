@@ -50,19 +50,10 @@ const RegularView = ({ loadedScene, setLoadedScene, scenes, setScenes, guestUser
   )
 }
 
-//root component
-const App = () => {
-  const guestUser = { displayname: 'guest', username: 'guest' }
-  const [highlight, setHighlight] = useState({ current: null, outgoing: null })
-  const [entryKey, setEntryKey] = useState(null)
-  const [lan, setLan] = useState('suo')
-  const [lastScroll, setLastScroll] = useState(0)//for scrolling to same part of page after highlight
-  const [imageList, setImageList] = useState([])
-  const [user, setUser] = useState(guestUser)
-  const [scenes, setScenes] = useState([]) //list of all the scenes
-  const [loadedScene, setLoadedScene] = useState(null) //currently selected scene to display
-
-  //effect hook to load image list on first render, plus whenever the upload images change
+//Need seperate, stable post-entry component so that image data doesn't reload on every exit from highlight view (that would erase any filtering applied)
+//but doesn't load when you're on the entry page
+const PostEntry = ( {loadedScene, setLoadedScene, scenes, setScenes, guestUser, user, setUser, imageList, setImageList, lastScroll, setLastScroll, highlight, setHighlight, setEntryKey, lan, setLan}) => {
+//effect hook to load image list on first render, plus whenever the upload images change
   //(need to put the async inside so it doesn't throw an error)
   const setImageFiles = () => {
     const fetchData = async () => {
@@ -76,19 +67,40 @@ const App = () => {
       newImageList.sort(helpers.compareImages)
       setImageList(newImageList)
     }
+    
     fetchData()
+  
   }
 
   useEffect(setImageFiles, [user])
+
+  return(
+    highlight.current === null
+      ? <RegularView loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} guestUser={guestUser} user={user} setUser={setUser} imageList={imageList} setImageList={setImageList} lastScroll={lastScroll} setLastScroll={setLastScroll} highlight={highlight} setHighlight={setHighlight} setEntryKey={setEntryKey} lan={lan} setLan={setLan} />
+      : <HighlightView imageList={imageList} highlight={highlight} setHighlight={setHighlight} lan={lan} />
+  )
+}
+
+
+//root component
+const App = () => {
+  const guestUser = { displayname: 'guest', username: 'guest' }
+  const [highlight, setHighlight] = useState({ current: null, outgoing: null })
+  const [entryKey, setEntryKey] = useState(null)
+  const [lan, setLan] = useState('suo')
+  const [lastScroll, setLastScroll] = useState(0)//for scrolling to same part of page after highlight
+  const [imageList, setImageList] = useState([])
+  const [user, setUser] = useState(guestUser)
+  const [scenes, setScenes] = useState([]) //list of all the scenes
+  const [loadedScene, setLoadedScene] = useState(null) //currently selected scene to display
+
 
   return (
     <div className='container'>
       <Routes>
         <Route path='/' element={
           entryKey
-            ? highlight.current === null
-              ? <RegularView loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} guestUser={guestUser} user={user} setUser={setUser} imageList={imageList} setImageList={setImageList} lastScroll={lastScroll} setLastScroll={setLastScroll} highlight={highlight} setHighlight={setHighlight} setEntryKey={setEntryKey} lan={lan} setLan={setLan} />
-              : <HighlightView imageList={imageList} highlight={highlight} setHighlight={setHighlight} lan={lan} />
+            ? <PostEntry loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} guestUser={guestUser} user={user} setUser={setUser} imageList={imageList} setImageList={setImageList} lastScroll={lastScroll} setLastScroll={setLastScroll} highlight={highlight} setHighlight={setHighlight} setEntryKey={setEntryKey} lan={lan} setLan={setLan}/>
             : <Entry setEntryKey={setEntryKey} />
         } />
       </Routes>
