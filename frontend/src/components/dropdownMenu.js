@@ -97,9 +97,8 @@ const ActiveView = ({loadedScene, setLoadedScene, setLastScroll, setIsActive, sc
     )
 }
 
-const DropDown = ({setLastScroll, scenes, setScenes, setImageList, user, lan}) => {
+const DropDown = ({loadedScene, setLoadedScene, setLastScroll, scenes, setScenes, setImageList, user, lan}) => {
     const [isActive, setIsActive] = useState(false)
-    const [loadedScene, setLoadedScene] = useState(null)
     
 
     return(

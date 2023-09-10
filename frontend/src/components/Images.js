@@ -14,7 +14,6 @@ const Image = ({imagePath}) => {
 
     //event handler
     const handleLoaded = () => {
-        console.log('loaded!')
         setThisClass('single-image')
     }
 
@@ -132,7 +131,7 @@ const ImageGroup = ({lastScroll, setLastScroll, lan, imageList, setImageList, hi
 }
 
 //root component for this module
-const Images = ({lastScroll, setLastScroll, scenes, setScenes, imageList, setImageList, user, highlight, setHighlight, lan}) => {
+const Images = ({loadedScene, setLoadedScene, lastScroll, setLastScroll, scenes, setScenes, imageList, setImageList, user, highlight, setHighlight, lan}) => {
     
     //effect hook to get scenes at first render
     useEffect(() => {
@@ -149,7 +148,7 @@ const Images = ({lastScroll, setLastScroll, scenes, setScenes, imageList, setIma
     return(
         <div>
             <h2 id = 'image-top' className='new-section'>{text.photos[lan]}</h2>
-            <DropDown setLastScroll = {setLastScroll} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} user = {user} lan = {lan}/>
+            <DropDown loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} setLastScroll = {setLastScroll} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} user = {user} lan = {lan}/>
             <ImageGroup lastScroll = {lastScroll} setLastScroll = {setLastScroll} lan = {lan} imageList = {imageList} setImageList = {setImageList} user = {user} highlight = {highlight} setHighlight = {setHighlight} scenes = {scenes} setScenes = {setScenes}/>
         </div>
     )
