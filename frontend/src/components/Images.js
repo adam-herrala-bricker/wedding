@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { ProgressBar } from 'react-bootstrap'
+import ResSelect from './ResSelect'
 import adminServices from '../services/adminServices'
 import sceneServices from '../services/sceneServices'
 import imageServices from '../services/imageServices'
@@ -121,7 +122,7 @@ const ImageGroup = ({ groupClass, setGroupClass, lastScroll, setLastScroll, lan,
 
     //Note: this seems to trigger on every load in the children elements, not when they're all loaded
     const handleNewLoad = () => {
-        if (window.scrollY > 30 | window.scrollY === 0) { //prevent from setting too quickly when coming back from highlight view (tried to approximate the danger zone)
+        if (window.scrollY > 30) { //prevent from setting too quickly when coming back from highlight view (tried to approximate the danger zone)
             console.log('scroll', window.scrollY)
             setLastScroll(window.scrollY)
         }
@@ -133,8 +134,7 @@ const ImageGroup = ({ groupClass, setGroupClass, lastScroll, setLastScroll, lan,
         progressRef.current === imageList.length && setGroupClass('image-grouping') //note: changed to show images while they load
     }
 
-    //note the scroll just goes here
-    window.scroll({ left: 0, top: lastScroll, behavior: 'instant' })
+   
 
     return (
         <div>
@@ -156,7 +156,7 @@ const ImageGroup = ({ groupClass, setGroupClass, lastScroll, setLastScroll, lan,
 }
 
 //root component for this module
-const Images = ({ loadedScene, setLoadedScene, lastScroll, setLastScroll, scenes, setScenes, imageList, setImageList, user, highlight, setHighlight, lan }) => {
+const Images = ({ res, setRes, loadedScene, setLoadedScene, lastScroll, setLastScroll, scenes, setScenes, imageList, setImageList, user, highlight, setHighlight, lan }) => {
     const [groupClass, setGroupClass] = useState('group-hidden') //keeping track of whether the progress bar is hidden
 
 
@@ -170,12 +170,11 @@ const Images = ({ loadedScene, setLoadedScene, lastScroll, setLastScroll, scenes
         fetchData()
     }, [imageList])
 
-
-
     return (
         <div>
             <h2 id='image-top' className='new-section'>{text.photos[lan]}</h2>
             <p>{text.photoTxt[lan]}</p>
+            {groupClass !== 'group-hidden' && <ResSelect lan = {lan} res = {res} setRes = {setRes} setLastScroll={setLastScroll}/>}
             {groupClass !== 'group-hidden' && <DropDown loadedScene={loadedScene} setLoadedScene={setLoadedScene} setLastScroll={setLastScroll} scenes={scenes} setScenes={setScenes} setImageList={setImageList} user={user} lan={lan} />}
             <ImageGroup groupClass = {groupClass} setGroupClass = {setGroupClass}lastScroll={lastScroll} setLastScroll={setLastScroll} lan={lan} imageList={imageList} setImageList={setImageList} user={user} highlight={highlight} setHighlight={setHighlight} scenes={scenes} setScenes={setScenes} />
         </div>

@@ -1,9 +1,10 @@
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Button, CloseButton, Image} from 'react-bootstrap'
 import text from '../resources/text'
 
 //component for highlighting a single image
-const HighlightView = ({imageList, highlight, setHighlight, lan}) => {
+const HighlightView = ({res, imageList, highlight, setHighlight, lan}) => {
+  const [thisClass, setThisClass] = useState('single-image-hidden')
   
     //helper function to get adjoining index in imageList
     const adjoiningImage = (highlight, direction) => {
@@ -44,6 +45,10 @@ const HighlightView = ({imageList, highlight, setHighlight, lan}) => {
         //console.log(adjoiningImage(highlight, event.key ))
         setHighlight({current : imageList[adjoiningImage(highlight, event.key)], outgoing : null})
     }
+
+    const handleLoad = () => {
+      setThisClass('highlight-image')
+    }
   
     //effect hook for listening to keyboard
     useEffect(() => {
@@ -51,8 +56,12 @@ const HighlightView = ({imageList, highlight, setHighlight, lan}) => {
     }, [highlight])
   
     console.log(imageList)
-  
-    const baseURL = '/api/images' //this has to live down here for some reason
+    
+    //this has to live down here for some reason
+    const baseURL = res === 'high'
+      ? '/api/images' 
+      : '/api/images/web-res'
+    
     const imagePath = `${baseURL}/${highlight.current.fileName}`
 
     return(
@@ -61,13 +70,19 @@ const HighlightView = ({imageList, highlight, setHighlight, lan}) => {
           <CloseButton onClick = {handleBack}/>
         </div>
         <div className = 'highlight-group'>
-          <Image alt = '' src = {imagePath} className = 'highlight-image'/>
+          <Image alt = '' src = {imagePath} className = {thisClass} onLoad = {handleLoad}/>
         </div>
-        <div className = 'bs-button-container'>
-          <Button variant = 'outline-dark' onClick = {() => handleScrollClick('ArrowLeft')}>{'<--'}</Button>
-          <a download className = 'regular-text' href = {imagePath}><Button variant = 'outline-dark'>{text.download[lan]}</Button></a>
-          <Button variant = 'outline-dark' onClick = {() => handleScrollClick('ArrowRight')}>{'-->'}</Button>
+        <div className = 'highlight-group'>
+          {thisClass === 'single-image-hidden' && text.loading[lan] + '...'}
         </div>
+        {thisClass !== 'single-image-hidden' &&
+          <div className = 'bs-button-container'>
+            <Button variant = 'outline-dark' onClick = {() => handleScrollClick('ArrowLeft')}>{'<--'}</Button>
+            <a download className = 'regular-text' href = {imagePath}><Button variant = 'outline-dark'>{text.download[lan]}</Button></a>
+            <Button variant = 'outline-dark' onClick = {() => handleScrollClick('ArrowRight')}>{'-->'}</Button>
+          </div>
+        }
+        
       </div>
     )
   

@@ -26,8 +26,13 @@ const DisplayUser = ({ user, lan, setLan, setLastScroll}) => {
 }
 
 //component for regular view
-const RegularView = ({ loadedScene, setLoadedScene, scenes, setScenes, guestUser, user, setUser, imageList, setImageList, lastScroll, setLastScroll, highlight, setHighlight, setEntryKey, lan, setLan }) => {
+const RegularView = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScenes, guestUser, user, setUser, imageList, setImageList, lastScroll, setLastScroll, highlight, setHighlight, setEntryKey, lan, setLan }) => {
   const [music, setMusic] = useState([]) //metadata for the music
+
+
+  //note the scroll just goes here
+  console.log('scroll', lastScroll)
+  window.scroll({ left: 0, top: lastScroll, behavior: 'instant' })
 
 
   return (
@@ -44,7 +49,7 @@ const RegularView = ({ loadedScene, setLoadedScene, scenes, setScenes, guestUser
       <section id='music'>
         <Music user={user} lan={lan} music={music} setMusic={setMusic} />
       </section>
-      <Images loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} lastScroll={lastScroll} setLastScroll={setLastScroll} id='images' scenes={scenes} setScenes={setScenes} imageList={imageList} setImageList={setImageList} user={user} highlight={highlight} setHighlight={setHighlight} lan={lan} />
+      <Images res = {res} setRes = {setRes} loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} lastScroll={lastScroll} setLastScroll={setLastScroll} id='images' scenes={scenes} setScenes={setScenes} imageList={imageList} setImageList={setImageList} user={user} highlight={highlight} setHighlight={setHighlight} lan={lan} />
     </div>
 
   )
@@ -53,7 +58,10 @@ const RegularView = ({ loadedScene, setLoadedScene, scenes, setScenes, guestUser
 //Need seperate, stable post-entry component so that image data doesn't reload on every exit from highlight view (that would erase any filtering applied)
 //but doesn't load when you're on the entry page
 const PostEntry = ( {loadedScene, setLoadedScene, scenes, setScenes, guestUser, user, setUser, imageList, setImageList, lastScroll, setLastScroll, highlight, setHighlight, setEntryKey, lan, setLan}) => {
-//effect hook to load image list on first render, plus whenever the upload images change
+  const [res, setRes] = useState('web') //two options are 'web' or 'high'
+
+
+  //effect hook to load image list on first render, plus whenever the upload images change
   //(need to put the async inside so it doesn't throw an error)
   const setImageFiles = () => {
     const fetchData = async () => {
@@ -76,8 +84,8 @@ const PostEntry = ( {loadedScene, setLoadedScene, scenes, setScenes, guestUser, 
 
   return(
     highlight.current === null
-      ? <RegularView loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} guestUser={guestUser} user={user} setUser={setUser} imageList={imageList} setImageList={setImageList} lastScroll={lastScroll} setLastScroll={setLastScroll} highlight={highlight} setHighlight={setHighlight} setEntryKey={setEntryKey} lan={lan} setLan={setLan} />
-      : <HighlightView imageList={imageList} highlight={highlight} setHighlight={setHighlight} lan={lan} />
+      ? <RegularView res = {res} setRes = {setRes} loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} guestUser={guestUser} user={user} setUser={setUser} imageList={imageList} setImageList={setImageList} lastScroll={lastScroll} setLastScroll={setLastScroll} highlight={highlight} setHighlight={setHighlight} setEntryKey={setEntryKey} lan={lan} setLan={setLan} />
+      : <HighlightView res = {res} imageList={imageList} highlight={highlight} setHighlight={setHighlight} lan={lan} />
   )
 }
 

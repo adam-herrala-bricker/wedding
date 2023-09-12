@@ -18,6 +18,10 @@ const text = {
 
     loading: { suo: 'ladataan', eng: 'loading' },
 
+    resolution: {suo : 'resoluutio', eng : 'resolution'},
+    larger : {suo : 'isompi', eng : 'larger'},
+    faster : {suo : 'nopeammin', eng : 'faster'},
+
     download: { suo: 'lataa', eng: 'download' },
 
     loginError: { suo: 'Väärä käyttäjätunnus tai salasana', eng: 'Username or password is incorrect' },
