@@ -20,7 +20,7 @@ const text = {
 
     resolution: {suo : 'resoluutio', eng : 'resolution'},
     larger : {suo : 'isompi', eng : 'larger'},
-    faster : {suo : 'nopeammin', eng : 'faster'},
+    faster : {suo : 'nopeampi', eng : 'faster'},
 
     download: { suo: 'lataa', eng: 'download' },
 
