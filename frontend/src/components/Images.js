@@ -9,7 +9,8 @@ import helpers from '../utilities/helpers'
 
 //component for rendering each image
 const Image = ({ imagePath }) => {
-    const baseURL = '/api/images'
+    //const baseURL = '/api/images' //may eventually want to high res an option
+    const webResURL = '/api/images/web-res'
     const [thisClass, setThisClass] = useState('single-image-hidden')
 
     //event handler
@@ -19,7 +20,7 @@ const Image = ({ imagePath }) => {
 
     return (
         <div className='single-image-container'>
-            <img className={thisClass} alt='single image' loading='eager' src={`${baseURL}/${imagePath}`} onLoad={handleLoaded} />
+            <img className={thisClass} alt='single image' loading='eager' src={`${webResURL}/${imagePath}`} onLoad={handleLoaded} />
         </div>
     )
 
