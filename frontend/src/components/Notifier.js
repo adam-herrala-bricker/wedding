@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 
-const Notifier = ({message}) => {
+const Notifier = () => {
     const notification = useSelector(i => i.notification)
     return(
         <div className = {notification.type}>

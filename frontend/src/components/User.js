@@ -1,5 +1,7 @@
 import {useState, useEffect} from 'react'
+import { useDispatch } from 'react-redux'
 import { Offcanvas } from 'react-bootstrap'
+import { clearUser } from '../reducers/userReducer'
 import text from '../resources/text'
 import Notifier from './Notifier'
 import userServices from '../services/userServices'
@@ -92,11 +94,12 @@ const LoginSelect = ({setUser, setLastScroll, lan}) => {
 
 //root component for this module
 //full user info component --> guest: login or create. logged in: display name + log out
-const Login = ({user, setUser, guestUser, setEntryKey, lan, setLastScroll}) => {
+const Login = ({user, setUser, guestUser, lan, setLastScroll}) => {
+    const dispatch = useDispatch()
+
     //event handler
     const handleExit = () => {
-        setUser(guestUser)
-        setEntryKey(null)
+        dispatch(clearUser())
         setLastScroll(window.scroll(0,0))
         window.localStorage.clear()
     }

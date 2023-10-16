@@ -123,12 +123,9 @@ const ImageGroup = ({ groupClass, setGroupClass, lastScroll, setLastScroll, lan,
     //Note: this seems to trigger on every load in the children elements, not when they're all loaded
     const handleNewLoad = () => {
         if (window.scrollY > 30) { //prevent from setting too quickly when coming back from highlight view (tried to approximate the danger zone)
-            console.log('scroll', window.scrollY)
             setLastScroll(window.scrollY)
         }
-        console.log('loaded!')
         progressRef.current++ //doing this as a ref decouples it from rendering, lets it update multiple times per render
-        console.log(progressRef.current)
         setLoadProgress(progressRef.current)
 
         progressRef.current === imageList.length && setGroupClass('image-grouping') //note: changed to show images while they load

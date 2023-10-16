@@ -1,16 +1,13 @@
 import axios from 'axios'
-import {adminToken} from './adminServices'
+import { adminToken } from './adminServices'
+import { getEntryToken } from './tokenHelpers'
 
 const baseURL = '/api/scenes'
 
-let entryToken = null
-
-const setEntryToken = (newToken) => {
-    entryToken = `Bearer ${newToken}`
-}
-
 //GET request for loading all the scenes (requires ENTRY token)
 const getScenes = async () => {
+    const entryToken = getEntryToken()
+
     const config = {
         headers : {Authorization : entryToken}
     }
@@ -60,4 +57,4 @@ const deleteScene = async (sceneToRemove) => {
 
 }
 
-export default {setEntryToken, getScenes, updateScene, addScene, deleteScene}
+export default { getScenes, updateScene, addScene, deleteScene }

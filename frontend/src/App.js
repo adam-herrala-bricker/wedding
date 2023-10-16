@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import text from './resources/text.js'
 import ImageUpload from './components/ImageUpload'
 import User from './components/User'
@@ -31,7 +32,6 @@ const RegularView = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScen
 
 
   //note the scroll just goes here
-  console.log('scroll', lastScroll)
   window.scroll({ left: 0, top: lastScroll, behavior: 'instant' })
 
 
@@ -57,7 +57,7 @@ const RegularView = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScen
 
 //Need seperate, stable post-entry component so that image data doesn't reload on every exit from highlight view (that would erase any filtering applied)
 //but doesn't load when you're on the entry page
-const PostEntry = ( {loadedScene, setLoadedScene, scenes, setScenes, guestUser, user, setUser, imageList, setImageList, lastScroll, setLastScroll, highlight, setHighlight, setEntryKey, lan, setLan}) => {
+const PostEntry = ( {loadedScene, setLoadedScene, scenes, setScenes, guestUser, user, setUser, imageList, setImageList, lastScroll, setLastScroll, highlight, setHighlight, lan, setLan}) => {
   const [res, setRes] = useState('web') //two options are 'web' or 'high'
 
 
@@ -84,7 +84,7 @@ const PostEntry = ( {loadedScene, setLoadedScene, scenes, setScenes, guestUser, 
 
   return(
     highlight.current === null
-      ? <RegularView res = {res} setRes = {setRes} loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} guestUser={guestUser} user={user} setUser={setUser} imageList={imageList} setImageList={setImageList} lastScroll={lastScroll} setLastScroll={setLastScroll} highlight={highlight} setHighlight={setHighlight} setEntryKey={setEntryKey} lan={lan} setLan={setLan} />
+      ? <RegularView res = {res} setRes = {setRes} loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} guestUser={guestUser} user={user} setUser={setUser} imageList={imageList} setImageList={setImageList} lastScroll={lastScroll} setLastScroll={setLastScroll} highlight={highlight} setHighlight={setHighlight} lan={lan} setLan={setLan} />
       : <HighlightView res = {res} imageList={imageList} highlight={highlight} setHighlight={setHighlight} lan={lan} />
   )
 }
@@ -94,7 +94,7 @@ const PostEntry = ( {loadedScene, setLoadedScene, scenes, setScenes, guestUser, 
 const App = () => {
   const guestUser = { displayname: 'guest', username: 'guest' }
   const [highlight, setHighlight] = useState({ current: null, outgoing: null })
-  const [entryKey, setEntryKey] = useState(null)
+  //const [entryKey, setEntryKey] = useState(null)
   const [lan, setLan] = useState('suo')
   const [lastScroll, setLastScroll] = useState(0)//for scrolling to same part of page after highlight
   const [imageList, setImageList] = useState([])
@@ -102,14 +102,16 @@ const App = () => {
   const [scenes, setScenes] = useState([]) //list of all the scenes
   const [loadedScene, setLoadedScene] = useState(null) //currently selected scene to display
 
+  const entryKey = useSelector(i => i.user.entryToken)
+
 
   return (
     <div className='container'>
       <Routes>
         <Route path='/' element={
           entryKey
-            ? <PostEntry loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} guestUser={guestUser} user={user} setUser={setUser} imageList={imageList} setImageList={setImageList} lastScroll={lastScroll} setLastScroll={setLastScroll} highlight={highlight} setHighlight={setHighlight} setEntryKey={setEntryKey} lan={lan} setLan={setLan}/>
-            : <Entry setEntryKey={setEntryKey} />
+            ? <PostEntry loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} guestUser={guestUser} user={user} setUser={setUser} imageList={imageList} setImageList={setImageList} lastScroll={lastScroll} setLastScroll={setLastScroll} highlight={highlight} setHighlight={setHighlight} lan={lan} setLan={setLan}/>
+            : <Entry />
         } />
       </Routes>
 
