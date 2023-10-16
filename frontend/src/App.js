@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import text from './resources/text.js'
+import { getText } from './resources/text.js'
 import ImageUpload from './components/ImageUpload'
 import Music from './components/Music'
 import Images from './components/Images'
@@ -15,20 +15,19 @@ import helpers from './utilities/helpers'
 //component to display current user
 const DisplayUser = () => {
   const user = useSelector(i => i.user)
-  const lan = useSelector(i => i.view.lan)
 
   return (
     <div className='user-container'>
       <Language />
       {user.username === 'guest'
-        ? text.guest[lan]
+        ? getText('guest')
         : user.username}
     </div>
   )
 }
 
 //component for regular view
-const RegularView = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScenes, imageList, setImageList,  lan }) => {
+const RegularView = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScenes, imageList, setImageList }) => {
   const [music, setMusic] = useState([]) //metadata for the music
   const user = useSelector(i => i.user)
 
@@ -40,19 +39,19 @@ const RegularView = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScen
 
   return (
     <div>
-      <DisplayUser lan={lan} />
-      <CustomNavbar lan={lan} ></CustomNavbar>
+      <DisplayUser />
+      <CustomNavbar ></CustomNavbar>
       {user.adminToken && <ImageUpload setImageList={setImageList} />}
       <section id='headingsSection'>
         <div>
-          <h1>{text.welcomeTxt[lan]}</h1>
+          <h1>{getText('welcomeTxt')}</h1>
         </div>
-        <h2>{text.welcomeSubTxt[lan]}</h2>
+        <h2>{getText('welcomeSubTxt')}</h2>
       </section>
       <section id='music'>
-        <Music lan={lan} music={music} setMusic={setMusic} />
+        <Music music={music} setMusic={setMusic} />
       </section>
-      <Images res = {res} setRes = {setRes} loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} id='images' scenes={scenes} setScenes={setScenes} imageList={imageList} setImageList={setImageList} lan={lan} />
+      <Images res = {res} setRes = {setRes} loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} id='images' scenes={scenes} setScenes={setScenes} imageList={imageList} setImageList={setImageList} />
     </div>
 
   )
@@ -60,7 +59,8 @@ const RegularView = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScen
 
 //Need seperate, stable post-entry component so that image data doesn't reload on every exit from highlight view (that would erase any filtering applied)
 //but doesn't load when you're on the entry page
-const PostEntry = ( {loadedScene, setLoadedScene, scenes, setScenes, guestUser, imageList, setImageList, lan}) => {
+//UPDATE: CAN PROBABLY REMOVE THIS ONCE THE REDUX REFACTOR IS COMPLETE
+const PostEntry = ( {loadedScene, setLoadedScene, scenes, setScenes, guestUser, imageList, setImageList}) => {
   const [res, setRes] = useState('web') //two options are 'web' or 'high'
   const user = useSelector(i => i.user)
 
@@ -86,14 +86,13 @@ const PostEntry = ( {loadedScene, setLoadedScene, scenes, setScenes, guestUser, 
   useEffect(setImageFiles, [user])
 
   return(
-      <RegularView res = {res} setRes = {setRes} loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} guestUser={guestUser} imageList={imageList} setImageList={setImageList} lan={lan} />
+      <RegularView res = {res} setRes = {setRes} loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} guestUser={guestUser} imageList={imageList} setImageList={setImageList} />
   )
 }
 
 
 //root component
 const App = () => {
-  //const [lan, setLan] = useState('suo')
   const [imageList, setImageList] = useState([])
   const [scenes, setScenes] = useState([]) //list of all the scenes
   const [loadedScene, setLoadedScene] = useState(null) //currently selected scene to display
@@ -107,7 +106,7 @@ const App = () => {
       <Routes>
         <Route path='/' element={
           entryKey
-            ? <PostEntry loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} imageList={imageList} setImageList={setImageList} lan={lan}/>
+            ? <PostEntry loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} imageList={imageList} setImageList={setImageList} />
             : <Entry />
         } />
         <Route path='/view/:fileName' element = {<HighlightView imageList = {imageList} /> }/>

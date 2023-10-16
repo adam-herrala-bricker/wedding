@@ -1,4 +1,5 @@
 //reducer for handling notifications
+//NOTE: still need to prevent bleed-over notifications when switching quickly between views
 import { createSlice } from '@reduxjs/toolkit'
 
 const defaultMessage = null

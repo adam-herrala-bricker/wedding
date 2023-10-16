@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import audioServices from '../services/audioServices'
 import adminServices from '../services/adminServices'
-import text from '../resources/text'
+import { getText } from '../resources/text'
 import helpers from '../utilities/helpers'
 //import testAudio from '../resources/test36.1c.wav'
 
@@ -25,7 +25,7 @@ const DeleteSong = ({ songID, setMusic }) => {
     )
 }
 
-const Music = ({ lan, music, setMusic }) => {
+const Music = ({ music, setMusic }) => {
     const user = useSelector(i => i.user)
     //note: fileToName lives in utilities/helpers now
 
@@ -44,12 +44,12 @@ const Music = ({ lan, music, setMusic }) => {
     return (
         <div className='music-div'>
             <h2 className='new-section'>
-                {text.music[lan]}
+                {getText('music')}
             </h2>
             {music.map(i =>
                 <div className='music-container' key={i.id}>
                     <audio controls src={`/api/audio/${i.fileName}`} />
-                    <h2>{helpers.fileToName(i) ? text[helpers.fileToName(i)][lan] : 'song title missing'}</h2>
+                    <h2>{helpers.fileToName(i) ? getText(helpers.fileToName(i)) : 'song title missing'}</h2>
                     {user.isAdmin && <DeleteSong songID={i.id} setMusic={setMusic} />}
                 </div>
             )}

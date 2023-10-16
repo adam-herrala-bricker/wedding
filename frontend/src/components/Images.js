@@ -7,7 +7,7 @@ import ResSelect from './ResSelect'
 import adminServices from '../services/adminServices'
 import sceneServices from '../services/sceneServices'
 import imageServices from '../services/imageServices'
-import text from '../resources/text.js'
+import { getText } from '../resources/text.js'
 import DropDown from './dropdownMenu.js'
 import helpers from '../utilities/helpers'
 
@@ -32,7 +32,7 @@ const Image = ({ imagePath }) => {
 }
 
 //component for rendering everything below an image
-const BelowImage = ({ lan, imageID, imageList, setImageList, scenes, setScenes }) => {
+const BelowImage = ({ imageID, imageList, setImageList, scenes, setScenes }) => {
     const dispatch = useDispatch()
 
     //helper function for testing whether the image is aleady linked to a scene
@@ -102,7 +102,7 @@ const BelowImage = ({ lan, imageID, imageList, setImageList, scenes, setScenes }
                     : 'scene-unlinked'
                 }
                     key={i.id} onClick={() => handleSceneLink(i, imageID)}>
-                    {text[i.sceneName.replace('-', '')] ? text[i.sceneName.replace('-', '')][lan] : i.sceneName}
+                    {getText(i.sceneName.replace('-', '')) || i.sceneName}
                 </button>
             )
             }
@@ -111,7 +111,7 @@ const BelowImage = ({ lan, imageID, imageList, setImageList, scenes, setScenes }
 }
 
 //component for grouping together each rendered image
-const ImageGroup = ({ groupClass, setGroupClass, lan, imageList, setImageList, scenes, setScenes }) => {
+const ImageGroup = ({ groupClass, setGroupClass, imageList, setImageList, scenes, setScenes }) => {
     const [loadProgress, setLoadProgress] = useState(0) //how many images have loaded 
     const progressRef = useRef(0)
     
@@ -143,7 +143,7 @@ const ImageGroup = ({ groupClass, setGroupClass, lan, imageList, setImageList, s
 
     return (
         <div>
-            {groupClass === 'group-hidden' && <div>{text.loading[lan]} {loadProgress}/{imageList.length}</div>}
+            {groupClass === 'group-hidden' && <div>{getText('loading')} {loadProgress}/{imageList.length}</div>}
             {groupClass === 'group-hidden' && <ProgressBar now={loadProgress} max={imageList.length} style={{ maxWidth: 500 }} />}
             <div className = 'image-grouping' onLoad={handleNewLoad}>
                 {imageList.map(i =>
@@ -152,7 +152,7 @@ const ImageGroup = ({ groupClass, setGroupClass, lan, imageList, setImageList, s
                             onClick = {() => handleToHighlight(i.fileName)}>
                             <Image key={`${i.id}-img`} imagePath={i.fileName} />
                         </button>
-                        {user.adminToken && <BelowImage key={`${i.id}-bel`} lan={lan} imageID={i.id} imageList={imageList} setImageList={setImageList} scenes={scenes} setScenes={setScenes} />}
+                        {user.adminToken && <BelowImage key={`${i.id}-bel`} imageID={i.id} imageList={imageList} setImageList={setImageList} scenes={scenes} setScenes={setScenes} />}
                     </div>
                 )}
             </div>
@@ -161,7 +161,7 @@ const ImageGroup = ({ groupClass, setGroupClass, lan, imageList, setImageList, s
 }
 
 //root component for this module
-const Images = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScenes, imageList, setImageList, lan }) => {
+const Images = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScenes, imageList, setImageList }) => {
     const [groupClass, setGroupClass] = useState('group-hidden') //keeping track of whether the progress bar is hidden
 
 
@@ -177,11 +177,11 @@ const Images = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScenes, i
 
     return (
         <div>
-            <h2 id='image-top' className='new-section'>{text.photos[lan]}</h2>
-            <p>{text.photoTxt[lan]}</p>
-            {groupClass !== 'group-hidden' && <ResSelect lan = {lan} res = {res} setRes = {setRes} />}
-            {groupClass !== 'group-hidden' && <DropDown loadedScene={loadedScene} setLoadedScene={setLoadedScene}  scenes={scenes} setScenes={setScenes} setImageList={setImageList} lan={lan} />}
-            <ImageGroup groupClass = {groupClass} setGroupClass = {setGroupClass} lan={lan} imageList={imageList} setImageList={setImageList} scenes={scenes} setScenes={setScenes} />
+            <h2 id='image-top' className='new-section'>{getText('photos')}</h2>
+            <p>{getText('photoTxt')}</p>
+            {groupClass !== 'group-hidden' && <ResSelect res = {res} setRes = {setRes} />}
+            {groupClass !== 'group-hidden' && <DropDown loadedScene={loadedScene} setLoadedScene={setLoadedScene}  scenes={scenes} setScenes={setScenes} setImageList={setImageList} />}
+            <ImageGroup groupClass = {groupClass} setGroupClass = {setGroupClass} imageList={imageList} setImageList={setImageList} scenes={scenes} setScenes={setScenes} />
         </div>
     )
 }

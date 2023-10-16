@@ -3,19 +3,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setScroll } from '../reducers/viewReducer'
 import sceneServices from '../services/sceneServices'
 import imageServices from '../services/imageServices'
-import text from '../resources/text'
+import { getText } from '../resources/text'
 import helpers from '../utilities/helpers'
 
-const InactiveView = ({setIsActive, lan}) => {
+const InactiveView = ({ setIsActive }) => {
     return(
         <div className = 'scene-filter-container'>
-            <button onClick = {() => setIsActive(true)}>{text.filter[lan]}</button>
+            <button onClick = {() => setIsActive(true)}>{getText('filter')}</button>
         </div>
         
     )
 }
 
-const CurrentScenes = ({loadedScene, setLoadedScene, scenes, setScenes, setImageList, lan}) => {
+const CurrentScenes = ({loadedScene, setLoadedScene, scenes, setScenes, setImageList }) => {
     const dispatch = useDispatch()
     const user = useSelector(i => i.user)
 
@@ -50,7 +50,7 @@ const CurrentScenes = ({loadedScene, setLoadedScene, scenes, setScenes, setImage
         scenes.map(i => 
             <div key = {i.id}>
                 <button key = {`${i.id}-fil`} className = {i.sceneName === loadedScene ? 'scene-name-highlight' : 'scene-name-regular'} onClick = {() => {handleSceneChange(i)}}>
-                    {text[i.sceneName.replace('-','')] ? text[i.sceneName.replace('-','')][lan] : i.sceneName}
+                    {getText(i.sceneName.replace('-','')) || i.sceneName}
                 </button>
                 {user.adminToken &&
                 <button key = {`${i.id}-del`} onClick = {() => deleteScene(i)}>
@@ -63,7 +63,7 @@ const CurrentScenes = ({loadedScene, setLoadedScene, scenes, setScenes, setImage
     )
 }
 
-const CreateNewScene = ({scenes, setScenes, lan}) => {
+const CreateNewScene = ({scenes, setScenes }) => {
     //helper function for new scene name
     const newSceneName = () => {
         //currently no scenes
@@ -88,30 +88,30 @@ const CreateNewScene = ({scenes, setScenes, lan}) => {
 
     }
 
-    return(<button onClick = {handleCreateNew}>{text.new[lan]}</button>)
+    return(<button onClick = {handleCreateNew}>{getText('new')}</button>)
 
 }
 
-const ActiveView = ({loadedScene, setLoadedScene, setIsActive, scenes, setScenes, setImageList, lan}) => {
+const ActiveView = ({loadedScene, setLoadedScene, setIsActive, scenes, setScenes, setImageList }) => {
     const user = useSelector(i => i.user)
 
     return(
         <div id = 'scenes' className = 'scene-filter-container'>
-            <button onClick = {() => setIsActive(false)}>{text.done[lan]}</button>
-            <CurrentScenes loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} lan = {lan} />
-            {user.adminToken && <CreateNewScene scenes = {scenes} setScenes = {setScenes} lan = {lan}/>}
+            <button onClick = {() => setIsActive(false)}>{getText('done')}</button>
+            <CurrentScenes loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} />
+            {user.adminToken && <CreateNewScene scenes = {scenes} setScenes = {setScenes} />}
         </div>
     )
 }
 
-const DropDown = ({loadedScene, setLoadedScene, scenes, setScenes, setImageList, lan}) => {
+const DropDown = ({loadedScene, setLoadedScene, scenes, setScenes, setImageList }) => {
     const [isActive, setIsActive] = useState(false)
 
     return(
         <div>
             {isActive
-            ? <ActiveView loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} setIsActive = {setIsActive} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} lan = {lan}/>
-            : <InactiveView setIsActive = {setIsActive} lan = {lan}/>
+            ? <ActiveView loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} setIsActive = {setIsActive} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} />
+            : <InactiveView setIsActive = {setIsActive} />
         }
         </div>
     )

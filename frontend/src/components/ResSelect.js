@@ -1,20 +1,20 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setScroll } from '../reducers/viewReducer'
-import text from '../resources/text'
+import { getText } from '../resources/text'
 
 //component for selecting resolution of images displayed in highlight view (grid view is always web res)
-const ClosedView = ({ lan, setSelectOpen}) => {
+const ClosedView = ({ setSelectOpen}) => {
     return(
         <div className='scene-filter-container'>
             <button onClick = {() => setSelectOpen(true)}>
-                {text.resolution[lan]}
+                {getText('resolution')}
             </button>
         </div>
     )
 }
 
-const OpenView = ({ lan, setSelectOpen, res, setRes }) => {
+const OpenView = ({ setSelectOpen, res, setRes }) => {
     const dispatch = useDispatch()
 
 
@@ -27,30 +27,24 @@ const OpenView = ({ lan, setSelectOpen, res, setRes }) => {
     return(
 
         <div className='scene-filter-container'>
-            <button onClick = {() => setSelectOpen(false)}>{text.done[lan]}</button>
+            <button onClick = {() => setSelectOpen(false)}>{getText('done')}</button>
             <button onClick = {() => handleChangeRes('web')} className = {res === 'web' ? 'scene-name-highlight' : 'scene-name-regular'}>
-                {text.faster[lan]}
+                {getText('faster')}
             </button>
             <button onClick = {() => handleChangeRes('high')} className = {res === 'high' ? 'scene-name-highlight' : 'scene-name-regular'}>
-                {text.larger[lan]}
+                {getText('larger')}
             </button>
         </div>
-
-
-
     )
 }
 
-
-
-const ResSelect = ({lan, res, setRes }) => {
+const ResSelect = ({ res, setRes }) => {
     const [selectOpen, setSelectOpen] = useState(false)
     
     return(
         selectOpen
-            ? <OpenView lan = {lan} setSelectOpen = {setSelectOpen} res = {res} setRes = {setRes}/>
-            : <ClosedView lan = {lan} setSelectOpen = {setSelectOpen}/>
-        
+            ? <OpenView setSelectOpen = {setSelectOpen} res = {res} setRes = {setRes}/>
+            : <ClosedView setSelectOpen = {setSelectOpen}/>
     )
 }
 

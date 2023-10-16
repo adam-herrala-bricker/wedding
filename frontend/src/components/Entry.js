@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { entryCheck, setEntryToken } from '../reducers/userReducer'
-import text from '../resources/text'
+import { text } from '../resources/text'
 import Notifier from './Notifier' //component
 
 //root component for entry page

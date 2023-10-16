@@ -1,19 +1,18 @@
-import Language from './Language'
 import User from './User'
-import text from '../resources/text'
+import { getText } from '../resources/text'
 
 import { Container, Nav, Navbar } from 'react-bootstrap';
 
-function CustomNavbar({ lan, setEntryKey, setLastScroll }) {
+function CustomNavbar({ setEntryKey, setLastScroll }) {
     return (
         <Navbar expand="lg" sticky="top" className="p-2 text-dark" style={{backgroundColor : 'rgb(234, 243, 238)', fontWeight : 200}}>
             <Container>
-                <Navbar.Brand>{text.header[lan]}</Navbar.Brand>
+                <Navbar.Brand>{getText('header')}</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link href="#music">{text.music[lan]}</Nav.Link>
-                        <Nav.Link href="#image-top">{text.photos[lan]}</Nav.Link>
+                        <Nav.Link href="#music">{getText('music')}</Nav.Link>
+                        <Nav.Link href="#image-top">{getText('photos')}</Nav.Link>
                         {/* <NavDropdown title="Dropdown" NavDropdown>
                             <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                             <NavDropdown.Item href="#action/3.2">
@@ -28,7 +27,7 @@ function CustomNavbar({ lan, setEntryKey, setLastScroll }) {
                     </Nav>
 
                     <Nav>
-                        <User setEntryKey={setEntryKey} lan={lan} setLastScroll = {setLastScroll}/>
+                        <User setEntryKey={setEntryKey}setLastScroll = {setLastScroll}/>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

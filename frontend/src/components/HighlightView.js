@@ -1,20 +1,18 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Button, CloseButton, Image} from 'react-bootstrap'
-import text from '../resources/text'
+import { getText } from '../resources/text'
 
 //component for highlighting a single image
-const HighlightView = ({res, imageList, lan}) => {
+const HighlightView = ({res, imageList }) => {
     const [thisClass, setThisClass] = useState('single-image-hidden')
 
     const navigate = useNavigate()
     const thisFile = useParams().fileName
 
-  
     //helper function to get adjoining index in imageList
     const adjoiningImage = (direction) => {
       const thisIndex = imageList.map(i => i.fileName).indexOf(thisFile)
-      console.log(thisIndex)
       const totalLength = imageList.length
   
       //only one entry --> return 0 (bugs out otherwise)
@@ -61,7 +59,6 @@ const HighlightView = ({res, imageList, lan}) => {
       window.addEventListener('keydown', handleArrow, {once : true})
     }, [thisFile])
     
-    
     //this has to live down here for some reason
     const baseURL = res === 'high'
       ? '/api/images' 
@@ -78,16 +75,15 @@ const HighlightView = ({res, imageList, lan}) => {
           <Image alt = '' src = {imagePath} className = {thisClass} onLoad = {handleLoad}/>
         </div>
         <div className = 'highlight-group'>
-          {thisClass === 'single-image-hidden' && text.loading[lan] + '...'}
+          {thisClass === 'single-image-hidden' && getText('loading') + '...'}
         </div>
         {thisClass !== 'single-image-hidden' &&
           <div className = 'bs-button-container'>
             <Button variant = 'outline-dark' onClick = {() => handleScrollClick('ArrowLeft')}>{'<--'}</Button>
-            <a download className = 'regular-text' href = {imagePath}><Button variant = 'outline-dark'>{text.download[lan]}</Button></a>
+            <a download className = 'regular-text' href = {imagePath}><Button variant = 'outline-dark'>{getText('download')}</Button></a>
             <Button variant = 'outline-dark' onClick = {() => handleScrollClick('ArrowRight')}>{'-->'}</Button>
           </div>
         }
-        
       </div>
     )
   
