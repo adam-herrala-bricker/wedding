@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useSelector } from 'react-redux'
 import { ProgressBar } from 'react-bootstrap'
 import ResSelect from './ResSelect'
 import adminServices from '../services/adminServices'
@@ -106,10 +107,11 @@ const BelowImage = ({ setLastScroll, lan, imageID, imageList, setImageList, user
 }
 
 //component for grouping together each rendered image
-const ImageGroup = ({ groupClass, setGroupClass, lastScroll, setLastScroll, lan, imageList, setImageList, highlight, setHighlight, user, scenes, setScenes }) => {
+const ImageGroup = ({ groupClass, setGroupClass, lastScroll, setLastScroll, lan, imageList, setImageList, highlight, setHighlight, scenes, setScenes }) => {
     
     const [loadProgress, setLoadProgress] = useState(0) //how many images have loaded 
     const progressRef = useRef(0)
+    const user = useSelector(i => i.user)
 
     //const minLoadNumber = 10 //minimum number of loaded images to display
 
@@ -144,7 +146,7 @@ const ImageGroup = ({ groupClass, setGroupClass, lastScroll, setLastScroll, lan,
                             onClick={() => handleSetHighlight(i)}>
                             <Image key={`${i.id}-img`} imagePath={i.fileName} />
                         </button>
-                        {user.isAdmin && <BelowImage key={`${i.id}-bel`} setLastScroll={setLastScroll} lan={lan} imageID={i.id} imageList={imageList} setImageList={setImageList} user={user} scenes={scenes} setScenes={setScenes} />}
+                        {user.adminToken && <BelowImage key={`${i.id}-bel`} setLastScroll={setLastScroll} lan={lan} imageID={i.id} imageList={imageList} setImageList={setImageList} scenes={scenes} setScenes={setScenes} />}
                     </div>
                 )}
             </div>
@@ -153,7 +155,7 @@ const ImageGroup = ({ groupClass, setGroupClass, lastScroll, setLastScroll, lan,
 }
 
 //root component for this module
-const Images = ({ res, setRes, loadedScene, setLoadedScene, lastScroll, setLastScroll, scenes, setScenes, imageList, setImageList, user, highlight, setHighlight, lan }) => {
+const Images = ({ res, setRes, loadedScene, setLoadedScene, lastScroll, setLastScroll, scenes, setScenes, imageList, setImageList, highlight, setHighlight, lan }) => {
     const [groupClass, setGroupClass] = useState('group-hidden') //keeping track of whether the progress bar is hidden
 
 
@@ -172,8 +174,8 @@ const Images = ({ res, setRes, loadedScene, setLoadedScene, lastScroll, setLastS
             <h2 id='image-top' className='new-section'>{text.photos[lan]}</h2>
             <p>{text.photoTxt[lan]}</p>
             {groupClass !== 'group-hidden' && <ResSelect lan = {lan} res = {res} setRes = {setRes} setLastScroll={setLastScroll}/>}
-            {groupClass !== 'group-hidden' && <DropDown loadedScene={loadedScene} setLoadedScene={setLoadedScene} setLastScroll={setLastScroll} scenes={scenes} setScenes={setScenes} setImageList={setImageList} user={user} lan={lan} />}
-            <ImageGroup groupClass = {groupClass} setGroupClass = {setGroupClass}lastScroll={lastScroll} setLastScroll={setLastScroll} lan={lan} imageList={imageList} setImageList={setImageList} user={user} highlight={highlight} setHighlight={setHighlight} scenes={scenes} setScenes={setScenes} />
+            {groupClass !== 'group-hidden' && <DropDown loadedScene={loadedScene} setLoadedScene={setLoadedScene} setLastScroll={setLastScroll} scenes={scenes} setScenes={setScenes} setImageList={setImageList} lan={lan} />}
+            <ImageGroup groupClass = {groupClass} setGroupClass = {setGroupClass}lastScroll={lastScroll} setLastScroll={setLastScroll} lan={lan} imageList={imageList} setImageList={setImageList} highlight={highlight} setHighlight={setHighlight} scenes={scenes} setScenes={setScenes} />
         </div>
     )
 }

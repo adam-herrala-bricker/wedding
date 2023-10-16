@@ -2,9 +2,9 @@ import Language from './Language'
 import User from './User'
 import text from '../resources/text'
 
-import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Container, Nav, Navbar } from 'react-bootstrap';
 
-function CustomNavbar({ lan, setLan, guestUser, user, setUser, setEntryKey, setLastScroll }) {
+function CustomNavbar({ lan, setLan, setEntryKey, setLastScroll }) {
     return (
         <Navbar expand="lg" sticky="top" className="p-2 text-dark" style={{backgroundColor : 'rgb(234, 243, 238)', fontWeight : 200}}>
             <Container>
@@ -28,7 +28,7 @@ function CustomNavbar({ lan, setLan, guestUser, user, setUser, setEntryKey, setL
                     </Nav>
 
                     <Nav>
-                        <User user={user} setUser={setUser} guestUser={guestUser} setEntryKey={setEntryKey} lan={lan} setLastScroll = {setLastScroll}/>
+                        <User setEntryKey={setEntryKey} lan={lan} setLastScroll = {setLastScroll}/>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

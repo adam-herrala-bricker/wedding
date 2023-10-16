@@ -9,3 +9,13 @@ export const getEntryToken = () => {
 
     return entryToken
 }
+
+//don't actuall use user token for anything yet, but that would go here
+
+//admin token
+export const getAdminToken = () => {
+    const currentState = store.getState()
+    const adminToken = 'Bearer ' + currentState.user.adminToken
+
+    return adminToken
+}

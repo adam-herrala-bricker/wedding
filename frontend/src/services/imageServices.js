@@ -1,6 +1,5 @@
 import axios from 'axios'
-import { adminToken } from './adminServices'
-import { getEntryToken } from './tokenHelpers'
+import { getEntryToken, getAdminToken } from './tokenHelpers'
 
 const baseURL = '/api/image-data'
 
@@ -21,6 +20,7 @@ const getImageData = async () => {
 
 //PUT request to update image (meta)data (requires ADMIN token)
 const updateImageData = async (newData) => {
+    const adminToken = getAdminToken()
     const config = {
         headers : {Authorization: adminToken}
     }

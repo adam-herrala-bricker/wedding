@@ -16,6 +16,7 @@ imagesRouter.get('/', async (request, response) => {
   }
 
   const imageData = await Image.find({}).populate('scenes', {sceneName : 1})
+  imageData.forEach(i => console.log(i.scenes))
 
   if(imageData) {
       response.json(imageData)

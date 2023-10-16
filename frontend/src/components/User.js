@@ -1,16 +1,16 @@
 import {useState, useEffect} from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Offcanvas } from 'react-bootstrap'
-import { clearUser } from '../reducers/userReducer'
+import { clearUser, login, logOut, setUser, setAdmin } from '../reducers/userReducer'
 import text from '../resources/text'
 import Notifier from './Notifier'
-import userServices from '../services/userServices'
 import adminServices from '../services/adminServices'
 
-const LoginForm = ({setUser, lan, setShowLogin, setLastScroll}) => {
+const LoginForm = ({lan, setShowLogin, setLastScroll}) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [errorMessage, setErrorMessage] = useState(null)
+
+    const dispatch = useDispatch()
 
     //event handlers
     const handleFormChange = (event) => {
@@ -21,35 +21,13 @@ const LoginForm = ({setUser, lan, setShowLogin, setLastScroll}) => {
 
     const handleLogin = async (event) => {
         event.preventDefault()
-        try {
-            const thisUser = await userServices.login({username, password})
-            window.localStorage.setItem('userData', JSON.stringify(thisUser))
-            
-            //userServices.setToken(thisUser.token)
-            console.log('this user', thisUser)
-           
-            if (thisUser.isAdmin) {
-                adminServices.setAdminToken(thisUser.adminToken)
-            }
-
-            setUser(thisUser)
-            setUsername('')
-            setPassword('')
-            setLastScroll(window.scrollY)
-        }
-        catch (exception) {
-            setErrorMessage(text.loginError[lan])
-            setTimeout(() => {
-                setErrorMessage(null)
-            },  5000)
-            console.log('username or password is incorrect')
-        }
+        dispatch(login(username, password))
     }
 
     return(
         <div className='login-container'>
             <h2>{text.login[lan]}</h2>
-            {errorMessage && <Notifier message = {errorMessage}/>}
+            <Notifier />
             <form autoComplete='off' onSubmit = {handleLogin}>
                 <div className = 'user-input'>
                     {text.username[lan]} <input name='Username' value={username} onChange = {handleFormChange}/>
@@ -66,12 +44,12 @@ const LoginForm = ({setUser, lan, setShowLogin, setLastScroll}) => {
     )
 }
 
-const LoggerOuter = ({setUser, setLastScroll, guestUser, lan}) => {
+const LoggerOuter = ({setLastScroll, lan}) => {
+    const dispatch = useDispatch()
     //event handler
     const handleLogout = () => {
-        setUser(guestUser)
+        dispatch(logOut())
         setLastScroll(window.scroll(0,0))
-        window.localStorage.removeItem('userData')
     }
 
     return(
@@ -80,13 +58,13 @@ const LoggerOuter = ({setUser, setLastScroll, guestUser, lan}) => {
 }
 
 //group where login can be selected/displayed
-const LoginSelect = ({setUser, setLastScroll, lan}) => {
+const LoginSelect = ({setLastScroll, lan}) => {
     const [showLogin, setShowLogin] = useState(false)
 
     return(
             showLogin
             ? <Offcanvas show = {showLogin} placement='end' style={{backgroundColor : 'rgb(234, 243, 238)'}}>
-                <LoginForm setUser = {setUser} lan = {lan} setShowLogin = {setShowLogin} setLastScroll = {setLastScroll}/>
+                <LoginForm lan = {lan} setShowLogin = {setShowLogin} setLastScroll = {setLastScroll}/>
             </Offcanvas>
             : <button className = 'generic-button' onClick = {() => setShowLogin(true)}>{text.login[lan]}</button>
     )
@@ -94,8 +72,9 @@ const LoginSelect = ({setUser, setLastScroll, lan}) => {
 
 //root component for this module
 //full user info component --> guest: login or create. logged in: display name + log out
-const Login = ({user, setUser, guestUser, lan, setLastScroll}) => {
+const Login = ({ lan, setLastScroll}) => {
     const dispatch = useDispatch()
+    const user = useSelector(i => i.user)
 
     //event handler
     const handleExit = () => {
@@ -107,21 +86,25 @@ const Login = ({user, setUser, guestUser, lan, setLastScroll}) => {
      //effect hook for keeping user logged in on refresh
      useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem('userData')
-        if (loggedUserJSON) {
-          const thisUser = JSON.parse(loggedUserJSON)
-          setUser(thisUser)
-          // userServices.setToken(thisUser.token)
-          if (thisUser.isAdmin) {
-            adminServices.setAdminToken(thisUser.adminToken)
-          }
+        const thisUser = JSON.parse(loggedUserJSON)
+        if (thisUser) {
+            dispatch(setUser({
+                username: thisUser.username,
+                displayname: thisUser.displayName,
+                userToken: thisUser.token
+            }))
+            
+            if (thisUser.isAdmin) {
+                dispatch(setAdmin(thisUser.adminToken))
+            }
         }
       }, [])
 
     return(
         <div className = 'login-button-container'>
             {user.username === 'guest'
-            ? <LoginSelect lan = {lan} setUser = {setUser} setLastScroll = {setLastScroll}/>
-            : <LoggerOuter setUser = {setUser} guestUser = {guestUser} lan = {lan} setLastScroll = {setLastScroll}/>}
+            ? <LoginSelect lan = {lan} setLastScroll = {setLastScroll}/>
+            : <LoggerOuter lan = {lan} setLastScroll = {setLastScroll}/>}
             <button className = 'generic-button' onClick = {handleExit}>{text.exit[lan]}</button>
         </div>
     )

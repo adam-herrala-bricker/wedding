@@ -28,13 +28,31 @@ const userSlice = createSlice({
         defaultAdminToken),
     
     reducers: {
+        //clears all user data in the store
         clearUser() {
+
+            window.localStorage.clear()
+
             return asObject(
                 defaultUsername, 
                 defaultDisplayname, 
                 defaultEntryToken,
                 defaultUserToken,
                 defaultAdminToken)
+        },
+
+        //logs out but keeps entry token
+        logOut(state) {
+            
+            window.localStorage.removeItem('userData')
+            
+            return {
+                username: defaultUsername,
+                displayname: defaultDisplayname,
+                entryToken: state.entryToken,
+                userToken: defaultUserToken,
+                adminToken: defaultAdminToken
+            }
         },
 
         setEntryToken(state, action) {
@@ -55,9 +73,11 @@ const userSlice = createSlice({
     }
 })
 
-export const { clearUser, setEntryToken, setUser, setAdmin} = userSlice.actions
+export const { clearUser, logOut, setEntryToken, setUser, setAdmin} = userSlice.actions
 
 //packaged functions for components
+
+//checking entry key to view main site
 export const entryCheck = (entryKey) => {
     return async dispatch => {
         try {
@@ -68,9 +88,28 @@ export const entryCheck = (entryKey) => {
         } catch (exception) {
             dispatch(notifier('entry key is incorrect', 'error-message', 5))
         }
-        
     }
 }
+
+//logging users in
+export const login = (username, password) => {
+    return async dispatch => {
+        try {
+            const thisUser = await userServices.login({username, password})
+            dispatch(setUser({username: username, password: password, userToken: thisUser.token}))
+            window.localStorage.setItem('userData', JSON.stringify(thisUser))
+
+            if (thisUser.isAdmin) {
+                dispatch(setAdmin(thisUser.adminToken))
+            }
+
+        } catch (except) {
+            dispatch(notifier('placeholder warning', 'error-message', 5))
+        }
+    }
+}
+
+
 
 export default userSlice.reducer
 

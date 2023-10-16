@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import audioServices from '../services/audioServices'
 import adminServices from '../services/adminServices'
 import text from '../resources/text'
@@ -24,7 +25,8 @@ const DeleteSong = ({ songID, setMusic }) => {
     )
 }
 
-const Music = ({ lan, user, music, setMusic }) => {
+const Music = ({ lan, music, setMusic }) => {
+    const user = useSelector(i => i.user)
     //note: fileToName lives in utilities/helpers now
 
     //effect hook to load music metadata from DB

@@ -1,4 +1,5 @@
-import { useState} from 'react'
+import { useState } from 'react'
+import { useSelector } from 'react-redux'
 import sceneServices from '../services/sceneServices'
 import imageServices from '../services/imageServices'
 import text from '../resources/text'
@@ -13,7 +14,9 @@ const InactiveView = ({setIsActive, lan}) => {
     )
 }
 
-const CurrentScenes = ({loadedScene, setLoadedScene, setLastScroll, scenes, setScenes, setImageList, lan, user}) => {
+const CurrentScenes = ({loadedScene, setLoadedScene, setLastScroll, scenes, setScenes, setImageList, lan}) => {
+    const user = useSelector(i => i.user)
+
     //event handlers
     const handleSceneChange = async (scene) => {
         const sceneID = scene.id
@@ -21,7 +24,7 @@ const CurrentScenes = ({loadedScene, setLoadedScene, setLastScroll, scenes, setS
         //may be overkill to fetch every time, but easiest sol'n I could think of
         const allImages = await imageServices.getImageData()
         //for admin user, 'all/kaikki' --> everything, even hidden images with no tags
-        const filteredImages = (user.isAdmin && scenes.filter(i => i.id === sceneID)[0]['sceneName'] === 'scene-0')
+        const filteredImages = (user.adminToken && scenes.filter(i => i.id === sceneID)[0]['sceneName'] === 'scene-0')
          ? allImages
          : allImages.filter(i => (Object.values(i.scenes).map(i => i.id).includes(sceneID) & Object.values(i.scenes).map(i => i.sceneName).includes('scene-0'))) //'all/kakki' tag is required for visibilty on non-admin view
         
@@ -47,7 +50,7 @@ const CurrentScenes = ({loadedScene, setLoadedScene, setLastScroll, scenes, setS
                 <button key = {`${i.id}-fil`} className = {i.sceneName === loadedScene ? 'scene-name-highlight' : 'scene-name-regular'} onClick = {() => {handleSceneChange(i)}}>
                     {text[i.sceneName.replace('-','')] ? text[i.sceneName.replace('-','')][lan] : i.sceneName}
                 </button>
-                {user.isAdmin &&
+                {user.adminToken &&
                 <button key = {`${i.id}-del`} onClick = {() => deleteScene(i)}>
                     -
                 </button>
@@ -87,24 +90,25 @@ const CreateNewScene = ({scenes, setScenes, lan}) => {
 
 }
 
-const ActiveView = ({loadedScene, setLoadedScene, setLastScroll, setIsActive, scenes, setScenes, setImageList, user, lan}) => {
+const ActiveView = ({loadedScene, setLoadedScene, setLastScroll, setIsActive, scenes, setScenes, setImageList, lan}) => {
+    const user = useSelector(i => i.user)
+
     return(
         <div id = 'scenes' className = 'scene-filter-container'>
             <button onClick = {() => setIsActive(false)}>{text.done[lan]}</button>
-            <CurrentScenes loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} setLastScroll = {setLastScroll} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} lan = {lan} user = {user}/>
-            {user.isAdmin && <CreateNewScene scenes = {scenes} setScenes = {setScenes} lan = {lan}/>}
+            <CurrentScenes loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} setLastScroll = {setLastScroll} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} lan = {lan} />
+            {user.adminToken && <CreateNewScene scenes = {scenes} setScenes = {setScenes} lan = {lan}/>}
         </div>
     )
 }
 
-const DropDown = ({loadedScene, setLoadedScene, setLastScroll, scenes, setScenes, setImageList, user, lan}) => {
+const DropDown = ({loadedScene, setLoadedScene, setLastScroll, scenes, setScenes, setImageList, lan}) => {
     const [isActive, setIsActive] = useState(false)
-    
 
     return(
         <div>
             {isActive
-            ? <ActiveView loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} setLastScroll = {setLastScroll} setIsActive = {setIsActive} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} user = {user} lan = {lan}/>
+            ? <ActiveView loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} setLastScroll = {setLastScroll} setIsActive = {setIsActive} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} lan = {lan}/>
             : <InactiveView setIsActive = {setIsActive} lan = {lan}/>
         }
         </div>
