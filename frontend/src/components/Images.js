@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { ProgressBar } from 'react-bootstrap'
+import { setScroll } from '../reducers/viewReducer'
 import ResSelect from './ResSelect'
 import adminServices from '../services/adminServices'
 import sceneServices from '../services/sceneServices'
@@ -30,7 +31,9 @@ const Image = ({ imagePath }) => {
 }
 
 //component for rendering everything below an image
-const BelowImage = ({ setLastScroll, lan, imageID, imageList, setImageList, user, scenes, setScenes }) => {
+const BelowImage = ({ lan, imageID, imageList, setImageList, scenes, setScenes }) => {
+    const dispatch = useDispatch()
+
     //helper function for testing whether the image is aleady linked to a scene
     const isLinked = (scene, imageID) => {
         if (scene.images.map(i => i.id).includes(imageID)) {
@@ -57,7 +60,7 @@ const BelowImage = ({ setLastScroll, lan, imageID, imageList, setImageList, user
 
     //handles linking/unlinking scenes to images
     const handleSceneLink = async (scene, imageID) => {
-        setLastScroll(window.scrollY) //keep from jumping around afterwards
+        dispatch(setScroll(window.scrollY)) //keep from jumping around afterwards
 
         //single object with value = array of list of IDs!
         const updatedIDs = isLinked(scene, imageID)
@@ -107,10 +110,11 @@ const BelowImage = ({ setLastScroll, lan, imageID, imageList, setImageList, user
 }
 
 //component for grouping together each rendered image
-const ImageGroup = ({ groupClass, setGroupClass, lastScroll, setLastScroll, lan, imageList, setImageList, highlight, setHighlight, scenes, setScenes }) => {
-    
+const ImageGroup = ({ groupClass, setGroupClass, lan, imageList, setImageList, highlight, setHighlight, scenes, setScenes }) => {
     const [loadProgress, setLoadProgress] = useState(0) //how many images have loaded 
     const progressRef = useRef(0)
+    
+    const dispatch = useDispatch()
     const user = useSelector(i => i.user)
 
     //const minLoadNumber = 10 //minimum number of loaded images to display
@@ -118,14 +122,16 @@ const ImageGroup = ({ groupClass, setGroupClass, lastScroll, setLastScroll, lan,
 
     //event handlers
     const handleSetHighlight = (i) => {
-        setLastScroll(window.scrollY)
+        dispatch(setScroll(window.scrollY))
         setHighlight({ current: i, outgoing: null })
     }
 
     //Note: this seems to trigger on every load in the children elements, not when they're all loaded
     const handleNewLoad = () => {
+
+        //KEEP AN EYE ON THIS. UNCLEAR WHETHER THIS CAN BE REMOVED OR IF THERE'S A BUG THAT ISN'T SHOWING UP ON PRODUCTION
         if (window.scrollY > 30) { //prevent from setting too quickly when coming back from highlight view (tried to approximate the danger zone)
-            setLastScroll(window.scrollY)
+            //dispatch(setScroll(window.scrollY))
         }
         progressRef.current++ //doing this as a ref decouples it from rendering, lets it update multiple times per render
         setLoadProgress(progressRef.current)
@@ -146,7 +152,7 @@ const ImageGroup = ({ groupClass, setGroupClass, lastScroll, setLastScroll, lan,
                             onClick={() => handleSetHighlight(i)}>
                             <Image key={`${i.id}-img`} imagePath={i.fileName} />
                         </button>
-                        {user.adminToken && <BelowImage key={`${i.id}-bel`} setLastScroll={setLastScroll} lan={lan} imageID={i.id} imageList={imageList} setImageList={setImageList} scenes={scenes} setScenes={setScenes} />}
+                        {user.adminToken && <BelowImage key={`${i.id}-bel`} lan={lan} imageID={i.id} imageList={imageList} setImageList={setImageList} scenes={scenes} setScenes={setScenes} />}
                     </div>
                 )}
             </div>
@@ -155,7 +161,7 @@ const ImageGroup = ({ groupClass, setGroupClass, lastScroll, setLastScroll, lan,
 }
 
 //root component for this module
-const Images = ({ res, setRes, loadedScene, setLoadedScene, lastScroll, setLastScroll, scenes, setScenes, imageList, setImageList, highlight, setHighlight, lan }) => {
+const Images = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScenes, imageList, setImageList, highlight, setHighlight, lan }) => {
     const [groupClass, setGroupClass] = useState('group-hidden') //keeping track of whether the progress bar is hidden
 
 
@@ -173,9 +179,9 @@ const Images = ({ res, setRes, loadedScene, setLoadedScene, lastScroll, setLastS
         <div>
             <h2 id='image-top' className='new-section'>{text.photos[lan]}</h2>
             <p>{text.photoTxt[lan]}</p>
-            {groupClass !== 'group-hidden' && <ResSelect lan = {lan} res = {res} setRes = {setRes} setLastScroll={setLastScroll}/>}
-            {groupClass !== 'group-hidden' && <DropDown loadedScene={loadedScene} setLoadedScene={setLoadedScene} setLastScroll={setLastScroll} scenes={scenes} setScenes={setScenes} setImageList={setImageList} lan={lan} />}
-            <ImageGroup groupClass = {groupClass} setGroupClass = {setGroupClass}lastScroll={lastScroll} setLastScroll={setLastScroll} lan={lan} imageList={imageList} setImageList={setImageList} highlight={highlight} setHighlight={setHighlight} scenes={scenes} setScenes={setScenes} />
+            {groupClass !== 'group-hidden' && <ResSelect lan = {lan} res = {res} setRes = {setRes} />}
+            {groupClass !== 'group-hidden' && <DropDown loadedScene={loadedScene} setLoadedScene={setLoadedScene}  scenes={scenes} setScenes={setScenes} setImageList={setImageList} lan={lan} />}
+            <ImageGroup groupClass = {groupClass} setGroupClass = {setGroupClass} lan={lan} imageList={imageList} setImageList={setImageList} highlight={highlight} setHighlight={setHighlight} scenes={scenes} setScenes={setScenes} />
         </div>
     )
 }

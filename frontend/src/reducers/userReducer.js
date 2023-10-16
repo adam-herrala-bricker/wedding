@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { notifier } from './notiReducer'
+import { setScroll } from './viewReducer'
 import userServices from '../services/userServices'
 
 //initial state
@@ -41,11 +42,11 @@ const userSlice = createSlice({
                 defaultAdminToken)
         },
 
-        //logs out but keeps entry token
-        logOut(state) {
-            
+        //reverts to guest user but keeps keeps entry token
+        guestUser(state) {
+
             window.localStorage.removeItem('userData')
-            
+
             return {
                 username: defaultUsername,
                 displayname: defaultDisplayname,
@@ -73,7 +74,7 @@ const userSlice = createSlice({
     }
 })
 
-export const { clearUser, logOut, setEntryToken, setUser, setAdmin} = userSlice.actions
+export const { clearUser, guestUser, setEntryToken, setUser, setAdmin} = userSlice.actions
 
 //packaged functions for components
 
@@ -99,6 +100,8 @@ export const login = (username, password) => {
             dispatch(setUser({username: username, password: password, userToken: thisUser.token}))
             window.localStorage.setItem('userData', JSON.stringify(thisUser))
 
+            dispatch(setScroll(window.scrollY))
+
             if (thisUser.isAdmin) {
                 dispatch(setAdmin(thisUser.adminToken))
             }
@@ -106,6 +109,13 @@ export const login = (username, password) => {
         } catch (except) {
             dispatch(notifier('placeholder warning', 'error-message', 5))
         }
+    }
+}
+
+export const logOut = () => {
+    return dispatch => {
+        dispatch(guestUser())
+        dispatch(setScroll(window.scrollY))
     }
 }
 

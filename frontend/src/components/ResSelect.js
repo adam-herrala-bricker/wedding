@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { setScroll } from '../reducers/viewReducer'
 import text from '../resources/text'
 
 //component for selecting resolution of images displayed in highlight view (grid view is always web res)
@@ -12,12 +14,14 @@ const ClosedView = ({ lan, setSelectOpen}) => {
     )
 }
 
-const OpenView = ({ lan, setSelectOpen, res, setRes, setLastScroll }) => {
+const OpenView = ({ lan, setSelectOpen, res, setRes }) => {
+    const dispatch = useDispatch()
+
 
     //event handler
     const handleChangeRes = (newRes) => {
         setRes(newRes)
-        setLastScroll(window.scrollY)
+        dispatch(setScroll(window.scrollY))
     }
 
     return(
@@ -39,12 +43,12 @@ const OpenView = ({ lan, setSelectOpen, res, setRes, setLastScroll }) => {
 
 
 
-const ResSelect = ({lan, res, setRes, setLastScroll}) => {
+const ResSelect = ({lan, res, setRes }) => {
     const [selectOpen, setSelectOpen] = useState(false)
     
     return(
         selectOpen
-            ? <OpenView lan = {lan} setSelectOpen = {setSelectOpen} res = {res} setRes = {setRes} setLastScroll={setLastScroll}/>
+            ? <OpenView lan = {lan} setSelectOpen = {setSelectOpen} res = {res} setRes = {setRes}/>
             : <ClosedView lan = {lan} setSelectOpen = {setSelectOpen}/>
         
     )

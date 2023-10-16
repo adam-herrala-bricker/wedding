@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { setScroll } from '../reducers/viewReducer'
 import sceneServices from '../services/sceneServices'
 import imageServices from '../services/imageServices'
 import text from '../resources/text'
@@ -14,7 +15,8 @@ const InactiveView = ({setIsActive, lan}) => {
     )
 }
 
-const CurrentScenes = ({loadedScene, setLoadedScene, setLastScroll, scenes, setScenes, setImageList, lan}) => {
+const CurrentScenes = ({loadedScene, setLoadedScene, scenes, setScenes, setImageList, lan}) => {
+    const dispatch = useDispatch()
     const user = useSelector(i => i.user)
 
     //event handlers
@@ -31,7 +33,7 @@ const CurrentScenes = ({loadedScene, setLoadedScene, setLastScroll, scenes, setS
         filteredImages.sort(helpers.compareImages)
         setImageList(filteredImages)
         setLoadedScene(sceneName)
-        setLastScroll(window.scrollY)
+        dispatch(setScroll(window.scrollY))
     }
 
     const deleteScene = async (scene) => {
@@ -90,25 +92,25 @@ const CreateNewScene = ({scenes, setScenes, lan}) => {
 
 }
 
-const ActiveView = ({loadedScene, setLoadedScene, setLastScroll, setIsActive, scenes, setScenes, setImageList, lan}) => {
+const ActiveView = ({loadedScene, setLoadedScene, setIsActive, scenes, setScenes, setImageList, lan}) => {
     const user = useSelector(i => i.user)
 
     return(
         <div id = 'scenes' className = 'scene-filter-container'>
             <button onClick = {() => setIsActive(false)}>{text.done[lan]}</button>
-            <CurrentScenes loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} setLastScroll = {setLastScroll} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} lan = {lan} />
+            <CurrentScenes loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} lan = {lan} />
             {user.adminToken && <CreateNewScene scenes = {scenes} setScenes = {setScenes} lan = {lan}/>}
         </div>
     )
 }
 
-const DropDown = ({loadedScene, setLoadedScene, setLastScroll, scenes, setScenes, setImageList, lan}) => {
+const DropDown = ({loadedScene, setLoadedScene, scenes, setScenes, setImageList, lan}) => {
     const [isActive, setIsActive] = useState(false)
 
     return(
         <div>
             {isActive
-            ? <ActiveView loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} setLastScroll = {setLastScroll} setIsActive = {setIsActive} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} lan = {lan}/>
+            ? <ActiveView loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} setIsActive = {setIsActive} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} lan = {lan}/>
             : <InactiveView setIsActive = {setIsActive} lan = {lan}/>
         }
         </div>

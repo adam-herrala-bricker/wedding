@@ -4,7 +4,6 @@ import { Offcanvas } from 'react-bootstrap'
 import { clearUser, login, logOut, setUser, setAdmin } from '../reducers/userReducer'
 import text from '../resources/text'
 import Notifier from './Notifier'
-import adminServices from '../services/adminServices'
 
 const LoginForm = ({lan, setShowLogin, setLastScroll}) => {
     const [username, setUsername] = useState('')
@@ -44,12 +43,11 @@ const LoginForm = ({lan, setShowLogin, setLastScroll}) => {
     )
 }
 
-const LoggerOuter = ({setLastScroll, lan}) => {
+const LoggerOuter = ({ lan }) => {
     const dispatch = useDispatch()
     //event handler
     const handleLogout = () => {
         dispatch(logOut())
-        setLastScroll(window.scroll(0,0))
     }
 
     return(
@@ -79,8 +77,7 @@ const Login = ({ lan, setLastScroll}) => {
     //event handler
     const handleExit = () => {
         dispatch(clearUser())
-        setLastScroll(window.scroll(0,0))
-        window.localStorage.clear()
+        //setLastScroll(window.scroll(0,0))
     }
 
      //effect hook for keeping user logged in on refresh

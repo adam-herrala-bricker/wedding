@@ -1,9 +1,14 @@
+import { useDispatch } from 'react-redux'
+import { setScroll } from '../reducers/viewReducer'
+
 import usFlag from '../resources/us-flag.png'
 import finFlag from '../resources/fin-flag.png'
 
-const Language = ({setLan, setLastScroll}) => {
+const Language = ({setLan}) => {
+    const dispatch = useDispatch()
+
     const handleLanChange = (newLan) => {
-        setLastScroll(window.scrollY)
+        dispatch(setScroll(window.scrollY))
         setLan(newLan)
     }
 
