@@ -1,4 +1,4 @@
-//reducer for assorted states that handle the view the user is given: language, scroll height, resolution!!, (more??)
+//reducer for assorted states that handle the view the user is given: language, scroll height, resolution
 import { createSlice } from '@reduxjs/toolkit'
 import text from '../resources/text'
 
@@ -31,12 +31,20 @@ const viewSlice = createSlice({
 
         setScroll(state, action) {
             return {...state, scroll: action.payload}
+        },
+
+        getRes(state) {
+            return state.res
+        },
+
+        setRes(state, action) {
+            return {...state, res: action.payload}
         }
 
     }
 })
 
-export const { getLan, setLan, getScroll, setScroll } = viewSlice.actions
+export const { getLan, setLan, getScroll, setScroll, getRes, setRes } = viewSlice.actions
 
 //helpful packaged functions
 //scrolls to the last saved point

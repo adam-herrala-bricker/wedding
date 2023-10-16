@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import { Button, CloseButton, Image} from 'react-bootstrap'
 import { getText } from '../resources/text'
 
 //component for highlighting a single image
-const HighlightView = ({res, imageList }) => {
+const HighlightView = ({ imageList }) => {
     const [thisClass, setThisClass] = useState('single-image-hidden')
+    const res = useSelector(i => i.view.res)
 
     const navigate = useNavigate()
     const thisFile = useParams().fileName

@@ -27,7 +27,7 @@ const DisplayUser = () => {
 }
 
 //component for regular view
-const RegularView = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScenes, imageList, setImageList }) => {
+const RegularView = ({ loadedScene, setLoadedScene, scenes, setScenes, imageList, setImageList }) => {
   const [music, setMusic] = useState([]) //metadata for the music
   const user = useSelector(i => i.user)
 
@@ -51,7 +51,7 @@ const RegularView = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScen
       <section id='music'>
         <Music music={music} setMusic={setMusic} />
       </section>
-      <Images res = {res} setRes = {setRes} loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} id='images' scenes={scenes} setScenes={setScenes} imageList={imageList} setImageList={setImageList} />
+      <Images loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} id='images' scenes={scenes} setScenes={setScenes} imageList={imageList} setImageList={setImageList} />
     </div>
 
   )
@@ -61,7 +61,6 @@ const RegularView = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScen
 //but doesn't load when you're on the entry page
 //UPDATE: CAN PROBABLY REMOVE THIS ONCE THE REDUX REFACTOR IS COMPLETE
 const PostEntry = ( {loadedScene, setLoadedScene, scenes, setScenes, guestUser, imageList, setImageList}) => {
-  const [res, setRes] = useState('web') //two options are 'web' or 'high'
   const user = useSelector(i => i.user)
 
   //effect hook to load image list on first render, plus whenever the upload images change
@@ -86,7 +85,7 @@ const PostEntry = ( {loadedScene, setLoadedScene, scenes, setScenes, guestUser, 
   useEffect(setImageFiles, [user])
 
   return(
-      <RegularView res = {res} setRes = {setRes} loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} guestUser={guestUser} imageList={imageList} setImageList={setImageList} />
+      <RegularView loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} guestUser={guestUser} imageList={imageList} setImageList={setImageList} />
   )
 }
 
@@ -98,8 +97,6 @@ const App = () => {
   const [loadedScene, setLoadedScene] = useState(null) //currently selected scene to display
 
   const entryKey = useSelector(i => i.user.entryToken)
-  const lan = useSelector(i => i.view.lan)
-
 
   return (
     <div className='container'>
@@ -114,10 +111,7 @@ const App = () => {
 
 
     </div>
-
   )
-
 }
-
 
 export default App;
