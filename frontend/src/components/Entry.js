@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { notifier } from '../reducers/notiReducer' //reducer function
 import text from '../resources/text'
-import Notifier from './Notifier'
+import Notifier from './Notifier' //component
 import imageServices from '../services/imageServices'
 import audioServices from '../services/audioServices'
 import sceneServices from '../services/sceneServices'
@@ -9,7 +11,8 @@ import userServices from '../services/userServices'
 //root component for entry page
 const Entry = ({setEntryKey}) => {
     const [enteredKey, setEnteredKey] = useState('')
-    const [errorMessage, setErrorMessage] = useState(null)
+
+    const dispatch = useDispatch()
 
     //helper function for dual-lan text
     const duoLingo = (phrase) => {
@@ -36,11 +39,7 @@ const Entry = ({setEntryKey}) => {
             setEntryKey(thisKey)
         }
         catch (exception) {
-            setErrorMessage(duoLingo('entryError'))
-            setTimeout(() => {
-                setErrorMessage(null)
-            }, 5000)
-            console.log('entry key is incorrect')
+            dispatch(notifier('entry key is incorrect', 'error-message', 5))
         }
     }
     //effect hook to load entry token on refresh (just like loading a user)
@@ -60,7 +59,7 @@ const Entry = ({setEntryKey}) => {
             <h1>{duoLingo('header')}</h1>
             <div>
                 <h4>{duoLingo('entryKey')}</h4>
-                <Notifier message = {errorMessage} />
+                <Notifier />
                 <form onSubmit = {checkKey}>
                     <input name='entry' type = 'password' value = {enteredKey} onChange = {handleEntry} />
                     <div>
