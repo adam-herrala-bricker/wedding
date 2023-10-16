@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Button, CloseButton, Image} from 'react-bootstrap'
 import text from '../resources/text'
 
 //component for highlighting a single image
-const HighlightView = ({res, imageList, setHighlight, lan}) => {
+const HighlightView = ({res, imageList, lan}) => {
     const [thisClass, setThisClass] = useState('single-image-hidden')
 
     const navigate = useNavigate()
@@ -46,8 +46,6 @@ const HighlightView = ({res, imageList, setHighlight, lan}) => {
 
     //also an event handler??
     const handleArrow = (event) => {
-        //console.log(event.key)
-        //console.log(adjoiningImage(highlight, event.key ))
         const nextFile = imageList[adjoiningImage(event.key)].fileName
         window.removeEventListener('keydown', handleArrow, {once : true})
         navigate(`/view/${nextFile}`)
@@ -58,11 +56,11 @@ const HighlightView = ({res, imageList, setHighlight, lan}) => {
     }
   
     //effect hook for listening to keyboard
-    /*
+    //NOTE THAT IT ABSOLUTELY HAS TO BE HERE!! NOT LOOSE IN THE COMPONENT
     useEffect(() => {
       window.addEventListener('keydown', handleArrow, {once : true})
-    }, [highlight])
-    */
+    }, [thisFile])
+    
     
     //this has to live down here for some reason
     const baseURL = res === 'high'
@@ -70,8 +68,6 @@ const HighlightView = ({res, imageList, setHighlight, lan}) => {
       : '/api/images/web-res'
     
     const imagePath = `${baseURL}/${thisFile}`
-
-    window.addEventListener('keydown', handleArrow, {once : true})
 
     return(
       <div className = 'outer-highlight-container'>
