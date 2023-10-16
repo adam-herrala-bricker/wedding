@@ -13,11 +13,13 @@ import imageServices from './services/imageServices'
 import helpers from './utilities/helpers'
 
 //component to display current user
-const DisplayUser = ({ lan, setLan }) => {
+const DisplayUser = () => {
   const user = useSelector(i => i.user)
+  const lan = useSelector(i => i.view.lan)
+
   return (
     <div className='user-container'>
-      <Language setLan = {setLan} />
+      <Language />
       {user.username === 'guest'
         ? text.guest[lan]
         : user.username}
@@ -26,12 +28,11 @@ const DisplayUser = ({ lan, setLan }) => {
 }
 
 //component for regular view
-const RegularView = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScenes, imageList, setImageList, highlight, setHighlight, setEntryKey, lan, setLan }) => {
+const RegularView = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScenes, imageList, setImageList, highlight, setHighlight, setEntryKey, lan }) => {
   const [music, setMusic] = useState([]) //metadata for the music
   const user = useSelector(i => i.user)
 
   const lastScroll = useSelector(i => i.view.scroll)
-  console.log('scroll', lastScroll)
 
   //note the scroll just goes here
   window.scroll({ left: 0, top: lastScroll, behavior: 'instant' })
@@ -39,8 +40,8 @@ const RegularView = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScen
 
   return (
     <div>
-      <DisplayUser lan={lan} setLan = {setLan}/>
-      <CustomNavbar lan={lan} setLan={setLan} setEntryKey={setEntryKey} ></CustomNavbar>
+      <DisplayUser lan={lan} />
+      <CustomNavbar lan={lan} setEntryKey={setEntryKey} ></CustomNavbar>
       {user.adminToken && <ImageUpload setImageList={setImageList} />}
       <section id='headingsSection'>
         <div>
@@ -59,7 +60,7 @@ const RegularView = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScen
 
 //Need seperate, stable post-entry component so that image data doesn't reload on every exit from highlight view (that would erase any filtering applied)
 //but doesn't load when you're on the entry page
-const PostEntry = ( {loadedScene, setLoadedScene, scenes, setScenes, guestUser, imageList, setImageList, highlight, setHighlight, lan, setLan}) => {
+const PostEntry = ( {loadedScene, setLoadedScene, scenes, setScenes, guestUser, imageList, setImageList, highlight, setHighlight, lan}) => {
   const [res, setRes] = useState('web') //two options are 'web' or 'high'
   const user = useSelector(i => i.user)
 
@@ -86,7 +87,7 @@ const PostEntry = ( {loadedScene, setLoadedScene, scenes, setScenes, guestUser, 
 
   return(
     highlight.current === null
-      ? <RegularView res = {res} setRes = {setRes} loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} guestUser={guestUser} imageList={imageList} setImageList={setImageList} highlight={highlight} setHighlight={setHighlight} lan={lan} setLan={setLan} />
+      ? <RegularView res = {res} setRes = {setRes} loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} guestUser={guestUser} imageList={imageList} setImageList={setImageList} highlight={highlight} setHighlight={setHighlight} lan={lan} />
       : <HighlightView res = {res} imageList={imageList} highlight={highlight} setHighlight={setHighlight} lan={lan} />
   )
 }
@@ -95,12 +96,13 @@ const PostEntry = ( {loadedScene, setLoadedScene, scenes, setScenes, guestUser, 
 //root component
 const App = () => {
   const [highlight, setHighlight] = useState({ current: null, outgoing: null })
-  const [lan, setLan] = useState('suo')
+  //const [lan, setLan] = useState('suo')
   const [imageList, setImageList] = useState([])
   const [scenes, setScenes] = useState([]) //list of all the scenes
   const [loadedScene, setLoadedScene] = useState(null) //currently selected scene to display
 
   const entryKey = useSelector(i => i.user.entryToken)
+  const lan = useSelector(i => i.view.lan)
 
 
   return (
@@ -108,7 +110,7 @@ const App = () => {
       <Routes>
         <Route path='/' element={
           entryKey
-            ? <PostEntry loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} imageList={imageList} setImageList={setImageList} highlight={highlight} setHighlight={setHighlight} lan={lan} setLan={setLan}/>
+            ? <PostEntry loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} imageList={imageList} setImageList={setImageList} highlight={highlight} setHighlight={setHighlight} lan={lan}/>
             : <Entry />
         } />
       </Routes>

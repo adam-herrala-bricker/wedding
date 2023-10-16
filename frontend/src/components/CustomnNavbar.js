@@ -4,7 +4,7 @@ import text from '../resources/text'
 
 import { Container, Nav, Navbar } from 'react-bootstrap';
 
-function CustomNavbar({ lan, setLan, setEntryKey, setLastScroll }) {
+function CustomNavbar({ lan, setEntryKey, setLastScroll }) {
     return (
         <Navbar expand="lg" sticky="top" className="p-2 text-dark" style={{backgroundColor : 'rgb(234, 243, 238)', fontWeight : 200}}>
             <Container>

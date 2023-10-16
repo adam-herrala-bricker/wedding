@@ -5,7 +5,7 @@ import { clearUser, login, logOut, setUser, setAdmin } from '../reducers/userRed
 import text from '../resources/text'
 import Notifier from './Notifier'
 
-const LoginForm = ({lan, setShowLogin, setLastScroll}) => {
+const LoginForm = ({lan, setShowLogin }) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
@@ -56,13 +56,13 @@ const LoggerOuter = ({ lan }) => {
 }
 
 //group where login can be selected/displayed
-const LoginSelect = ({setLastScroll, lan}) => {
+const LoginSelect = ({lan}) => {
     const [showLogin, setShowLogin] = useState(false)
 
     return(
             showLogin
             ? <Offcanvas show = {showLogin} placement='end' style={{backgroundColor : 'rgb(234, 243, 238)'}}>
-                <LoginForm lan = {lan} setShowLogin = {setShowLogin} setLastScroll = {setLastScroll}/>
+                <LoginForm lan = {lan} setShowLogin = {setShowLogin} />
             </Offcanvas>
             : <button className = 'generic-button' onClick = {() => setShowLogin(true)}>{text.login[lan]}</button>
     )
