@@ -77,7 +77,6 @@ const Login = ({ lan, setLastScroll}) => {
     //event handler
     const handleExit = () => {
         dispatch(clearUser())
-        //setLastScroll(window.scroll(0,0))
     }
 
      //effect hook for keeping user logged in on refresh

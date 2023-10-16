@@ -1,14 +1,19 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { Button, CloseButton, Image} from 'react-bootstrap'
 import text from '../resources/text'
 
 //component for highlighting a single image
-const HighlightView = ({res, imageList, highlight, setHighlight, lan}) => {
-  const [thisClass, setThisClass] = useState('single-image-hidden')
+const HighlightView = ({res, imageList, setHighlight, lan}) => {
+    const [thisClass, setThisClass] = useState('single-image-hidden')
+
+    const navigate = useNavigate()
+    const thisFile = useParams().fileName
+
   
     //helper function to get adjoining index in imageList
-    const adjoiningImage = (highlight, direction) => {
-      const thisIndex = imageList.map(i => i.fileName).indexOf(highlight.current.fileName)
+    const adjoiningImage = (direction) => {
+      const thisIndex = imageList.map(i => i.fileName).indexOf(thisFile)
       console.log(thisIndex)
       const totalLength = imageList.length
   
@@ -29,21 +34,23 @@ const HighlightView = ({res, imageList, highlight, setHighlight, lan}) => {
     //event handlers
     const handleBack = () => {
       window.removeEventListener('keydown', handleArrow, {once : true})
-      setHighlight({current : null, outgoing : highlight.current})
-      
+      navigate('/')
     }
 
     const handleScrollClick = (direction) => {
         //uses same direction encoding as the arrow handler since it shares a helper function
         window.removeEventListener('keydown', handleArrow, {once : true})
-        setHighlight({current : imageList[adjoiningImage(highlight, direction)], outgoing : null})
+        const nextFile = imageList[adjoiningImage(direction)].fileName
+        navigate(`/view/${nextFile}`)
     }
 
     //also an event handler??
     const handleArrow = (event) => {
         //console.log(event.key)
         //console.log(adjoiningImage(highlight, event.key ))
-        setHighlight({current : imageList[adjoiningImage(highlight, event.key)], outgoing : null})
+        const nextFile = imageList[adjoiningImage(event.key)].fileName
+        window.removeEventListener('keydown', handleArrow, {once : true})
+        navigate(`/view/${nextFile}`)
     }
 
     const handleLoad = () => {
@@ -51,18 +58,20 @@ const HighlightView = ({res, imageList, highlight, setHighlight, lan}) => {
     }
   
     //effect hook for listening to keyboard
+    /*
     useEffect(() => {
       window.addEventListener('keydown', handleArrow, {once : true})
     }, [highlight])
-  
-    console.log(imageList)
+    */
     
     //this has to live down here for some reason
     const baseURL = res === 'high'
       ? '/api/images' 
       : '/api/images/web-res'
     
-    const imagePath = `${baseURL}/${highlight.current.fileName}`
+    const imagePath = `${baseURL}/${thisFile}`
+
+    window.addEventListener('keydown', handleArrow, {once : true})
 
     return(
       <div className = 'outer-highlight-container'>

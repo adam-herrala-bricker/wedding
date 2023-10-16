@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { ProgressBar } from 'react-bootstrap'
 import { setScroll } from '../reducers/viewReducer'
 import ResSelect from './ResSelect'
@@ -110,21 +111,20 @@ const BelowImage = ({ lan, imageID, imageList, setImageList, scenes, setScenes }
 }
 
 //component for grouping together each rendered image
-const ImageGroup = ({ groupClass, setGroupClass, lan, imageList, setImageList, highlight, setHighlight, scenes, setScenes }) => {
+const ImageGroup = ({ groupClass, setGroupClass, lan, imageList, setImageList, scenes, setScenes }) => {
     const [loadProgress, setLoadProgress] = useState(0) //how many images have loaded 
     const progressRef = useRef(0)
     
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const user = useSelector(i => i.user)
 
-    //const minLoadNumber = 10 //minimum number of loaded images to display
-
-
-    //event handlers
-    const handleSetHighlight = (i) => {
+    const handleToHighlight = (fileName) => {
         dispatch(setScroll(window.scrollY))
-        setHighlight({ current: i, outgoing: null })
+        navigate(`/view/${fileName}`)
     }
+
+    //const minLoadNumber = 10 //minimum number of loaded images to display
 
     //Note: this seems to trigger on every load in the children elements, not when they're all loaded
     const handleNewLoad = () => {
@@ -149,7 +149,7 @@ const ImageGroup = ({ groupClass, setGroupClass, lan, imageList, setImageList, h
                 {imageList.map(i =>
                     <div id={i.id} key={i.id}>
                         <button className={i.scenes.map(i => i.sceneName).includes('scene-0') ? 'image-button' : 'hidden-image'}
-                            onClick={() => handleSetHighlight(i)}>
+                            onClick = {() => handleToHighlight(i.fileName)}>
                             <Image key={`${i.id}-img`} imagePath={i.fileName} />
                         </button>
                         {user.adminToken && <BelowImage key={`${i.id}-bel`} lan={lan} imageID={i.id} imageList={imageList} setImageList={setImageList} scenes={scenes} setScenes={setScenes} />}
@@ -161,7 +161,7 @@ const ImageGroup = ({ groupClass, setGroupClass, lan, imageList, setImageList, h
 }
 
 //root component for this module
-const Images = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScenes, imageList, setImageList, highlight, setHighlight, lan }) => {
+const Images = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScenes, imageList, setImageList, lan }) => {
     const [groupClass, setGroupClass] = useState('group-hidden') //keeping track of whether the progress bar is hidden
 
 
@@ -181,7 +181,7 @@ const Images = ({ res, setRes, loadedScene, setLoadedScene, scenes, setScenes, i
             <p>{text.photoTxt[lan]}</p>
             {groupClass !== 'group-hidden' && <ResSelect lan = {lan} res = {res} setRes = {setRes} />}
             {groupClass !== 'group-hidden' && <DropDown loadedScene={loadedScene} setLoadedScene={setLoadedScene}  scenes={scenes} setScenes={setScenes} setImageList={setImageList} lan={lan} />}
-            <ImageGroup groupClass = {groupClass} setGroupClass = {setGroupClass} lan={lan} imageList={imageList} setImageList={setImageList} highlight={highlight} setHighlight={setHighlight} scenes={scenes} setScenes={setScenes} />
+            <ImageGroup groupClass = {groupClass} setGroupClass = {setGroupClass} lan={lan} imageList={imageList} setImageList={setImageList} scenes={scenes} setScenes={setScenes} />
         </div>
     )
 }
