@@ -34,13 +34,11 @@ const HighlightView = () => {
   
     //event handlers
     const handleBack = () => {
-      window.removeEventListener('keydown', handleArrow, {once : true})
       navigate('/')
     }
 
     const handleScrollClick = (direction) => {
         //uses same direction encoding as the arrow handler since it shares a helper function
-        window.removeEventListener('keydown', handleArrow, {once : true})
         const nextFile = imageList[adjoiningImage(direction)].fileName
         navigate(`/view/${nextFile}`)
     }
@@ -48,7 +46,6 @@ const HighlightView = () => {
     //also an event handler??
     const handleArrow = (event) => {
         const nextFile = imageList[adjoiningImage(event.key)].fileName
-        window.removeEventListener('keydown', handleArrow, {once : true})
         navigate(`/view/${nextFile}`)
     }
 
@@ -59,7 +56,11 @@ const HighlightView = () => {
     //effect hook for listening to keyboard
     //NOTE THAT IT ABSOLUTELY HAS TO BE HERE!! NOT LOOSE IN THE COMPONENT
     useEffect(() => {
-      window.addEventListener('keydown', handleArrow, {once : true})
+      console.log('listener added')
+      window.addEventListener('keydown', handleArrow)
+      return () => {
+        window.removeEventListener('keydown', handleArrow)
+      }
     }, [thisFile])
     
     //this has to live down here for some reason
