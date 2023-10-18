@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getText } from './resources/text.js'
 import { initializeScenes } from './reducers/sceneReducer.js'
+import { initializeMusic } from './reducers/mediaReducer.js'
 import ImageUpload from './components/ImageUpload'
 import Music from './components/Music'
 import Images from './components/Images'
@@ -29,7 +30,6 @@ const DisplayUser = () => {
 
 //component for regular view
 const RegularView = ({ imageList, setImageList }) => {
-  const [music, setMusic] = useState([]) //metadata for the music
   const user = useSelector(i => i.user)
 
   const lastScroll = useSelector(i => i.view.scroll)
@@ -50,7 +50,7 @@ const RegularView = ({ imageList, setImageList }) => {
         <h2>{getText('welcomeSubTxt')}</h2>
       </section>
       <section id='music'>
-        <Music music={music} setMusic={setMusic} />
+        <Music />
       </section>
       <Images id='images' imageList={imageList} setImageList={setImageList} />
     </div>
@@ -91,6 +91,12 @@ const PostEntry = ({ imageList, setImageList}) => {
   useEffect(() => {
     dispatch(initializeScenes())
   }, [])
+
+  //get music metadata
+  useEffect(() => {
+    dispatch(initializeMusic())
+  }, [])
+
 
   return(
       <RegularView imageList={imageList} setImageList={setImageList} />

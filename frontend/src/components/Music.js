@@ -1,20 +1,15 @@
-import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import audioServices from '../services/audioServices'
-import adminServices from '../services/adminServices'
+import { useDispatch, useSelector } from 'react-redux'
+import { deleteSong } from '../reducers/mediaReducer'
 import { getText } from '../resources/text'
 import helpers from '../utilities/helpers'
 //import testAudio from '../resources/test36.1c.wav'
 
-const DeleteSong = ({ songID, setMusic }) => {
+const DeleteSong = ({ songID }) => {
+    const dispatch = useDispatch()
     //event handler
     const handleDelete = async () => {
         if (window.confirm('comfirm delete')) {
-            await adminServices.deleteAudio(songID)
-
-            //reload and reset songs
-            const audioData = await audioServices.getAudioData()
-            setMusic(audioData)
+            dispatch(deleteSong(songID))
         }
     }
 
@@ -25,21 +20,9 @@ const DeleteSong = ({ songID, setMusic }) => {
     )
 }
 
-const Music = ({ music, setMusic }) => {
+const Music = () => {
     const user = useSelector(i => i.user)
-    //note: fileToName lives in utilities/helpers now
-
-    //effect hook to load music metadata from DB
-    useEffect(() => {
-        const fetchData = async () => {
-            const audioData = await audioServices.getAudioData()
-            audioData.sort(helpers.compareSongs)
-            setMusic(audioData)
-        }
-
-        fetchData()
-
-    }, [])
+    const music = useSelector(i => i.media.music)
 
     return (
         <div className='music-div'>
@@ -50,7 +33,7 @@ const Music = ({ music, setMusic }) => {
                 <div className='music-container' key={i.id}>
                     <audio controls src={`/api/audio/${i.fileName}`} />
                     <h2>{helpers.fileToName(i) ? getText(helpers.fileToName(i)) : 'song title missing'}</h2>
-                    {user.isAdmin && <DeleteSong songID={i.id} setMusic={setMusic} />}
+                    {user.adminToken && <DeleteSong songID={i.id} />}
                 </div>
             )}
         </div>

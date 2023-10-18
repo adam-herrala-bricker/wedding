@@ -10,7 +10,7 @@ export const getEntryToken = () => {
     return entryToken
 }
 
-//don't actuall use user token for anything yet, but that would go here
+//don't actually use user token for anything yet, but that would go here
 
 //admin token
 export const getAdminToken = () => {

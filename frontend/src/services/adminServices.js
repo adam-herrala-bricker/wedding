@@ -1,15 +1,12 @@
 import axios from 'axios'
+import { getAdminToken } from './tokenHelpers'
 
 const baseURL = '/api/admin/upload'
 
-export let adminToken = null
-
-const setAdminToken = (newToken) => {
-    adminToken = `Bearer ${newToken}`
-}
-
 //POST request for uploading images
 const postImage = async (imageFile) => {
+    const adminToken = getAdminToken()
+
     //set cofig for authorization
     const config = {
         headers: { Authorization: adminToken },
@@ -27,6 +24,8 @@ const postImage = async (imageFile) => {
 
 //POST request for uploading audio files
 const postAudio = async (audioFile) => {
+    const adminToken = getAdminToken()
+
     const config = {
         headers: {Authorization: adminToken}
     }
@@ -41,6 +40,8 @@ const postAudio = async (audioFile) => {
 
 //DELETE request for deleting a single image
 const deleteImage = async (imageID) => {
+    const adminToken = getAdminToken()
+
     const config = {
         headers: {Authorization : adminToken}
     }
@@ -51,6 +52,8 @@ const deleteImage = async (imageID) => {
 
 //DELETE request for deleting a single audio file
 const deleteAudio = async (audioID) => {
+    const adminToken = getAdminToken()
+
     const config = {
         headers: {Authorization : adminToken}
     }
@@ -59,4 +62,4 @@ const deleteAudio = async (audioID) => {
     return response.data
 }
 
-export default {postImage, postAudio, deleteImage, deleteAudio, setAdminToken}
+export default {postImage, postAudio, deleteImage, deleteAudio }
