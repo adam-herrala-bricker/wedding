@@ -56,13 +56,16 @@ export const {setLoaded, setList, addScene, removeScene, changeScene} = sceneSli
 
 //packaged functions
 
-export const initializeScenes = () => {
-    return async dispatch => {
-        const scenes = await sceneServices.getScenes()
-        scenes.sort(helpers.compareScenes)
-
-        dispatch(setList(scenes))
-    }
+export const initializeScenes = (entryToken) => {
+        return async dispatch => {
+            //only try if user has an entry token (will still fail if token is invalid)
+            if (entryToken) {
+                const scenes = await sceneServices.getScenes()
+                scenes.sort(helpers.compareScenes)
+        
+                dispatch(setList(scenes))
+            }
+        }
 }
 
 //updates the scene (ID provided) with a new list of image IDs

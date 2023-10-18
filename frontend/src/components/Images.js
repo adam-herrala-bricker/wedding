@@ -4,12 +4,10 @@ import { useNavigate } from 'react-router-dom'
 import { ProgressBar } from 'react-bootstrap'
 import { setScroll } from '../reducers/viewReducer'
 import { updateScene } from '../reducers/sceneReducer'
+import { updateImages, deleteImage } from '../reducers/mediaReducer'
 import ResSelect from './ResSelect'
-import adminServices from '../services/adminServices'
-import imageServices from '../services/imageServices'
 import { getText } from '../resources/text.js'
 import DropDown from './dropdownMenu.js'
-import helpers from '../utilities/helpers'
 
 //component for rendering each image
 const Image = ({ imagePath }) => {
@@ -30,9 +28,10 @@ const Image = ({ imagePath }) => {
 }
 
 //component for rendering everything below an image
-const BelowImage = ({ imageID, imageList, setImageList }) => {
+const BelowImage = ({ imageID }) => {
     const dispatch = useDispatch()
     const scenes = useSelector(i => i.scenes.list)
+    const imageList = useSelector(i => i.media.images.display)
 
     //helper function for testing whether the image is aleady linked to a scene
     const isLinked = (scene, imageID) => {
@@ -46,15 +45,7 @@ const BelowImage = ({ imageID, imageList, setImageList }) => {
     //event handlers
     const handleDelete = async (imageID) => {
         if (window.confirm('Are you sure you want to delete?')) {
-            //image object that's being deleted
-            const contentToDelete = imageList.filter(i => i.id === imageID)[0]
-
-            //then actually delete it from the images DB
-            await adminServices.deleteImage(imageID)
-            const newFileList = imageList.filter(i => i.id !== imageID)
-
-            newFileList.sort(helpers.compareImages)
-            setImageList(newFileList)
+            dispatch(deleteImage(imageID))
         }
     }
 
@@ -70,17 +61,12 @@ const BelowImage = ({ imageID, imageList, setImageList }) => {
         dispatch(updateScene(scene.id, updatedIDs))
 
         //update image DB too (also needs object in same format as scene)
-        const thisImage = imageList.filter(i => i.id === imageID)[0]
+        const thisImage = {...imageList.find(i => i.id === imageID)} //need to copy like this so it's not read-only
         thisImage.scenes = isLinked(scene, imageID)
             ? thisImage.scenes.map(i => i.id).filter(i => i !== scene.id)
             : thisImage.scenes.map(i => i.id).concat(scene.id)
 
-        const returnedImage = await imageServices.updateImageData({ id: imageID, scenes: thisImage.scenes })
-
-        const newImageList = [...imageList.filter(i => i.id !== imageID), returnedImage]
-
-        newImageList.sort(helpers.compareImages)
-        setImageList(newImageList)
+        dispatch(updateImages(imageID, thisImage.scenes))
 
     }
 
@@ -101,13 +87,15 @@ const BelowImage = ({ imageID, imageList, setImageList }) => {
 }
 
 //component for grouping together each rendered image
-const ImageGroup = ({ groupClass, setGroupClass, imageList, setImageList }) => {
+const ImageGroup = ({ groupClass, setGroupClass }) => {
     const [loadProgress, setLoadProgress] = useState(0) //how many images have loaded 
     const progressRef = useRef(0)
     
     const navigate = useNavigate()
+
     const dispatch = useDispatch()
     const user = useSelector(i => i.user)
+    const imageList = useSelector(i => i.media.images.display)
 
     const handleToHighlight = (fileName) => {
         dispatch(setScroll(window.scrollY))
@@ -129,8 +117,6 @@ const ImageGroup = ({ groupClass, setGroupClass, imageList, setImageList }) => {
         progressRef.current === imageList.length && setGroupClass('image-grouping') //note: changed to show images while they load
     }
 
-   
-
     return (
         <div>
             {groupClass === 'group-hidden' && <div>{getText('loading')} {loadProgress}/{imageList.length}</div>}
@@ -142,7 +128,7 @@ const ImageGroup = ({ groupClass, setGroupClass, imageList, setImageList }) => {
                             onClick = {() => handleToHighlight(i.fileName)}>
                             <Image key={`${i.id}-img`} imagePath={i.fileName} />
                         </button>
-                        {user.adminToken && <BelowImage key={`${i.id}-bel`} imageID={i.id} imageList={imageList} setImageList={setImageList} />}
+                        {user.adminToken && <BelowImage key={`${i.id}-bel`} imageID={i.id} />}
                     </div>
                 )}
             </div>
@@ -151,7 +137,7 @@ const ImageGroup = ({ groupClass, setGroupClass, imageList, setImageList }) => {
 }
 
 //root component for this module
-const Images = ({ imageList, setImageList }) => {
+const Images = () => {
     const [groupClass, setGroupClass] = useState('group-hidden') //keeping track of whether the progress bar is hidden
 
     return (
@@ -159,8 +145,8 @@ const Images = ({ imageList, setImageList }) => {
             <h2 id='image-top' className='new-section'>{getText('photos')}</h2>
             <p>{getText('photoTxt')}</p>
             {groupClass !== 'group-hidden' && <ResSelect />}
-            {groupClass !== 'group-hidden' && <DropDown setImageList={setImageList} />}
-            <ImageGroup groupClass = {groupClass} setGroupClass = {setGroupClass} imageList={imageList} setImageList={setImageList} />
+            {groupClass !== 'group-hidden' && <DropDown />}
+            <ImageGroup groupClass = {groupClass} setGroupClass = {setGroupClass} />
         </div>
     )
 }

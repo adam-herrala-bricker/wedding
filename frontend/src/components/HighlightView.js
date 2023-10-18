@@ -5,9 +5,10 @@ import { Button, CloseButton, Image} from 'react-bootstrap'
 import { getText } from '../resources/text'
 
 //component for highlighting a single image
-const HighlightView = ({ imageList }) => {
+const HighlightView = () => {
     const [thisClass, setThisClass] = useState('single-image-hidden')
     const res = useSelector(i => i.view.res)
+    const imageList = useSelector(i => i.media.images.display)
 
     const navigate = useNavigate()
     const thisFile = useParams().fileName

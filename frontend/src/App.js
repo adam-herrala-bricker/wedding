@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { getText } from './resources/text.js'
 import { initializeScenes } from './reducers/sceneReducer.js'
+import { initializeImages } from './reducers/mediaReducer.js'
 import { initializeMusic } from './reducers/mediaReducer.js'
 import ImageUpload from './components/ImageUpload'
 import Music from './components/Music'
@@ -11,8 +12,6 @@ import Entry from './components/Entry'
 import CustomNavbar from './components/CustomnNavbar.js'
 import Language from './components/Language'
 import HighlightView from './components/HighlightView.js'
-import imageServices from './services/imageServices'
-import helpers from './utilities/helpers'
 
 //component to display current user
 const DisplayUser = () => {
@@ -29,20 +28,22 @@ const DisplayUser = () => {
 }
 
 //component for regular view
-const RegularView = ({ imageList, setImageList }) => {
+const RegularView = () => {
   const user = useSelector(i => i.user)
 
   const lastScroll = useSelector(i => i.view.scroll)
 
-  //note the scroll just goes here
-  window.scroll({ left: 0, top: lastScroll, behavior: 'instant' })
-
-
+  //note the scroll just goes here (temp fix on timing)
+  setTimeout(() => {
+    window.scroll({ left: 0, top: lastScroll, behavior: 'instant' })
+  },50)
+  
+  
   return (
     <div>
       <DisplayUser />
       <CustomNavbar ></CustomNavbar>
-      {user.adminToken && <ImageUpload setImageList={setImageList} />}
+      {user.adminToken && <ImageUpload />}
       <section id='headingsSection'>
         <div>
           <h1>{getText('welcomeTxt')}</h1>
@@ -52,76 +53,37 @@ const RegularView = ({ imageList, setImageList }) => {
       <section id='music'>
         <Music />
       </section>
-      <Images id='images' imageList={imageList} setImageList={setImageList} />
+      <Images id='images' />
     </div>
-
   )
 }
-
-//Need seperate, stable post-entry component so that image data doesn't reload on every exit from highlight view (that would erase any filtering applied)
-//but doesn't load when you're on the entry page
-//UPDATE: CAN PROBABLY REMOVE THIS ONCE THE REDUX REFACTOR IS COMPLETE
-const PostEntry = ({ imageList, setImageList}) => {
-  const dispatch = useDispatch()
-
-  const user = useSelector(i => i.user)
-
-  //effect hook to load image list on first render, plus whenever the upload images change
-  //(need to put the async inside so it doesn't throw an error)
-  const setImageFiles = () => {
-    const fetchData = async () => {
-      const response = await imageServices.getImageData()
-
-      //allows for 'hidden' files only visible to admin by removing from 'all' scene
-      const newImageList = user.adminToken
-        ? response
-        : response.filter(i => i.scenes.map(i => i.sceneName).includes('scene-0'))
-
-      newImageList.sort(helpers.compareImages)
-      setImageList(newImageList)
-    }
-    
-    fetchData()
-  
-  }
-
-  useEffect(setImageFiles, [user])
-  
-  //get scenes
-  useEffect(() => {
-    dispatch(initializeScenes())
-  }, [])
-
-  //get music metadata
-  useEffect(() => {
-    dispatch(initializeMusic())
-  }, [])
-
-
-  return(
-      <RegularView imageList={imageList} setImageList={setImageList} />
-  )
-}
-
 
 //root component
 const App = () => {
-  const [imageList, setImageList] = useState([])
+  const dispatch = useDispatch()
+  //note that if you do this as an object (i.e. 'user') it will update everytime
+  //since equality comparison is === by default (may be able to fix with custom equality comparison?)
+  const entryToken = useSelector(i => i.user.entryToken)
+  const adminToken = useSelector(i => i.user.adminToken)
 
-  const entryKey = useSelector(i => i.user.entryToken)
+  //initialize states
+  useEffect(() => {
+    dispatch(initializeScenes(entryToken))
+    dispatch(initializeImages(entryToken, adminToken))
+    dispatch(initializeMusic(entryToken))
+  }, [entryToken, adminToken])
+  
 
   return (
     <div className='container'>
       <Routes>
         <Route path='/' element={
-          entryKey
-            ? <PostEntry imageList={imageList} setImageList={setImageList} />
+          entryToken
+            ? <RegularView />
             : <Entry />
         } />
-        <Route path='/view/:fileName' element = {<HighlightView imageList = {imageList} /> }/>
+        <Route path='/view/:fileName' element = {<HighlightView /> }/>
       </Routes>
-
-
     </div>
   )
 }
