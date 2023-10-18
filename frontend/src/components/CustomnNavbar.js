@@ -3,7 +3,7 @@ import { getText } from '../resources/text'
 
 import { Container, Nav, Navbar } from 'react-bootstrap';
 
-function CustomNavbar({ setEntryKey, setLastScroll }) {
+function CustomNavbar() {
     return (
         <Navbar expand="lg" sticky="top" className="p-2 text-dark" style={{backgroundColor : 'rgb(234, 243, 238)', fontWeight : 200}}>
             <Container>
@@ -27,7 +27,7 @@ function CustomNavbar({ setEntryKey, setLastScroll }) {
                     </Nav>
 
                     <Nav>
-                        <User setEntryKey={setEntryKey}setLastScroll = {setLastScroll}/>
+                        <User />
                     </Nav>
                 </Navbar.Collapse>
             </Container>

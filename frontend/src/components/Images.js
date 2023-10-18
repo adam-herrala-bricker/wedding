@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { ProgressBar } from 'react-bootstrap'
 import { setScroll } from '../reducers/viewReducer'
+import { updateScene } from '../reducers/sceneReducer'
 import ResSelect from './ResSelect'
 import adminServices from '../services/adminServices'
-import sceneServices from '../services/sceneServices'
 import imageServices from '../services/imageServices'
 import { getText } from '../resources/text.js'
 import DropDown from './dropdownMenu.js'
@@ -27,13 +27,12 @@ const Image = ({ imagePath }) => {
             <img className={thisClass} alt='single image' loading='eager' src={`${webResURL}/${imagePath}`} onLoad={handleLoaded} />
         </div>
     )
-
-
 }
 
 //component for rendering everything below an image
-const BelowImage = ({ imageID, imageList, setImageList, scenes, setScenes }) => {
+const BelowImage = ({ imageID, imageList, setImageList }) => {
     const dispatch = useDispatch()
+    const scenes = useSelector(i => i.scenes.list)
 
     //helper function for testing whether the image is aleady linked to a scene
     const isLinked = (scene, imageID) => {
@@ -63,20 +62,12 @@ const BelowImage = ({ imageID, imageList, setImageList, scenes, setScenes }) => 
     const handleSceneLink = async (scene, imageID) => {
         dispatch(setScroll(window.scrollY)) //keep from jumping around afterwards
 
-        //single object with value = array of list of IDs!
+        //single object with value = array of list of image IDs!
         const updatedIDs = isLinked(scene, imageID)
             ? [...scene.images.filter(i => i.id !== imageID).map(i => i.id)]
             : [...scene.images.map(i => i.id), imageID]
 
-        const updatedScene = await sceneServices.updateScene({ id: scene.id, imageIDs: updatedIDs })
-        const thisScene = updatedScene.sceneName
-
-        //const newScenes = await sceneServices.getScenes() //too much lag this way
-        const newScenes = [...scenes.filter(i => i.sceneName !== thisScene), updatedScene]
-
-        newScenes.sort(helpers.compareScenes)
-
-        setScenes(newScenes)
+        dispatch(updateScene(scene.id, updatedIDs))
 
         //update image DB too (also needs object in same format as scene)
         const thisImage = imageList.filter(i => i.id === imageID)[0]
@@ -104,14 +95,13 @@ const BelowImage = ({ imageID, imageList, setImageList, scenes, setScenes }) => 
                     key={i.id} onClick={() => handleSceneLink(i, imageID)}>
                     {getText(i.sceneName.replace('-', '')) || i.sceneName}
                 </button>
-            )
-            }
+            )}
         </div>
     )
 }
 
 //component for grouping together each rendered image
-const ImageGroup = ({ groupClass, setGroupClass, imageList, setImageList, scenes, setScenes }) => {
+const ImageGroup = ({ groupClass, setGroupClass, imageList, setImageList }) => {
     const [loadProgress, setLoadProgress] = useState(0) //how many images have loaded 
     const progressRef = useRef(0)
     
@@ -152,7 +142,7 @@ const ImageGroup = ({ groupClass, setGroupClass, imageList, setImageList, scenes
                             onClick = {() => handleToHighlight(i.fileName)}>
                             <Image key={`${i.id}-img`} imagePath={i.fileName} />
                         </button>
-                        {user.adminToken && <BelowImage key={`${i.id}-bel`} imageID={i.id} imageList={imageList} setImageList={setImageList} scenes={scenes} setScenes={setScenes} />}
+                        {user.adminToken && <BelowImage key={`${i.id}-bel`} imageID={i.id} imageList={imageList} setImageList={setImageList} />}
                     </div>
                 )}
             </div>
@@ -161,27 +151,16 @@ const ImageGroup = ({ groupClass, setGroupClass, imageList, setImageList, scenes
 }
 
 //root component for this module
-const Images = ({ loadedScene, setLoadedScene, scenes, setScenes, imageList, setImageList }) => {
+const Images = ({ loadedScene, setLoadedScene, imageList, setImageList }) => {
     const [groupClass, setGroupClass] = useState('group-hidden') //keeping track of whether the progress bar is hidden
-
-
-    //effect hook to get scenes at first render
-    useEffect(() => {
-        const fetchData = async () => {
-            const scenes = await sceneServices.getScenes()
-            scenes.sort(helpers.compareScenes)
-            setScenes(scenes)
-        }
-        fetchData()
-    }, [imageList])
 
     return (
         <div>
             <h2 id='image-top' className='new-section'>{getText('photos')}</h2>
             <p>{getText('photoTxt')}</p>
             {groupClass !== 'group-hidden' && <ResSelect />}
-            {groupClass !== 'group-hidden' && <DropDown loadedScene={loadedScene} setLoadedScene={setLoadedScene}  scenes={scenes} setScenes={setScenes} setImageList={setImageList} />}
-            <ImageGroup groupClass = {groupClass} setGroupClass = {setGroupClass} imageList={imageList} setImageList={setImageList} scenes={scenes} setScenes={setScenes} />
+            {groupClass !== 'group-hidden' && <DropDown loadedScene={loadedScene} setLoadedScene={setLoadedScene}  setImageList={setImageList} />}
+            <ImageGroup groupClass = {groupClass} setGroupClass = {setGroupClass} imageList={imageList} setImageList={setImageList} />
         </div>
     )
 }

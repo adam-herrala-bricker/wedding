@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { getText } from './resources/text.js'
+import { initializeScenes } from './reducers/sceneReducer.js'
 import ImageUpload from './components/ImageUpload'
 import Music from './components/Music'
 import Images from './components/Images'
@@ -27,7 +28,7 @@ const DisplayUser = () => {
 }
 
 //component for regular view
-const RegularView = ({ loadedScene, setLoadedScene, scenes, setScenes, imageList, setImageList }) => {
+const RegularView = ({ loadedScene, setLoadedScene, imageList, setImageList }) => {
   const [music, setMusic] = useState([]) //metadata for the music
   const user = useSelector(i => i.user)
 
@@ -51,7 +52,7 @@ const RegularView = ({ loadedScene, setLoadedScene, scenes, setScenes, imageList
       <section id='music'>
         <Music music={music} setMusic={setMusic} />
       </section>
-      <Images loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} id='images' scenes={scenes} setScenes={setScenes} imageList={imageList} setImageList={setImageList} />
+      <Images loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} id='images' imageList={imageList} setImageList={setImageList} />
     </div>
 
   )
@@ -60,7 +61,9 @@ const RegularView = ({ loadedScene, setLoadedScene, scenes, setScenes, imageList
 //Need seperate, stable post-entry component so that image data doesn't reload on every exit from highlight view (that would erase any filtering applied)
 //but doesn't load when you're on the entry page
 //UPDATE: CAN PROBABLY REMOVE THIS ONCE THE REDUX REFACTOR IS COMPLETE
-const PostEntry = ( {loadedScene, setLoadedScene, scenes, setScenes, guestUser, imageList, setImageList}) => {
+const PostEntry = ( {loadedScene, setLoadedScene, guestUser, imageList, setImageList}) => {
+  const dispatch = useDispatch()
+
   const user = useSelector(i => i.user)
 
   //effect hook to load image list on first render, plus whenever the upload images change
@@ -83,9 +86,13 @@ const PostEntry = ( {loadedScene, setLoadedScene, scenes, setScenes, guestUser, 
   }
 
   useEffect(setImageFiles, [user])
+  //get scenes
+  useEffect(() => {
+    dispatch(initializeScenes())
+  }, [])
 
   return(
-      <RegularView loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} guestUser={guestUser} imageList={imageList} setImageList={setImageList} />
+      <RegularView loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} guestUser={guestUser} imageList={imageList} setImageList={setImageList} />
   )
 }
 
@@ -93,7 +100,6 @@ const PostEntry = ( {loadedScene, setLoadedScene, scenes, setScenes, guestUser, 
 //root component
 const App = () => {
   const [imageList, setImageList] = useState([])
-  const [scenes, setScenes] = useState([]) //list of all the scenes
   const [loadedScene, setLoadedScene] = useState(null) //currently selected scene to display
 
   const entryKey = useSelector(i => i.user.entryToken)
@@ -103,7 +109,7 @@ const App = () => {
       <Routes>
         <Route path='/' element={
           entryKey
-            ? <PostEntry loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} imageList={imageList} setImageList={setImageList} />
+            ? <PostEntry loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} imageList={imageList} setImageList={setImageList} />
             : <Entry />
         } />
         <Route path='/view/:fileName' element = {<HighlightView imageList = {imageList} /> }/>

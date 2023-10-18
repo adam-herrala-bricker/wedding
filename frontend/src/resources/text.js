@@ -59,5 +59,10 @@ export const getText = (key) => {
     const currentState = store.getState()
     const lan = currentState.view.lan
 
-    return text[key][lan]
+    //only return values if they're in here
+    if (text[key]) {
+        return text[key][lan]
+    }
+
+    return false
 }

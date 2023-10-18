@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setScroll } from '../reducers/viewReducer'
-import sceneServices from '../services/sceneServices'
+import { createNewScene, deleteScene } from '../reducers/sceneReducer'
 import imageServices from '../services/imageServices'
 import { getText } from '../resources/text'
 import helpers from '../utilities/helpers'
@@ -15,9 +15,11 @@ const InactiveView = ({ setIsActive }) => {
     )
 }
 
-const CurrentScenes = ({loadedScene, setLoadedScene, scenes, setScenes, setImageList }) => {
+const CurrentScenes = ({loadedScene, setLoadedScene, setImageList }) => {
     const dispatch = useDispatch()
     const user = useSelector(i => i.user)
+    const scenes = useSelector(i => i.scenes.list)
+    
 
     //event handlers
     const handleSceneChange = async (scene) => {
@@ -36,13 +38,9 @@ const CurrentScenes = ({loadedScene, setLoadedScene, scenes, setScenes, setImage
         dispatch(setScroll(window.scrollY))
     }
 
-    const deleteScene = async (scene) => {
+    const handleDeleteScene = async (scene) => {
         if (window.confirm(`Are you sure you want to delete scene ${scene.sceneName}?`)) {
-            await sceneServices.deleteScene(scene)
-
-            const newScenes = scenes.filter(i => i.id !== scene.id)
-            setScenes(newScenes) // WATCH OUT TO SEE IF WE NEED TO ADD SORTING HERE!!
-
+            dispatch(deleteScene(scene))
         }
     }
 
@@ -53,7 +51,7 @@ const CurrentScenes = ({loadedScene, setLoadedScene, scenes, setScenes, setImage
                     {getText(i.sceneName.replace('-','')) || i.sceneName}
                 </button>
                 {user.adminToken &&
-                <button key = {`${i.id}-del`} onClick = {() => deleteScene(i)}>
+                <button key = {`${i.id}-del`} onClick = {() => handleDeleteScene(i)}>
                     -
                 </button>
                 }
@@ -63,54 +61,50 @@ const CurrentScenes = ({loadedScene, setLoadedScene, scenes, setScenes, setImage
     )
 }
 
-const CreateNewScene = ({scenes, setScenes }) => {
+const CreateNewScene = () => {
+    const dispatch = useDispatch()
+    const scenes = useSelector(i => i.scenes.list)
+
     //helper function for new scene name
     const newSceneName = () => {
         //currently no scenes
         if (scenes.length === 0 ) {
             return 'scene-0'
         }
-
         //scene with the largest number
         const maxScene = Math.max(...scenes.map(i => Number(i.sceneName.split('-')[1])))
 
-        
         return(`scene-${maxScene + 1}`)
-
     }
 
     //event handler
     const handleCreateNew = async () => {
-
-        const addedScene = await sceneServices.addScene({sceneName : newSceneName()})
-
-        setScenes(scenes.concat(addedScene))
-
+        dispatch(createNewScene(newSceneName()))
     }
 
     return(<button onClick = {handleCreateNew}>{getText('new')}</button>)
 
 }
 
-const ActiveView = ({loadedScene, setLoadedScene, setIsActive, scenes, setScenes, setImageList }) => {
+const ActiveView = ({loadedScene, setLoadedScene, setIsActive, setImageList }) => {
     const user = useSelector(i => i.user)
 
     return(
         <div id = 'scenes' className = 'scene-filter-container'>
             <button onClick = {() => setIsActive(false)}>{getText('done')}</button>
-            <CurrentScenes loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} />
-            {user.adminToken && <CreateNewScene scenes = {scenes} setScenes = {setScenes} />}
+            <CurrentScenes loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} setImageList = {setImageList} />
+            {user.adminToken && <CreateNewScene />}
         </div>
     )
 }
 
-const DropDown = ({loadedScene, setLoadedScene, scenes, setScenes, setImageList }) => {
+const DropDown = ({loadedScene, setLoadedScene, setImageList }) => {
     const [isActive, setIsActive] = useState(false)
 
     return(
         <div>
             {isActive
-            ? <ActiveView loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} setIsActive = {setIsActive} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} />
+            ? <ActiveView loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} setIsActive = {setIsActive} setImageList = {setImageList} />
             : <InactiveView setIsActive = {setIsActive} />
         }
         </div>

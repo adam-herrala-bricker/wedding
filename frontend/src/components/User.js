@@ -70,7 +70,7 @@ const LoginSelect = () => {
 
 //root component for this module
 //full user info component --> guest: login or create. logged in: display name + log out
-const Login = ({ setLastScroll}) => {
+const Login = () => {
     const dispatch = useDispatch()
     const user = useSelector(i => i.user)
 
@@ -99,8 +99,8 @@ const Login = ({ setLastScroll}) => {
     return(
         <div className = 'login-button-container'>
             {user.username === 'guest'
-            ? <LoginSelect setLastScroll = {setLastScroll}/>
-            : <LoggerOuter  setLastScroll = {setLastScroll}/>}
+            ? <LoginSelect />
+            : <LoggerOuter />}
             <button className = 'generic-button' onClick = {handleExit}>{getText('exit')}</button>
         </div>
     )
