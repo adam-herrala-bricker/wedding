@@ -92,7 +92,14 @@ const ActiveView = ({ setIsActive }) => {
 }
 
 const DropDown = () => {
-    const [isActive, setIsActive] = useState(false)
+    const loadedScene = useSelector(i => i.scenes.loaded)
+
+    //make it a little nicer for users: keep menu open if there's a (non all/kakki) scene loaded
+    const activeDefault = loadedScene && loadedScene !== 'scene-0'
+        ? true
+        : false
+
+    const [isActive, setIsActive] = useState(activeDefault)
 
     return(
         <div>
