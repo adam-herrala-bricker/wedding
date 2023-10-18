@@ -6,7 +6,6 @@ import { setScroll } from '../reducers/viewReducer'
 import { updateScene } from '../reducers/sceneReducer'
 import { updateImages, deleteImage } from '../reducers/mediaReducer'
 import ResSelect from './ResSelect'
-import { getText } from '../resources/text.js'
 import DropDown from './dropdownMenu.js'
 
 //component for rendering each image
@@ -32,6 +31,7 @@ const BelowImage = ({ imageID }) => {
     const dispatch = useDispatch()
     const scenes = useSelector(i => i.scenes.list)
     const imageList = useSelector(i => i.media.images.display)
+    const textLan = useSelector(i => i.view.textLan)
 
     //helper function for testing whether the image is aleady linked to a scene
     const isLinked = (scene, imageID) => {
@@ -79,7 +79,7 @@ const BelowImage = ({ imageID }) => {
                     : 'scene-unlinked'
                 }
                     key={i.id} onClick={() => handleSceneLink(i, imageID)}>
-                    {getText(i.sceneName.replace('-', '')) || i.sceneName}
+                    {textLan[i.sceneName.replace('-', '')] || i.sceneName}
                 </button>
             )}
         </div>
@@ -96,6 +96,7 @@ const ImageGroup = ({ groupClass, setGroupClass }) => {
     const dispatch = useDispatch()
     const user = useSelector(i => i.user)
     const imageList = useSelector(i => i.media.images.display)
+    const textLan = useSelector(i => i.view.textLan)
 
     const handleToHighlight = (fileName) => {
         dispatch(setScroll(window.scrollY))
@@ -119,7 +120,7 @@ const ImageGroup = ({ groupClass, setGroupClass }) => {
 
     return (
         <div>
-            {groupClass === 'group-hidden' && <div>{getText('loading')} {loadProgress}/{imageList.length}</div>}
+            {groupClass === 'group-hidden' && <div>{textLan.loading} {loadProgress}/{imageList.length}</div>}
             {groupClass === 'group-hidden' && <ProgressBar now={loadProgress} max={imageList.length} style={{ maxWidth: 500 }} />}
             <div className = 'image-grouping' onLoad={handleNewLoad}>
                 {imageList.map(i =>
@@ -139,11 +140,12 @@ const ImageGroup = ({ groupClass, setGroupClass }) => {
 //root component for this module
 const Images = () => {
     const [groupClass, setGroupClass] = useState('group-hidden') //keeping track of whether the progress bar is hidden
+    const textLan = useSelector(i => i.view.textLan)
 
     return (
         <div>
-            <h2 id='image-top' className='new-section'>{getText('photos')}</h2>
-            <p>{getText('photoTxt')}</p>
+            <h2 id='image-top' className='new-section'>{textLan.photos}</h2>
+            <p>{textLan.photoTxt}</p>
             {groupClass !== 'group-hidden' && <ResSelect />}
             {groupClass !== 'group-hidden' && <DropDown />}
             <ImageGroup groupClass = {groupClass} setGroupClass = {setGroupClass} />

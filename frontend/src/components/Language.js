@@ -1,4 +1,4 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setLan, setScroll } from '../reducers/viewReducer'
 
 import usFlag from '../resources/us-flag.png'
@@ -6,6 +6,7 @@ import finFlag from '../resources/fin-flag.png'
 
 const Language = () => {
     const dispatch = useDispatch()
+    const lan = useSelector(i => i.view.lan)
 
     const handleLanChange = (newLan) => {
         dispatch(setScroll(window.scrollY))

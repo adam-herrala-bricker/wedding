@@ -2,12 +2,13 @@ import {useState, useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Offcanvas } from 'react-bootstrap'
 import { clearUser, login, logOut, setUser, setAdmin } from '../reducers/userReducer'
-import { getText } from '../resources/text'
 import Notifier from './Notifier'
 
 const LoginForm = ({ setShowLogin }) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+
+    const textLan = useSelector(i => i.view.textLan)
 
     const dispatch = useDispatch()
 
@@ -25,18 +26,18 @@ const LoginForm = ({ setShowLogin }) => {
 
     return(
         <div className='login-container'>
-            <h2>{getText('login')}</h2>
+            <h2>{textLan.login}</h2>
             <Notifier />
             <form autoComplete='off' onSubmit = {handleLogin}>
                 <div className = 'user-input'>
-                    {getText('username')} <input name='Username' value={username} onChange = {handleFormChange}/>
+                    {textLan.username} <input name='Username' value={username} onChange = {handleFormChange}/>
                  </div>
                 <div className = 'user-input'>
-                    {getText('password')} <input name='Password' type='password' value={password} onChange = {handleFormChange}/>
+                    {textLan.password} <input name='Password' type='password' value={password} onChange = {handleFormChange}/>
                 </div>
                 <div className = 'login-button-container'>
-                    <button className = 'generic-button' id = 'login-button' type='submit'>{getText('login')}</button>
-                    <button className = 'generic-button' onClick = {() => setShowLogin(false)}>{getText('cancel')}</button> 
+                    <button className = 'generic-button' id = 'login-button' type='submit'>{textLan.login}</button>
+                    <button className = 'generic-button' onClick = {() => setShowLogin(false)}>{textLan.cancel}</button> 
                 </div>
             </form>
         </div>
@@ -44,6 +45,7 @@ const LoginForm = ({ setShowLogin }) => {
 }
 
 const LoggerOuter = () => {
+    const textLan = useSelector(i => i.view.textLan)
     const dispatch = useDispatch()
     //event handler
     const handleLogout = () => {
@@ -51,20 +53,21 @@ const LoggerOuter = () => {
     }
 
     return(
-        <button className = 'generic-button' onClick = {handleLogout}>{getText('logout')}</button>
+        <button className = 'generic-button' onClick = {handleLogout}>{textLan.logout}</button>
     )
 }
 
 //group where login can be selected/displayed
 const LoginSelect = () => {
     const [showLogin, setShowLogin] = useState(false)
+    const textLan = useSelector(i => i.view.textLan)
 
     return(
             showLogin
             ? <Offcanvas show = {showLogin} placement='end' style={{backgroundColor : 'rgb(234, 243, 238)'}}>
                 <LoginForm setShowLogin = {setShowLogin} />
             </Offcanvas>
-            : <button className = 'generic-button' onClick = {() => setShowLogin(true)}>{getText('login')}</button>
+            : <button className = 'generic-button' onClick = {() => setShowLogin(true)}>{textLan.login}</button>
     )
 }
 
@@ -73,6 +76,7 @@ const LoginSelect = () => {
 const Login = () => {
     const dispatch = useDispatch()
     const user = useSelector(i => i.user)
+    const textLan = useSelector(i => i.view.textLan)
 
     //event handler
     const handleExit = () => {
@@ -101,7 +105,7 @@ const Login = () => {
             {user.username === 'guest'
             ? <LoginSelect />
             : <LoggerOuter />}
-            <button className = 'generic-button' onClick = {handleExit}>{getText('exit')}</button>
+            <button className = 'generic-button' onClick = {handleExit}>{textLan.exit}</button>
         </div>
     )
 }

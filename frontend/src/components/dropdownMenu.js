@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setScroll } from '../reducers/viewReducer'
 import { createNewScene, deleteScene, setLoaded } from '../reducers/sceneReducer'
 import { filterImages } from '../reducers/mediaReducer'
-import { getText } from '../resources/text'
 
 const InactiveView = ({ setIsActive }) => {
+    const textLan = useSelector(i => i.view.textLan)
     return(
         <div className = 'scene-filter-container'>
-            <button onClick = {() => setIsActive(true)}>{getText('filter')}</button>
+            <button onClick = {() => setIsActive(true)}>{textLan.filter}</button>
         </div>
         
     )
@@ -19,6 +19,7 @@ const CurrentScenes = () => {
     const user = useSelector(i => i.user)
     const scenes = useSelector(i => i.scenes.list)
     const loadedScene = useSelector(i => i.scenes.loaded)
+    const textLan = useSelector(i => i.view.textLan)
 
     //event handlers
     const handleSceneChange = async (scene) => {
@@ -38,7 +39,7 @@ const CurrentScenes = () => {
         scenes.map(i => 
             <div key = {i.id}>
                 <button key = {`${i.id}-fil`} className = {i.sceneName === loadedScene ? 'scene-name-highlight' : 'scene-name-regular'} onClick = {() => {handleSceneChange(i)}}>
-                    {getText(i.sceneName.replace('-','')) || i.sceneName}
+                    {textLan[i.sceneName.replace('-','')] || i.sceneName}
                 </button>
                 {user.adminToken &&
                 <button key = {`${i.id}-del`} onClick = {() => handleDeleteScene(i)}>
@@ -54,6 +55,7 @@ const CurrentScenes = () => {
 const CreateNewScene = () => {
     const dispatch = useDispatch()
     const scenes = useSelector(i => i.scenes.list)
+    const textLan = useSelector(i => i.view.textLan)
 
     //helper function for new scene name
     const newSceneName = () => {
@@ -72,16 +74,17 @@ const CreateNewScene = () => {
         dispatch(createNewScene(newSceneName()))
     }
 
-    return(<button onClick = {handleCreateNew}>{getText('new')}</button>)
+    return(<button onClick = {handleCreateNew}>{textLan.new}</button>)
 
 }
 
 const ActiveView = ({ setIsActive }) => {
     const user = useSelector(i => i.user)
+    const textLan = useSelector(i => i.view.textLan)
 
     return(
         <div id = 'scenes' className = 'scene-filter-container'>
-            <button onClick = {() => setIsActive(false)}>{getText('done')}</button>
+            <button onClick = {() => setIsActive(false)}>{textLan.done}</button>
             <CurrentScenes setImageList />
             {user.adminToken && <CreateNewScene />}
         </div>

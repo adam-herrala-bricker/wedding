@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { getText } from './resources/text.js'
 import { initializeScenes } from './reducers/sceneReducer.js'
 import { initializeImages } from './reducers/mediaReducer.js'
 import { initializeMusic } from './reducers/mediaReducer.js'
@@ -16,12 +15,13 @@ import HighlightView from './components/HighlightView.js'
 //component to display current user
 const DisplayUser = () => {
   const user = useSelector(i => i.user)
+  const textLan = useSelector(i => i.view.textLan)
 
   return (
     <div className='user-container'>
       <Language />
       {user.username === 'guest'
-        ? getText('guest')
+        ? textLan.guest
         : user.username}
     </div>
   )
@@ -30,6 +30,7 @@ const DisplayUser = () => {
 //component for regular view
 const RegularView = () => {
   const user = useSelector(i => i.user)
+  const textLan = useSelector(i => i.view.textLan)
 
   const lastScroll = useSelector(i => i.view.scroll)
 
@@ -42,13 +43,13 @@ const RegularView = () => {
   return (
     <div>
       <DisplayUser />
-      <CustomNavbar ></CustomNavbar>
+      <CustomNavbar />
       {user.adminToken && <ImageUpload />}
       <section id='headingsSection'>
         <div>
-          <h1>{getText('welcomeTxt')}</h1>
+          <h1>{textLan.welcomeTxt}</h1>
         </div>
-        <h2>{getText('welcomeSubTxt')}</h2>
+        <h2>{textLan.welcomeSubTxt}</h2>
       </section>
       <section id='music'>
         <Music />

@@ -2,12 +2,11 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { Button, CloseButton, Image} from 'react-bootstrap'
-import { getText } from '../resources/text'
 
 //component for highlighting a single image
 const HighlightView = () => {
     const [thisClass, setThisClass] = useState('single-image-hidden')
-    const res = useSelector(i => i.view.res)
+    const { res, textLan } = useSelector(i => i.view)
     const imageList = useSelector(i => i.media.images.display)
 
     const navigate = useNavigate()
@@ -56,7 +55,6 @@ const HighlightView = () => {
     //effect hook for listening to keyboard
     //NOTE THAT IT ABSOLUTELY HAS TO BE HERE!! NOT LOOSE IN THE COMPONENT
     useEffect(() => {
-      console.log('listener added')
       window.addEventListener('keydown', handleArrow)
       return () => {
         window.removeEventListener('keydown', handleArrow)
@@ -79,12 +77,12 @@ const HighlightView = () => {
           <Image alt = '' src = {imagePath} className = {thisClass} onLoad = {handleLoad}/>
         </div>
         <div className = 'highlight-group'>
-          {thisClass === 'single-image-hidden' && getText('loading') + '...'}
+          {thisClass === 'single-image-hidden' && textLan.loading + '...'}
         </div>
         {thisClass !== 'single-image-hidden' &&
           <div className = 'bs-button-container'>
             <Button variant = 'outline-dark' onClick = {() => handleScrollClick('ArrowLeft')}>{'<--'}</Button>
-            <a download className = 'regular-text' href = {imagePath}><Button variant = 'outline-dark'>{getText('download')}</Button></a>
+            <a download className = 'regular-text' href = {imagePath}><Button variant = 'outline-dark'>{textLan.download}</Button></a>
             <Button variant = 'outline-dark' onClick = {() => handleScrollClick('ArrowRight')}>{'-->'}</Button>
           </div>
         }
