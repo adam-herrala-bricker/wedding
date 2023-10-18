@@ -204,7 +204,7 @@ p {
     text-align: center;
 }
 
-.image-button {
+.image-button, .hidden-image {
     background-color: white;
 
     border-style: none;
@@ -215,7 +215,7 @@ p {
 
 }
 
-.image-button:hover {
+.image-button:hover, .hidden-image:hover {
     filter:grayscale(0%);
     
 }
