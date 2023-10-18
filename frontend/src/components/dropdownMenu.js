@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setScroll } from '../reducers/viewReducer'
-import { createNewScene, deleteScene } from '../reducers/sceneReducer'
+import { createNewScene, deleteScene, setLoaded } from '../reducers/sceneReducer'
 import imageServices from '../services/imageServices'
 import { getText } from '../resources/text'
 import helpers from '../utilities/helpers'
@@ -15,11 +15,11 @@ const InactiveView = ({ setIsActive }) => {
     )
 }
 
-const CurrentScenes = ({loadedScene, setLoadedScene, setImageList }) => {
+const CurrentScenes = ({ setImageList }) => {
     const dispatch = useDispatch()
     const user = useSelector(i => i.user)
     const scenes = useSelector(i => i.scenes.list)
-    
+    const loadedScene = useSelector(i => i.scenes.loaded)
 
     //event handlers
     const handleSceneChange = async (scene) => {
@@ -34,7 +34,7 @@ const CurrentScenes = ({loadedScene, setLoadedScene, setImageList }) => {
         
         filteredImages.sort(helpers.compareImages)
         setImageList(filteredImages)
-        setLoadedScene(sceneName)
+        dispatch(setLoaded(sceneName))
         dispatch(setScroll(window.scrollY))
     }
 
@@ -86,25 +86,25 @@ const CreateNewScene = () => {
 
 }
 
-const ActiveView = ({loadedScene, setLoadedScene, setIsActive, setImageList }) => {
+const ActiveView = ({ setIsActive, setImageList }) => {
     const user = useSelector(i => i.user)
 
     return(
         <div id = 'scenes' className = 'scene-filter-container'>
             <button onClick = {() => setIsActive(false)}>{getText('done')}</button>
-            <CurrentScenes loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} setImageList = {setImageList} />
+            <CurrentScenes setImageList = {setImageList} />
             {user.adminToken && <CreateNewScene />}
         </div>
     )
 }
 
-const DropDown = ({loadedScene, setLoadedScene, setImageList }) => {
+const DropDown = ({ setImageList }) => {
     const [isActive, setIsActive] = useState(false)
 
     return(
         <div>
             {isActive
-            ? <ActiveView loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} setIsActive = {setIsActive} setImageList = {setImageList} />
+            ? <ActiveView setIsActive = {setIsActive} setImageList = {setImageList} />
             : <InactiveView setIsActive = {setIsActive} />
         }
         </div>

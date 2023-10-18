@@ -151,7 +151,7 @@ const ImageGroup = ({ groupClass, setGroupClass, imageList, setImageList }) => {
 }
 
 //root component for this module
-const Images = ({ loadedScene, setLoadedScene, imageList, setImageList }) => {
+const Images = ({ imageList, setImageList }) => {
     const [groupClass, setGroupClass] = useState('group-hidden') //keeping track of whether the progress bar is hidden
 
     return (
@@ -159,7 +159,7 @@ const Images = ({ loadedScene, setLoadedScene, imageList, setImageList }) => {
             <h2 id='image-top' className='new-section'>{getText('photos')}</h2>
             <p>{getText('photoTxt')}</p>
             {groupClass !== 'group-hidden' && <ResSelect />}
-            {groupClass !== 'group-hidden' && <DropDown loadedScene={loadedScene} setLoadedScene={setLoadedScene}  setImageList={setImageList} />}
+            {groupClass !== 'group-hidden' && <DropDown setImageList={setImageList} />}
             <ImageGroup groupClass = {groupClass} setGroupClass = {setGroupClass} imageList={imageList} setImageList={setImageList} />
         </div>
     )

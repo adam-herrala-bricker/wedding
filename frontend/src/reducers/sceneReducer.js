@@ -37,6 +37,7 @@ const sceneSlice = createSlice({
             return {...state, list: newList}
         },
 
+        //changes a scene IN THE LIST, not the scene that's loaded
         changeScene(state, action) {
             const currentScenes = state.list
             const changedScene = action.payload
@@ -54,6 +55,7 @@ const sceneSlice = createSlice({
 export const {setLoaded, setList, addScene, removeScene, changeScene} = sceneSlice.actions
 
 //packaged functions
+
 export const initializeScenes = () => {
     return async dispatch => {
         const scenes = await sceneServices.getScenes()
