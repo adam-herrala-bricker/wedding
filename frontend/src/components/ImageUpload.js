@@ -1,15 +1,13 @@
 import { useState } from 'react'
-import adminServices from '../services/adminServices'
-import imageServices from '../services/imageServices'
-import helpers from '../utilities/helpers'
-import audioServices from '../services/audioServices'
-
+import { useDispatch } from 'react-redux'
+import { uploadMedia } from '../reducers/mediaReducer'
 
 //NOTE: The name is a bit unfortunate, since we're using this to handle uploading audio files as well
 //and it could be easily expanded to handle video if needed
-const ImageUpload = ({setImageList, setMusic}) => {
+const ImageUpload = () => {
     const acceptedFiles = ["image/png", "image/jpeg", "audio/wav", "audio/mp3"]
-    const [images, setImages] = useState([''])
+    const [files, setFiles] = useState([''])
+    const dispatch = useDispatch()
     
 
     //event handlers
@@ -17,14 +15,18 @@ const ImageUpload = ({setImageList, setMusic}) => {
         event.preventDefault()
 
         const currentFiles = [...event.target.files] //need to make an array
-        setImages(currentFiles)
+        setFiles(currentFiles)
     }
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        images.forEach(async (i) => {
-            console.log(i.type)
-        
+        files.forEach(async (i) => {
+            dispatch(uploadMedia(i))
+
+
+            
+            
+            /*
             //route for image upload
             if (i.type === 'image/png' | i.type === 'image/jpeg') {
                 await adminServices.postImage(i)
@@ -48,6 +50,7 @@ const ImageUpload = ({setImageList, setMusic}) => {
                     setMusic(newAudioList)
                 }, 1000)
             }
+            */
         })
     }
 

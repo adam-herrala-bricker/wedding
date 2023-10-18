@@ -45,32 +45,28 @@ const authorizeUser = (request, response, next) => {
 
 
 //FINALLY the actual router for uploading images
-uploadRouter.post('/images', uploadImages.array('adminUpload'), authorizeUser, (request, response, next) => {
+uploadRouter.post('/images', uploadImages.array('adminUpload'), authorizeUser, async (request, response, next) => {
     //saves the metadata to the DB
     console.log(request.files)
-    const filesNames = request.files.map(i => i.filename)
+    const fileName = request.files[0].filename
 
-    filesNames.forEach( async (i) => {
-        //ID for scene all moved to .env
+    //ID for scene all moved to .env
 
-        //image DB
-        const imageMetadata = new Image({fileName: i, scenes : [sceneAllID]})
-        const savedMetadata = await imageMetadata.save()
-        await savedMetadata.populate('scenes')
+    //image DB
+    const imageMetadata = new Image({fileName: fileName, scenes : [sceneAllID]})
+    const savedMetadata = await imageMetadata.save()
+    await savedMetadata.populate('scenes', {sceneName: 1, id: 1})
+    console.log(savedMetadata)
 
-        //scenes DB (adding to 'all' as default)
-        const sceneAllData = await Scene.findById(sceneAllID)
+    //scenes DB (adding to 'all' as default)
+    const sceneAllData = await Scene.findById(sceneAllID)
 
-        sceneAllData.images = sceneAllData.images.concat(savedMetadata._id)
-        
-        console.log(sceneAllData)
+    sceneAllData.images = sceneAllData.images.concat(savedMetadata._id)
 
-        await sceneAllData.save()
+    await sceneAllData.save()
 
-    })
-
-    response.status(200).send() //maybe want to return array of saved metaData? unclear if that's necessary
-
+    response.status(200).json(savedMetadata)
+    
     next()
 })
 

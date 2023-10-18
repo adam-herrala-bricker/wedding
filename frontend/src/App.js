@@ -64,8 +64,7 @@ const App = () => {
   const dispatch = useDispatch()
   //note that if you do this as an object (i.e. 'user') it will update everytime
   //since equality comparison is === by default (may be able to fix with custom equality comparison?)
-  const entryToken = useSelector(i => i.user.entryToken)
-  const adminToken = useSelector(i => i.user.adminToken)
+  const {entryToken, adminToken } = useSelector(i => i.user)
 
   //initialize states
   useEffect(() => {

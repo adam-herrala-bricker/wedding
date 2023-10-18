@@ -35,12 +35,22 @@ const BelowImage = ({ imageID }) => {
 
     //helper function for testing whether the image is aleady linked to a scene
     const isLinked = (scene, imageID) => {
+        if (imageList.find(i => i.id === imageID).scenes.map(i => i.sceneName).includes(scene.sceneName)) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    /*
+    const isLinked = (scene, imageID) => {
         if (scene.images.map(i => i.id).includes(imageID)) {
             return true
         } else {
             return false
         }
     }
+    */
 
     //event handlers
     const handleDelete = async (imageID) => {
@@ -51,8 +61,10 @@ const BelowImage = ({ imageID }) => {
 
     //handles linking/unlinking scenes to images
     const handleSceneLink = async (scene, imageID) => {
+        console.log('imgage list', imageList)
         dispatch(setScroll(window.scrollY)) //keep from jumping around afterwards
 
+        
         //single object with value = array of list of image IDs!
         const updatedIDs = isLinked(scene, imageID)
             ? [...scene.images.filter(i => i.id !== imageID).map(i => i.id)]
@@ -61,12 +73,16 @@ const BelowImage = ({ imageID }) => {
         dispatch(updateScene(scene.id, updatedIDs))
 
         //update image DB too (also needs object in same format as scene)
-        const thisImage = {...imageList.find(i => i.id === imageID)} //need to copy like this so it's not read-only
-        thisImage.scenes = isLinked(scene, imageID)
-            ? thisImage.scenes.map(i => i.id).filter(i => i !== scene.id)
-            : thisImage.scenes.map(i => i.id).concat(scene.id)
+        const currentScenes = imageList.find(i => i.id === imageID).scenes
 
-        dispatch(updateImages(imageID, thisImage.scenes))
+        console.log('linked:', isLinked(scene, imageID))
+        const newScenes = isLinked(scene, imageID)
+            ? currentScenes.map(i => i.id).filter(i => i !== scene.id)
+            : [...currentScenes.map(i => i.id), scene.id]
+        
+        console.log(newScenes)
+
+        dispatch(updateImages(imageID, newScenes))
 
     }
 

@@ -20,6 +20,11 @@ const sceneSlice = createSlice({
             return {...state, loaded: action.payload}
         },
 
+        //return to default loaded scene
+        resetLoaded(state) {
+            return {...state, loaded: defaultLoaded}
+        },
+
         setList(state, action) {
             return {...state, list: action.payload}
         },
@@ -48,11 +53,25 @@ const sceneSlice = createSlice({
 
             return {...state, list: newScenes}
 
+        },
+
+        //specifcally adds to scene-0 (for use in the media reducer)
+        changeSceneZero(state, action) {
+            const newImage = action.payload
+            const sceneZero = state.list.find(i => i.sceneName === 'scene-0')
+
+            const newSceneZero = {...sceneZero, images: [...sceneZero.images, newImage]}
+            
+            const newScenes = [...state.list.filter(i => i.sceneName !== 'scene-0'), newSceneZero]
+
+            newScenes.sort(helpers.compareScenes)
+
+            return {...state, list: newScenes}
         }
     }
 })
 
-export const {setLoaded, setList, addScene, removeScene, changeScene} = sceneSlice.actions
+export const {setLoaded, resetLoaded, setList, addScene, removeScene, changeScene, changeSceneZero} = sceneSlice.actions
 
 //packaged functions
 

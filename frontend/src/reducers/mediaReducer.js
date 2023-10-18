@@ -1,6 +1,7 @@
 //handles lists of all media files (images + music)
 //note that this is just the metadata, not the actual files themselves
 import { createSlice } from '@reduxjs/toolkit'
+import { resetLoaded, changeSceneZero } from './sceneReducer'
 import imageServices from '../services/imageServices'
 import audioServices from '../services/audioServices'
 import adminServices from '../services/adminServices'
@@ -29,6 +30,14 @@ const mediaSlice = createSlice({
             return {...state, images: {...state.images, display: state.images.all }}
         },
 
+        addImage(state, action) {
+            const newImages = [...state.images.all, action.payload]
+            newImages.sort(helpers.compareImages)
+
+
+            return {...state, images: {...state.images, all: newImages}}
+        },
+
         //filtering DISPLAY IMAGES ONLY
         filterImages(state, action) {
             const user = action.payload.user
@@ -43,16 +52,18 @@ const mediaSlice = createSlice({
         },
 
         //for updating after scene link/unlink (updates both all and display)
-        //note: doesn't remove from view even if you have a filter on, so there are no quick disappearing images
         changeImages(state, action) {
             const newImage = action.payload
             const imagesAll = state.images.all
+            const imagesDisplay = state.images.display
 
             const newImagesAll = [...imagesAll.filter(i => i.id !== newImage.id), newImage]
+            const newImagesDisplay = [...imagesDisplay.filter(i => i.id !== newImage.id), newImage]
 
             newImagesAll.sort(helpers.compareImages)
+            newImagesDisplay.sort(helpers.compareImages)
 
-            return {...state, images: {...state.images, all: newImagesAll}}
+            return {...state, images: {all: newImagesAll, display: newImagesDisplay}}
         },
 
         removeImage(state, action) {
@@ -76,7 +87,16 @@ const mediaSlice = createSlice({
     }
 })
 
-export const { setImagesAll, displayAllImages, filterImages, changeImages, removeImage, setMusic, removeSong } = mediaSlice.actions
+export const { 
+    setImagesAll, 
+    displayAllImages, 
+    addImage, 
+    filterImages, 
+    changeImages, 
+    removeImage, 
+    setMusic, 
+    removeSong 
+} = mediaSlice.actions
 
 //packaged functions
 
@@ -97,7 +117,8 @@ export const initializeImages = (entryToken, adminToken) => {
             dispatch(setImagesAll(imagesAll))
     
             //by default displaying all images
-            dispatch(displayAllImages()) 
+            dispatch(displayAllImages())
+
         }
     }
 }
@@ -135,6 +156,25 @@ export const deleteSong = (songID) => {
         await adminServices.deleteAudio(songID)
 
         dispatch(removeSong(songID))
+    }
+}
+
+export const uploadMedia = (file) => {
+    return async dispatch => {
+        //route for images
+        if (file.type === 'image/png' | file.type === 'image/jpeg') {
+            const newImage = await adminServices.postImage(file)
+
+            //add image to images.all
+            dispatch(addImage(newImage))
+
+            //add that image to scene-0
+            dispatch(changeSceneZero(newImage))
+
+            //return to default scene after upload (avoids confusion re. 'missing' uploads)
+            dispatch(displayAllImages())
+            dispatch(resetLoaded())
+        }
     }
 }
 

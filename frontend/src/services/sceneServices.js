@@ -41,6 +41,9 @@ const updateScene = async (updatedScene) => {
 
     const id = updatedScene.id
 
+
+    //await axios.put(`/api/`)
+
     const response = await axios.put(`${baseURL}/${id}`, updatedScene, config)
 
     return response.data
