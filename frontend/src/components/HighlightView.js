@@ -67,7 +67,9 @@ const HighlightView = () => {
       ? '/api/images' 
       : '/api/images/web-res'
     
-    const imagePath = `${baseURL}/${thisFile}`
+    //Note: Sending the entry token in the query itself. Can't imagine this is the best idea, but all the ways of
+    //authenticating the requests in the img component seem needlessly complicated
+    const imagePath = `${baseURL}/${thisFile}?token=${user.entryToken}`
 
     return(
       <div className = 'outer-highlight-container'>

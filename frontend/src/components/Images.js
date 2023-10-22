@@ -12,6 +12,7 @@ const Image = ({ imagePath }) => {
     //const baseURL = '/api/images' //may eventually want to high res an option
     const webResURL = '/api/images/web-res'
     const [thisClass, setThisClass] = useState('single-image-hidden')
+    const user = useSelector(i => i.user)
 
     //event handler
     const handleLoaded = () => {
@@ -20,7 +21,7 @@ const Image = ({ imagePath }) => {
 
     return (
         <div className='single-image-container'>
-            <img className={thisClass} alt='single image' loading='eager' src={`${webResURL}/${imagePath}`} onLoad={handleLoaded} />
+            <img className={thisClass} alt='single image' loading='eager' src={`${webResURL}/${imagePath}?token=${user.entryToken}`} onLoad={handleLoaded} />
         </div>
     )
 }
