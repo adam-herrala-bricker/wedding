@@ -45,10 +45,10 @@ const authorizeUser = (request, response, next) => {
 
 
 //FINALLY the actual router for uploading images
-uploadRouter.post('/images', uploadImages.array('adminUpload'), authorizeUser, async (request, response, next) => {
+uploadRouter.post('/images', uploadImages.single('adminUpload'), authorizeUser, async (request, response, next) => {
     //saves the metadata to the DB
-    console.log(request.files)
-    const fileName = request.files[0].filename
+    console.log('upload request:', request.file)
+    const fileName = request.file.filename
 
     //ID for scene all moved to .env
 
@@ -56,7 +56,7 @@ uploadRouter.post('/images', uploadImages.array('adminUpload'), authorizeUser, a
     const imageMetadata = new Image({fileName: fileName, scenes : [sceneAllID]})
     const savedMetadata = await imageMetadata.save()
     await savedMetadata.populate('scenes', {sceneName: 1, id: 1})
-    console.log(savedMetadata)
+    console.log('saved metadata:', savedMetadata)
 
     //scenes DB (adding to 'all' as default)
     const sceneAllData = await Scene.findById(sceneAllID)
@@ -74,7 +74,7 @@ uploadRouter.post('/images', uploadImages.array('adminUpload'), authorizeUser, a
 uploadRouter.post('/audio', uploadAudio.array('adminUpload'), authorizeUser, async (request, response, next) => {
     //save metadata to audio DB
     //const fileNames = request.files.map(i => i.filename)
-    const fileName = request.files[0].filename
+    const fileName = request.file.filename
     const audioMetadata = new Audio({fileName})
     await audioMetadata.save()
     
