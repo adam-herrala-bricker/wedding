@@ -71,17 +71,14 @@ uploadRouter.post('/images', uploadImages.array('adminUpload'), authorizeUser, a
 })
 
 //router for uploading audio
-uploadRouter.post('/audio', uploadAudio.array('adminUpload'), authorizeUser, (request, response, next) => {
+uploadRouter.post('/audio', uploadAudio.array('adminUpload'), authorizeUser, async (request, response, next) => {
     //save metadata to audio DB
-    const fileNames = request.files.map(i => i.filename)
-    fileNames.forEach (async (i) => {
-        const audioMetadata = new Audio({fileName : i})
-        await audioMetadata.save()
-    })
-
-   
-
-    response.status(200).send()
+    //const fileNames = request.files.map(i => i.filename)
+    const fileName = request.files[0].filename
+    const audioMetadata = new Audio({fileName})
+    await audioMetadata.save()
+    
+    response.status(200).json(audioMetadata)
     next()
 })
 

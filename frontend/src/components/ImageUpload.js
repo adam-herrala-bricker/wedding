@@ -22,35 +22,6 @@ const ImageUpload = () => {
         event.preventDefault()
         files.forEach(async (i) => {
             dispatch(uploadMedia(i))
-
-
-            
-            
-            /*
-            //route for image upload
-            if (i.type === 'image/png' | i.type === 'image/jpeg') {
-                await adminServices.postImage(i)
-                //FINALLY got it to consistently reload after uploading new images
-                //Think the original problem was it was fetching the new server data too quickly to load the updates
-                //idk if this is the correct solution, but slowing it down seems to work at least
-                //maybe react query can help provide a more robust solution ??
-                setTimeout(async () => {
-                    const newImageList = await imageServices.getImageData()
-                    newImageList.sort(helpers.compareImages)
-                    setImageList(newImageList)
-                }, 1000)
-            //route for audio upload     
-            } else if (i.type === 'audio/wav' | i.type === 'audio/x-wav' |i.type === 'audio/mp3' | i.type === 'audio/mpeg') {
-                console.log('audio upload')
-                await adminServices.postAudio(i)
-                //same idea as with the images (interestingly, doesn't seem necessary w the audio DELETE requests . . .)
-                setTimeout(async () => {
-                    const newAudioList = await audioServices.getAudioData()
-                    newAudioList.sort(helpers.compareSongs)
-                    setMusic(newAudioList)
-                }, 1000)
-            }
-            */
         })
     }
 

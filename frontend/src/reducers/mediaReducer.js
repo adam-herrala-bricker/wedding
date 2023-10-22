@@ -78,9 +78,20 @@ const mediaSlice = createSlice({
             return {...state, music: action.payload}
         },
 
+        addSong(state, action) {
+            const newSong = action.payload
+            const updatedSongs = [...state.music, newSong]
+
+            updatedSongs.sort(helpers.compareSongs)
+
+            return {...state, music: updatedSongs}
+        },
+
         removeSong(state, action) {
             const songID = action.payload
             const newSongs = state.music.filter(i => i.id !== songID)
+            
+            newSongs.sort(helpers.compareSongs)
 
             return {...state, music: newSongs}
         }
@@ -95,6 +106,7 @@ export const {
     changeImages, 
     removeImage, 
     setMusic, 
+    addSong,
     removeSong 
 } = mediaSlice.actions
 
@@ -174,6 +186,12 @@ export const uploadMedia = (file) => {
             //return to default scene after upload (avoids confusion re. 'missing' uploads)
             dispatch(displayAllImages())
             dispatch(resetLoaded())
+        
+        //route for audio
+        } else if (file.type === 'audio/wav' | file.type === 'audio/x-wav' |file.type === 'audio/mp3' | file.type === 'audio/mpeg') {
+            const newAudio = await adminServices.postAudio(file)
+
+            dispatch(addSong(newAudio))
         }
     }
 }

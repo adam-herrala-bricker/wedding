@@ -42,16 +42,6 @@ const BelowImage = ({ imageID }) => {
         }
     }
 
-    /*
-    const isLinked = (scene, imageID) => {
-        if (scene.images.map(i => i.id).includes(imageID)) {
-            return true
-        } else {
-            return false
-        }
-    }
-    */
-
     //event handlers
     const handleDelete = async (imageID) => {
         if (window.confirm('Are you sure you want to delete?')) {
