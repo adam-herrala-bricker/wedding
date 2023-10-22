@@ -4,7 +4,6 @@
 const uploadRouter = require('express').Router()
 const jwt = require('jsonwebtoken')
 const Image = require('../models/imageModel')
-const Scene = require('../models/sceneModel')
 const Audio = require('../models/audioModel')
 const {SECRET_ADMIN, sceneAllID} = require('../utils/config')
 
@@ -66,7 +65,6 @@ uploadRouter.post('/images', uploadImages.single('adminUpload'), authorizeUser, 
 //router for uploading audio
 uploadRouter.post('/audio', uploadAudio.array('adminUpload'), authorizeUser, async (request, response, next) => {
     //save metadata to audio DB
-    //const fileNames = request.files.map(i => i.filename)
     const fileName = request.file.filename
     const audioMetadata = new Audio({fileName})
     await audioMetadata.save()

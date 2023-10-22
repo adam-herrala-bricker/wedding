@@ -100,15 +100,8 @@ const ImageGroup = ({ groupClass, setGroupClass }) => {
         navigate(`/view/${fileName}`)
     }
 
-    //const minLoadNumber = 10 //minimum number of loaded images to display
-
     //Note: this seems to trigger on every load in the children elements, not when they're all loaded
     const handleNewLoad = () => {
-
-        //KEEP AN EYE ON THIS. UNCLEAR WHETHER THIS CAN BE REMOVED OR IF THERE'S A BUG THAT ISN'T SHOWING UP ON PRODUCTION
-        if (window.scrollY > 30) { //prevent from setting too quickly when coming back from highlight view (tried to approximate the danger zone)
-            //dispatch(setScroll(window.scrollY))
-        }
         progressRef.current++ //doing this as a ref decouples it from rendering, lets it update multiple times per render
         setLoadProgress(progressRef.current)
 
