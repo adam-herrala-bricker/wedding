@@ -6,7 +6,8 @@ import { uploadMedia } from '../reducers/mediaReducer'
 //and it could be easily expanded to handle video if needed
 const ImageUpload = () => {
     const acceptedFiles = ["image/png", "image/jpeg", "audio/wav", "audio/mp3"]
-    const [files, setFiles] = useState([''])
+    const defaultFiles = ['']
+    const [files, setFiles] = useState(defaultFiles)
     const dispatch = useDispatch()
     
 

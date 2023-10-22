@@ -21,7 +21,7 @@ sceneRouter.post('/', async (request, response, next) => {
 
     const savedScene = await scene.save()
 
-    await savedScene.populate('images', {fileName : 1})
+    //await savedScene.populate('images', {fileName : 1})
 
     response.status(201).json(savedScene)
 
@@ -37,7 +37,8 @@ sceneRouter.get('/', async (request, response, next) => {
         return response.status(401).json({ error: 'valid token required' })
       }
     
-    const sceneData = await Scene.find({}).populate('images', {fileName : 1})
+    //const sceneData = await Scene.find({}).populate('images', {fileName : 1})
+    const sceneData = await Scene.find({})
     
     if(sceneData) {
         response.json(sceneData)
@@ -46,32 +47,6 @@ sceneRouter.get('/', async (request, response, next) => {
     }
 
     next()
-})
-
-
-//adding/removing new image to scene (also requires ADMIN token)
-//this is accomplished by passing the ENTIRE NEW list of images (by id) in the scene
-//logic for adding or removing is done on the FE
-sceneRouter.put('/:id', async (request, response, next) => {
-    const adminTokenFound = jwt.verify(request.token, SECRET_ADMIN).id
-
-    if (!adminTokenFound) {
-        return response.status(401).json({ error: 'valid token required' })
-      }
-
-    const thisID = request.params.id
-    const body = request.body
-    const updates = {images: body.imageIDs}
-    
-    //update scenes in DB
-    const savedUpdates = await Scene.findByIdAndUpdate(thisID, updates, {new: true})
-
-    await savedUpdates.populate('images', {fileName : 1})
-
-    response.json(savedUpdates)
-
-    next()
-
 })
 
 //deleting entire scene (requires ADMIN token)

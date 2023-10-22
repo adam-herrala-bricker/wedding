@@ -58,13 +58,6 @@ uploadRouter.post('/images', uploadImages.single('adminUpload'), authorizeUser, 
     await savedMetadata.populate('scenes', {sceneName: 1, id: 1})
     console.log('saved metadata:', savedMetadata)
 
-    //scenes DB (adding to 'all' as default)
-    const sceneAllData = await Scene.findById(sceneAllID)
-
-    sceneAllData.images = sceneAllData.images.concat(savedMetadata._id)
-
-    await sceneAllData.save()
-
     response.status(200).json(savedMetadata)
     
     next()

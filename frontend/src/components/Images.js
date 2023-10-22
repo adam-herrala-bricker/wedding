@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { ProgressBar } from 'react-bootstrap'
 import { setScroll } from '../reducers/viewReducer'
-import { updateScene } from '../reducers/sceneReducer'
 import { updateImages, deleteImage } from '../reducers/mediaReducer'
 import ResSelect from './ResSelect'
 import DropDown from './dropdownMenu.js'
@@ -54,15 +53,7 @@ const BelowImage = ({ imageID }) => {
         console.log('imgage list', imageList)
         dispatch(setScroll(window.scrollY)) //keep from jumping around afterwards
 
-        
-        //single object with value = array of list of image IDs!
-        const updatedIDs = isLinked(scene, imageID)
-            ? [...scene.images.filter(i => i.id !== imageID).map(i => i.id)]
-            : [...scene.images.map(i => i.id), imageID]
-
-        dispatch(updateScene(scene.id, updatedIDs))
-
-        //update image DB too (also needs object in same format as scene)
+        //update image DB (object formatted as value = array of list of image IDs)
         const currentScenes = imageList.find(i => i.id === imageID).scenes
 
         console.log('linked:', isLinked(scene, imageID))

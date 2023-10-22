@@ -1,7 +1,7 @@
 //handles lists of all media files (images + music)
 //note that this is just the metadata, not the actual files themselves
 import { createSlice } from '@reduxjs/toolkit'
-import { resetLoaded, changeSceneZero } from './sceneReducer'
+import { resetLoaded } from './sceneReducer'
 import imageServices from '../services/imageServices'
 import audioServices from '../services/audioServices'
 import adminServices from '../services/adminServices'
@@ -179,9 +179,6 @@ export const uploadMedia = (file) => {
 
             //add image to images.all
             dispatch(addImage(newImage))
-
-            //add that image to scene-0
-            dispatch(changeSceneZero(newImage))
 
             //return to default scene after upload (avoids confusion re. 'missing' uploads)
             dispatch(displayAllImages())

@@ -40,38 +40,11 @@ const sceneSlice = createSlice({
             const newList = state.list.filter(i => i.id !== sceneID)
 
             return {...state, list: newList}
-        },
-
-        //changes a scene IN THE LIST, not the scene that's loaded
-        changeScene(state, action) {
-            const currentScenes = state.list
-            const changedScene = action.payload
-
-            const newScenes = [...currentScenes.filter(i => i.sceneName !== changedScene.sceneName), changedScene]
-
-            newScenes.sort(helpers.compareScenes)
-
-            return {...state, list: newScenes}
-
-        },
-
-        //specifcally adds to scene-0 (for use in the media reducer)
-        changeSceneZero(state, action) {
-            const newImage = action.payload
-            const sceneZero = state.list.find(i => i.sceneName === 'scene-0')
-
-            const newSceneZero = {...sceneZero, images: [...sceneZero.images, newImage]}
-            
-            const newScenes = [...state.list.filter(i => i.sceneName !== 'scene-0'), newSceneZero]
-
-            newScenes.sort(helpers.compareScenes)
-
-            return {...state, list: newScenes}
         }
     }
 })
 
-export const {setLoaded, resetLoaded, setList, addScene, removeScene, changeScene, changeSceneZero} = sceneSlice.actions
+export const {setLoaded, resetLoaded, setList, addScene, removeScene} = sceneSlice.actions
 
 //packaged functions
 
@@ -85,15 +58,6 @@ export const initializeScenes = (entryToken) => {
                 dispatch(setList(scenes))
             }
         }
-}
-
-//updates the scene (ID provided) with a new list of image IDs
-export const updateScene = (sceneID, imageIDs) => {
-    return async dispatch => {
-        const changedScene = await sceneServices.updateScene({ id: sceneID, imageIDs: imageIDs})
-        
-        dispatch(changeScene(changedScene))
-    }
 }
 
 export const createNewScene = (sceneName) => {
