@@ -8,6 +8,7 @@ const HighlightView = () => {
     const [thisClass, setThisClass] = useState('single-image-hidden')
     const { res, textLan } = useSelector(i => i.view)
     const imageList = useSelector(i => i.media.images.display)
+    const user = useSelector(i => i.user)
 
     const navigate = useNavigate()
     const thisFile = useParams().fileName
