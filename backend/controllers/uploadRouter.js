@@ -4,7 +4,6 @@
 const uploadRouter = require('express').Router()
 const jwt = require('jsonwebtoken')
 const Image = require('../models/imageModel')
-const Scene = require('../models/sceneModel')
 const Audio = require('../models/audioModel')
 const {SECRET_ADMIN, sceneAllID} = require('../utils/config')
 
@@ -45,47 +44,32 @@ const authorizeUser = (request, response, next) => {
 
 
 //FINALLY the actual router for uploading images
-uploadRouter.post('/images', uploadImages.array('adminUpload'), authorizeUser, (request, response, next) => {
+uploadRouter.post('/images', uploadImages.single('adminUpload'), authorizeUser, async (request, response, next) => {
     //saves the metadata to the DB
-    console.log(request.files)
-    const filesNames = request.files.map(i => i.filename)
+    console.log('upload request:', request.file)
+    const fileName = request.file.filename
 
-    filesNames.forEach( async (i) => {
-        //ID for scene all moved to .env
+    //ID for scene all moved to .env
 
-        //image DB
-        const imageMetadata = new Image({fileName: i, scenes : [sceneAllID]})
-        const savedMetadata = await imageMetadata.save()
-        await savedMetadata.populate('scenes')
+    //image DB
+    const imageMetadata = new Image({fileName: fileName, scenes : [sceneAllID]})
+    const savedMetadata = await imageMetadata.save()
+    await savedMetadata.populate('scenes', {sceneName: 1, id: 1})
+    console.log('saved metadata:', savedMetadata)
 
-        //scenes DB (adding to 'all' as default)
-        const sceneAllData = await Scene.findById(sceneAllID)
-
-        sceneAllData.images = sceneAllData.images.concat(savedMetadata._id)
-        
-        console.log(sceneAllData)
-
-        await sceneAllData.save()
-
-    })
-
-    response.status(200).send() //maybe want to return array of saved metaData? unclear if that's necessary
-
+    response.status(200).json(savedMetadata)
+    
     next()
 })
 
 //router for uploading audio
-uploadRouter.post('/audio', uploadAudio.array('adminUpload'), authorizeUser, (request, response, next) => {
+uploadRouter.post('/audio', uploadAudio.single('adminUpload'), authorizeUser, async (request, response, next) => {
     //save metadata to audio DB
-    const fileNames = request.files.map(i => i.filename)
-    fileNames.forEach (async (i) => {
-        const audioMetadata = new Audio({fileName : i})
-        await audioMetadata.save()
-    })
-
-   
-
-    response.status(200).send()
+    const fileName = request.file.filename
+    const audioMetadata = new Audio({fileName})
+    await audioMetadata.save()
+    
+    response.status(200).json(audioMetadata)
     next()
 })
 

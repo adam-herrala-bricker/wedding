@@ -1,7 +1,10 @@
-const Notifier = ({message}) => {
+import { useSelector } from 'react-redux'
+
+const Notifier = () => {
+    const notification = useSelector(i => i.notification)
     return(
-        <div className='error-message'>
-            {message}
+        <div className = {notification.type}>
+            {notification.message}
         </div>
     )
 }

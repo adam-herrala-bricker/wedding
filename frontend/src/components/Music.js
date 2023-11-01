@@ -1,19 +1,14 @@
-import { useState, useEffect } from 'react'
-import audioServices from '../services/audioServices'
-import adminServices from '../services/adminServices'
-import text from '../resources/text'
+import { useDispatch, useSelector } from 'react-redux'
+import { deleteSong } from '../reducers/mediaReducer'
 import helpers from '../utilities/helpers'
 //import testAudio from '../resources/test36.1c.wav'
 
-const DeleteSong = ({ songID, setMusic }) => {
+const DeleteSong = ({ songID }) => {
+    const dispatch = useDispatch()
     //event handler
     const handleDelete = async () => {
         if (window.confirm('comfirm delete')) {
-            await adminServices.deleteAudio(songID)
-
-            //reload and reset songs
-            const audioData = await audioServices.getAudioData()
-            setMusic(audioData)
+            dispatch(deleteSong(songID))
         }
     }
 
@@ -24,31 +19,21 @@ const DeleteSong = ({ songID, setMusic }) => {
     )
 }
 
-const Music = ({ lan, user, music, setMusic }) => {
-    //note: fileToName lives in utilities/helpers now
-
-    //effect hook to load music metadata from DB
-    useEffect(() => {
-        const fetchData = async () => {
-            const audioData = await audioServices.getAudioData()
-            audioData.sort(helpers.compareSongs)
-            setMusic(audioData)
-        }
-
-        fetchData()
-
-    }, [])
+const Music = () => {
+    const user = useSelector(i => i.user)
+    const music = useSelector(i => i.media.music)
+    const textLan = useSelector(i => i.view.textLan)
 
     return (
         <div className='music-div'>
             <h2 className='new-section'>
-                {text.music[lan]}
+                {textLan.music}
             </h2>
             {music.map(i =>
                 <div className='music-container' key={i.id}>
                     <audio controls src={`/api/audio/${i.fileName}`} />
-                    <h2>{helpers.fileToName(i) ? text[helpers.fileToName(i)][lan] : 'song title missing'}</h2>
-                    {user.isAdmin && <DeleteSong songID={i.id} setMusic={setMusic} />}
+                    <h2>{helpers.fileToName(i) ? textLan[helpers.fileToName(i)] : 'song title missing'}</h2>
+                    {user.adminToken && <DeleteSong songID={i.id} />}
                 </div>
             )}
         </div>

@@ -1,16 +1,12 @@
 import axios from 'axios'
-import {adminToken} from './adminServices'
+import { getEntryToken, getAdminToken } from './tokenHelpers'
 
 const baseURL = '/api/scenes'
 
-let entryToken = null
-
-const setEntryToken = (newToken) => {
-    entryToken = `Bearer ${newToken}`
-}
-
 //GET request for loading all the scenes (requires ENTRY token)
 const getScenes = async () => {
+    const entryToken = getEntryToken()
+
     const config = {
         headers : {Authorization : entryToken}
     }
@@ -23,6 +19,8 @@ const getScenes = async () => {
 
 //POST request to add new scene (requires ADMIN token)
 const addScene = async (newScene) => {
+    const adminToken = getAdminToken()
+
     const config = {
         headers : {Authorization : adminToken}
     }
@@ -35,11 +33,16 @@ const addScene = async (newScene) => {
 
 //PUT request to update scenes (requires ADMIN token)
 const updateScene = async (updatedScene) => {
+    const adminToken = getAdminToken()
+
     const config = {
         headers : {Authorization : adminToken}
     }
 
     const id = updatedScene.id
+
+
+    //await axios.put(`/api/`)
 
     const response = await axios.put(`${baseURL}/${id}`, updatedScene, config)
 
@@ -49,6 +52,8 @@ const updateScene = async (updatedScene) => {
 
 //DELETE request to remove a scene from the DB (requires ADMIN token)
 const deleteScene = async (sceneToRemove) => {
+    const adminToken = getAdminToken()
+
     const config = {
         headers : {Authorization : adminToken}
     }
@@ -60,4 +65,4 @@ const deleteScene = async (sceneToRemove) => {
 
 }
 
-export default {setEntryToken, getScenes, updateScene, addScene, deleteScene}
+export default { getScenes, updateScene, addScene, deleteScene }

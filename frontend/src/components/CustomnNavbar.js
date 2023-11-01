@@ -1,19 +1,20 @@
-import Language from './Language'
+import { useSelector } from 'react-redux'
 import User from './User'
-import text from '../resources/text'
 
-import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Container, Nav, Navbar } from 'react-bootstrap';
 
-function CustomNavbar({ lan, setLan, guestUser, user, setUser, setEntryKey, setLastScroll }) {
+function CustomNavbar() {
+    const textLan = useSelector(i => i.view.textLan)
+
     return (
         <Navbar expand="lg" sticky="top" className="p-2 text-dark" style={{backgroundColor : 'rgb(234, 243, 238)', fontWeight : 200}}>
             <Container>
-                <Navbar.Brand>{text.header[lan]}</Navbar.Brand>
+                <Navbar.Brand>{textLan.header}</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link href="#music">{text.music[lan]}</Nav.Link>
-                        <Nav.Link href="#image-top">{text.photos[lan]}</Nav.Link>
+                        <Nav.Link href="#music">{textLan.music}</Nav.Link>
+                        <Nav.Link href="#image-top">{textLan.photos}</Nav.Link>
                         {/* <NavDropdown title="Dropdown" NavDropdown>
                             <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                             <NavDropdown.Item href="#action/3.2">
@@ -28,7 +29,7 @@ function CustomNavbar({ lan, setLan, guestUser, user, setUser, setEntryKey, setL
                     </Nav>
 
                     <Nav>
-                        <User user={user} setUser={setUser} guestUser={guestUser} setEntryKey={setEntryKey} lan={lan} setLastScroll = {setLastScroll}/>
+                        <User />
                     </Nav>
                 </Navbar.Collapse>
             </Container>

@@ -1,4 +1,5 @@
 //Finnish-English dictionary for all the text displayed on the screen
+import store from '../store'
 
 const text = {
     entryKey: { suo: 'sivuavain', eng: 'entry key' },
@@ -53,5 +54,17 @@ const text = {
 
 }
 
-
 export default text
+
+//returns only the text you want in only the current language
+export const getText = (key) => {
+    const currentState = store.getState()
+    const lan = currentState.view.lan
+
+    //only return values if they're in here
+    if (text[key]) {
+        return text[key][lan]
+    }
+
+    return false
+}
