@@ -12,6 +12,9 @@ const SECRET_ADMIN = process.env.SECRET_ADMIN;
 
 const ADMIN_KEY = process.env.ADMIN_KEY;
 
+const ENTRY_HASH = process.env.ENTRY_HASH;
+const ENTRY_KEY = process.env.ENTRY_KEY;
+
 const NODE_ENV = process.env.NODE_ENV;
 
 // different DBs for development, testing, and production
@@ -41,4 +44,6 @@ module.exports = {
   SECRET_ENTER,
   SECRET_USER,
   SECRET_ADMIN,
+  ENTRY_HASH,
+  ENTRY_KEY,
 };
