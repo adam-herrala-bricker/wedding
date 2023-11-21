@@ -24,3 +24,5 @@ jobs:
         run: cd frontend && npm install
       - name: Install backend dependencies
         run: cd backend && npm install
+      - name: Style check (backend)
+        run: cd backend && npm run lint
