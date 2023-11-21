@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { entryCheck, setEntryToken } from '../reducers/userReducer'
 import text from '../resources/text'
-import Notifier from './Notifier'
-import imageServices from '../services/imageServices'
-import audioServices from '../services/audioServices'
-import sceneServices from '../services/sceneServices'
-import userServices from '../services/userServices'
+import Notifier from './Notifier' //component
 
 //root component for entry page
-const Entry = ({setEntryKey}) => {
+const Entry = () => {
     const [enteredKey, setEnteredKey] = useState('')
-    const [errorMessage, setErrorMessage] = useState(null)
+
+    const dispatch = useDispatch()
 
     //helper function for dual-lan text
     const duoLingo = (phrase) => {
@@ -24,46 +23,34 @@ const Entry = ({setEntryKey}) => {
     const checkKey = async (event) => {
         event.preventDefault()
 
-        //entry authenticates like they're logging on to a user called 'entry'
-        const username = 'entry'
-        const password = enteredKey
-        try {
-            const thisKey = await userServices.login({username, password})
-            window.localStorage.setItem('entryKey', JSON.stringify(thisKey))
-            imageServices.setEntryToken(thisKey.token)
-            audioServices.setEntryToken(thisKey.token)
-            sceneServices.setEntryToken(thisKey.token)
-            setEntryKey(thisKey)
-        }
-        catch (exception) {
-            setErrorMessage(duoLingo('entryError'))
-            setTimeout(() => {
-                setErrorMessage(null)
-            }, 5000)
-            console.log('entry key is incorrect')
-        }
+        dispatch(entryCheck(enteredKey))
+
     }
     //effect hook to load entry token on refresh (just like loading a user)
     useEffect(() => {
         const entryKeyJSON = window.localStorage.getItem('entryKey')
         if (entryKeyJSON) {
             const thisKey = JSON.parse(entryKeyJSON)
-            imageServices.setEntryToken(thisKey.token)
-            audioServices.setEntryToken(thisKey.token)
-            sceneServices.setEntryToken(thisKey.token)
-            setEntryKey(thisKey)
+
+            if (thisKey) {
+                dispatch(setEntryToken(thisKey.token))
+            }
         }
     }, [])
 
     return(
-        <div>
+        <div className = 'entry-container'>
             <h1>{duoLingo('header')}</h1>
-            <h4>{duoLingo('entryKey')}</h4>
-            <Notifier message = {errorMessage} />
-            <form onSubmit = {checkKey}>
-                <input name='entry' type = 'password' value = {enteredKey} onChange = {handleEntry} />
-                <button type = 'submit'>enter</button>
-            </form>
+            <div>
+                <h4>{duoLingo('entryKey')}</h4>
+                <Notifier />
+                <form onSubmit = {checkKey}>
+                    <input name='entry' type = 'password' value = {enteredKey} onChange = {handleEntry} />
+                    <div>
+                        <button className = 'generic-button' type = 'submit'>{duoLingo('enter')}</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
     )

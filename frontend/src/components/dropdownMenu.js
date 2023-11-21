@@ -1,43 +1,37 @@
-import { useState} from 'react'
-import sceneServices from '../services/sceneServices'
-import imageServices from '../services/imageServices'
-import text from '../resources/text'
-import helpers from '../utilities/helpers'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { setScroll } from '../reducers/viewReducer'
+import { createNewScene, deleteScene, setLoaded } from '../reducers/sceneReducer'
+import { filterImages } from '../reducers/mediaReducer'
 
-const InactiveView = ({setIsActive, lan}) => {
+const InactiveView = ({ setIsActive }) => {
+    const textLan = useSelector(i => i.view.textLan)
     return(
         <div className = 'scene-filter-container'>
-            <button onClick = {() => setIsActive(true)}>{text.filter[lan]}</button>
+            <button onClick = {() => setIsActive(true)}>{textLan.filter}</button>
         </div>
         
     )
 }
 
-const CurrentScenes = ({loadedScene, setLoadedScene, setLastScroll, scenes, setScenes, setImageList, lan, user}) => {
+const CurrentScenes = () => {
+    const dispatch = useDispatch()
+    const user = useSelector(i => i.user)
+    const scenes = useSelector(i => i.scenes.list)
+    const loadedScene = useSelector(i => i.scenes.loaded)
+    const textLan = useSelector(i => i.view.textLan)
+
     //event handlers
     const handleSceneChange = async (scene) => {
-        const sceneID = scene.id
-        const sceneName = scene.sceneName
-        //may be overkill to fetch every time, but easiest sol'n I could think of
-        const allImages = await imageServices.getImageData()
-        //for admin user, 'all/kaikki' --> everything, even hidden images with no tags
-        const filteredImages = (user.isAdmin && scenes.filter(i => i.id === sceneID)[0]['sceneName'] === 'scene-0')
-         ? allImages
-         : allImages.filter(i => (Object.values(i.scenes).map(i => i.id).includes(sceneID) & Object.values(i.scenes).map(i => i.sceneName).includes('scene-0'))) //'all/kakki' tag is required for visibilty on non-admin view
+        dispatch(setScroll(window.scrollY))
+        dispatch(filterImages({user, scene}))
+        dispatch(setLoaded(scene.sceneName))
         
-        filteredImages.sort(helpers.compareImages)
-        setImageList(filteredImages)
-        setLoadedScene(sceneName)
-        setLastScroll(window.scrollY)
     }
 
-    const deleteScene = async (scene) => {
+    const handleDeleteScene = async (scene) => {
         if (window.confirm(`Are you sure you want to delete scene ${scene.sceneName}?`)) {
-            await sceneServices.deleteScene(scene)
-
-            const newScenes = scenes.filter(i => i.id !== scene.id)
-            setScenes(newScenes) // WATCH OUT TO SEE IF WE NEED TO ADD SORTING HERE!!
-
+            dispatch(deleteScene(scene))
         }
     }
 
@@ -45,10 +39,10 @@ const CurrentScenes = ({loadedScene, setLoadedScene, setLastScroll, scenes, setS
         scenes.map(i => 
             <div key = {i.id}>
                 <button key = {`${i.id}-fil`} className = {i.sceneName === loadedScene ? 'scene-name-highlight' : 'scene-name-regular'} onClick = {() => {handleSceneChange(i)}}>
-                    {text[i.sceneName.replace('-','')] ? text[i.sceneName.replace('-','')][lan] : i.sceneName}
+                    {textLan[i.sceneName.replace('-','')] || i.sceneName}
                 </button>
-                {user.isAdmin &&
-                <button key = {`${i.id}-del`} onClick = {() => deleteScene(i)}>
+                {user.adminToken &&
+                <button key = {`${i.id}-del`} onClick = {() => handleDeleteScene(i)}>
                     -
                 </button>
                 }
@@ -58,55 +52,60 @@ const CurrentScenes = ({loadedScene, setLoadedScene, setLastScroll, scenes, setS
     )
 }
 
-const CreateNewScene = ({scenes, setScenes, lan}) => {
+const CreateNewScene = () => {
+    const dispatch = useDispatch()
+    const scenes = useSelector(i => i.scenes.list)
+    const textLan = useSelector(i => i.view.textLan)
+
     //helper function for new scene name
     const newSceneName = () => {
         //currently no scenes
         if (scenes.length === 0 ) {
             return 'scene-0'
         }
-
         //scene with the largest number
         const maxScene = Math.max(...scenes.map(i => Number(i.sceneName.split('-')[1])))
 
-        
         return(`scene-${maxScene + 1}`)
-
     }
 
     //event handler
     const handleCreateNew = async () => {
-
-        const addedScene = await sceneServices.addScene({sceneName : newSceneName()})
-
-        setScenes(scenes.concat(addedScene))
-
+        dispatch(createNewScene(newSceneName()))
     }
 
-    return(<button onClick = {handleCreateNew}>{text.new[lan]}</button>)
+    return(<button onClick = {handleCreateNew}>{textLan.new}</button>)
 
 }
 
-const ActiveView = ({loadedScene, setLoadedScene, setLastScroll, setIsActive, scenes, setScenes, setImageList, user, lan}) => {
+const ActiveView = ({ setIsActive }) => {
+    const user = useSelector(i => i.user)
+    const textLan = useSelector(i => i.view.textLan)
+
     return(
         <div id = 'scenes' className = 'scene-filter-container'>
-            <button onClick = {() => setIsActive(false)}>{text.done[lan]}</button>
-            <CurrentScenes loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} setLastScroll = {setLastScroll} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} lan = {lan} user = {user}/>
-            {user.isAdmin && <CreateNewScene scenes = {scenes} setScenes = {setScenes} lan = {lan}/>}
+            <button onClick = {() => setIsActive(false)}>{textLan.done}</button>
+            <CurrentScenes setImageList />
+            {user.adminToken && <CreateNewScene />}
         </div>
     )
 }
 
-const DropDown = ({setLastScroll, scenes, setScenes, setImageList, user, lan}) => {
-    const [isActive, setIsActive] = useState(false)
-    const [loadedScene, setLoadedScene] = useState(null)
-    
+const DropDown = () => {
+    const loadedScene = useSelector(i => i.scenes.loaded)
+
+    //make it a little nicer for users: keep menu open if there's a (non all/kakki) scene loaded
+    const activeDefault = loadedScene && loadedScene !== 'scene-0'
+        ? true
+        : false
+
+    const [isActive, setIsActive] = useState(activeDefault)
 
     return(
         <div>
             {isActive
-            ? <ActiveView loadedScene = {loadedScene} setLoadedScene = {setLoadedScene} setLastScroll = {setLastScroll} setIsActive = {setIsActive} scenes = {scenes} setScenes = {setScenes} setImageList = {setImageList} user = {user} lan = {lan}/>
-            : <InactiveView setIsActive = {setIsActive} lan = {lan}/>
+            ? <ActiveView setIsActive = {setIsActive} />
+            : <InactiveView setIsActive = {setIsActive} />
         }
         </div>
     )

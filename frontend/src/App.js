@@ -1,101 +1,91 @@
-import { useState, useEffect} from 'react'
-import text from './resources/text.js'
+import { useEffect } from 'react'
+import { Routes, Route } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { initializeScenes } from './reducers/sceneReducer.js'
+import { initializeImages } from './reducers/mediaReducer.js'
+import { initializeMusic } from './reducers/mediaReducer.js'
 import ImageUpload from './components/ImageUpload'
-import User from './components/User'
 import Music from './components/Music'
 import Images from './components/Images'
 import Entry from './components/Entry'
+import CustomNavbar from './components/CustomnNavbar.js'
 import Language from './components/Language'
 import HighlightView from './components/HighlightView.js'
-import imageServices from './services/imageServices'
-import helpers from './utilities/helpers'
+
+//component to display current user
+const DisplayUser = () => {
+  const user = useSelector(i => i.user)
+  const textLan = useSelector(i => i.view.textLan)
+
+  return (
+    <div className='user-container'>
+      <Language />
+      {user.username === 'guest'
+        ? textLan.guest
+        : user.username}
+    </div>
+  )
+}
 
 //component for regular view
-const RegularView = ({guestUser, user, setUser, imageList, setImageList, lastScroll, setLastScroll, highlight, setHighlight, setEntryKey, lan, setLan}) => {
-  const [scenes, setScenes] = useState([]) //list of all the scenes
-  const [music, setMusic] = useState([]) //metadata for the music
+const RegularView = () => {
+  const user = useSelector(i => i.user)
+  const textLan = useSelector(i => i.view.textLan)
 
-  //effect hook to load image list on first render, plus whenever the upload images change
-  //(need to put the async inside so it doesn't throw an error)
-  const setImageFiles = () => {
-    const fetchData = async () => {
-        const response = await imageServices.getImageData()
+  const lastScroll = useSelector(i => i.view.scroll)
 
-        //allows for 'hidden' files only visible to admin by removing from 'all' scene
-        const newImageList = user.isAdmin
-          ? response
-          : response.filter(i => i.scenes.map(i => i.sceneName).includes('scene-0'))
-        
-        newImageList.sort(helpers.compareImages)
-        setImageList(newImageList)
-    }
-    fetchData()
-  }
-
-  useEffect(setImageFiles, [user])
-
-
-  return(
+  //note the scroll just goes here (temp fix on timing)
+  setTimeout(() => {
+    window.scroll({ left: 0, top: lastScroll, behavior: 'instant' })
+  },50)
+  
+  
+  return (
     <div>
-      <div className='flexbox-header'>
-        <h1>{text.header[lan]}</h1>
-        <h2><a href = '#music' className = 'header-link'>{text.music[lan]}</a></h2>
-        <h2><a href = '#image-top' className = 'header-link'>{text.photos[lan]}</a></h2>
-        <Language setLan = {setLan}/>
-        <User user = {user} setUser = {setUser} guestUser = {guestUser} setEntryKey = {setEntryKey} lan = {lan} setLastScroll = {setLastScroll}/>
-      </div>
-      {user.isAdmin && <ImageUpload setImageList = {setImageList} setMusic = {setMusic}/>}
-      <section id = 'music'>
-        <Music  user = {user} lan = {lan} music = {music} setMusic = {setMusic}/>
+      <DisplayUser />
+      <CustomNavbar />
+      {user.adminToken && <ImageUpload />}
+      <section id='headingsSection'>
+        <div>
+          <h1>{textLan.welcomeTxt}</h1>
+        </div>
+        <h2>{textLan.welcomeSubTxt}</h2>
       </section>
-      <Images lastScroll = {lastScroll} setLastScroll = {setLastScroll} id = 'images' scenes = {scenes} setScenes = {setScenes} imageList={imageList} setImageList = {setImageList} user = {user} highlight = {highlight} setHighlight = {setHighlight} lan = {lan}/>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
-      <h1>F</h1>
+      <section id='music'>
+        <Music />
+      </section>
+      <Images id='images' />
     </div>
-    
   )
 }
 
 //root component
 const App = () => {
-  const guestUser = {displayname: 'guest', username: 'guest'}
-  const [highlight, setHighlight] = useState({current : null, outgoing : null})
-  const [entryKey, setEntryKey] = useState(null)
-  const [lan, setLan] = useState('suo')
-  const [lastScroll, setLastScroll] = useState(0)//for scrolling to same part of page after highlight
-  const [imageList, setImageList] = useState([])
-  const [user, setUser] = useState(guestUser)
+  const dispatch = useDispatch()
+  //note that if you do this as an object (i.e. 'user') it will update everytime
+  //since equality comparison is === by default (may be able to fix with custom equality comparison?)
+  const {entryToken, adminToken } = useSelector(i => i.user)
 
+  //initialize states
+  useEffect(() => {
+    dispatch(initializeScenes(entryToken))
+    dispatch(initializeImages(entryToken, adminToken))
+    dispatch(initializeMusic(entryToken))
+  }, [entryToken, adminToken])
+  
 
-  return(
-    <>
-      {entryKey
-        ? highlight.current === null
-          ? <RegularView guestUser = {guestUser} user = {user} setUser = {setUser} imageList = {imageList} setImageList = {setImageList} lastScroll = {lastScroll} setLastScroll = {setLastScroll} highlight = {highlight} setHighlight = {setHighlight} setEntryKey = {setEntryKey} lan = {lan} setLan = {setLan}/>
-          : <HighlightView imageList = {imageList} highlight = {highlight} setHighlight = {setHighlight} lan = {lan}/>
-        : <Entry setEntryKey = {setEntryKey}/>
-      }
-      
-    </>
-
+  return (
+    <div className='container'>
+      <Routes>
+        <Route path='/' element={
+          entryToken
+            ? <RegularView />
+            : <Entry />
+        } />
+        <Route path='/view/:fileName' element = {<HighlightView /> }/>
+      </Routes>
+    </div>
   )
-
 }
-
 
 export default App;

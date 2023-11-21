@@ -26,22 +26,19 @@ const compareImages = (image1, image2) => {
 const fileToName = (songFile) => {
     const fileList = {'waiting.mp3' : 'song0', 'transition.mp3' : 'song1', 'down-the-aisle.mp3' : 'song2', 'Mia2.1.mp3' : 'song3'}
     
-    return fileList[songFile.fileName]
+    const songCode = fileList[songFile.fileName]
+
+    return songCode
 }
 
 //helper function for sorting audio
 const compareSongs = (song1, song2) => {
-    //both songs are in fileToName (in the production version, they all should be)
-    if (fileToName[song1] & fileToName[song2]) {
-        const name1 = fileToName(song1)
-        const name2 = fileToName(song2)
-        if (song1 > song2) {
-            return 1
-        } else if (song1 < song2) {
-            return -1
-        } else {
-            return 0
-        }
+    const name1 = fileToName(song1)
+    const name2 = fileToName(song2)
+    if (name1 > name2) {
+        return 1
+    } else if (name1 < name2) {
+        return -1
     } else {
         return 0
     }

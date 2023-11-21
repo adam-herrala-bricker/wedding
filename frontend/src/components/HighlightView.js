@@ -1,13 +1,21 @@
-import { useEffect } from 'react'
-import text from '../resources/text'
+import { useState, useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { Button, CloseButton, Image} from 'react-bootstrap'
 
 //component for highlighting a single image
-const HighlightView = ({imageList, highlight, setHighlight, lan}) => {
-  
+const HighlightView = () => {
+    const [thisClass, setThisClass] = useState('single-image-hidden')
+    const { res, textLan } = useSelector(i => i.view)
+    const imageList = useSelector(i => i.media.images.display)
+    const user = useSelector(i => i.user)
+
+    const navigate = useNavigate()
+    const thisFile = useParams().fileName
+
     //helper function to get adjoining index in imageList
-    const adjoiningImage = (highlight, direction) => {
-      const thisIndex = imageList.map(i => i.fileName).indexOf(highlight.current.fileName)
-      console.log(thisIndex)
+    const adjoiningImage = (direction) => {
+      const thisIndex = imageList.map(i => i.fileName).indexOf(thisFile)
       const totalLength = imageList.length
   
       //only one entry --> return 0 (bugs out otherwise)
@@ -26,39 +34,61 @@ const HighlightView = ({imageList, highlight, setHighlight, lan}) => {
   
     //event handlers
     const handleBack = () => {
-      setHighlight({current : null, outgoing : highlight.current})
-      window.removeEventListener('keydown', handleArrow, {once : true})
+      navigate('/')
     }
 
     const handleScrollClick = (direction) => {
         //uses same direction encoding as the arrow handler since it shares a helper function
-        setHighlight({current : imageList[adjoiningImage(highlight, direction)], outgoing : null})
+        const nextFile = imageList[adjoiningImage(direction)].fileName
+        navigate(`/view/${nextFile}`)
     }
 
     //also an event handler??
     const handleArrow = (event) => {
-        //console.log(event.key)
-        //console.log(adjoiningImage(highlight, event.key ))
-        setHighlight({current : imageList[adjoiningImage(highlight, event.key)], outgoing : null})
+        const nextFile = imageList[adjoiningImage(event.key)].fileName
+        navigate(`/view/${nextFile}`)
+    }
+
+    const handleLoad = () => {
+      setThisClass('highlight-image')
     }
   
     //effect hook for listening to keyboard
+    //NOTE THAT IT ABSOLUTELY HAS TO BE HERE!! NOT LOOSE IN THE COMPONENT
     useEffect(() => {
-      window.addEventListener('keydown', handleArrow, {once : true})
-    }, [highlight])
-  
-    console.log(imageList)
-  
-    const baseURL = '/api/images' //this has to live down here for some reason
+      window.addEventListener('keydown', handleArrow)
+      return () => {
+        window.removeEventListener('keydown', handleArrow)
+      }
+    }, [thisFile])
+    
+    //this has to live down here for some reason
+    const baseURL = res === 'high'
+      ? '/api/images' 
+      : '/api/images/web-res'
+    
+    //Note: Sending the entry token in the query itself. Can't imagine this is the best idea, but all the ways of
+    //authenticating the requests in the img component seem needlessly complicated
+    const imagePath = `${baseURL}/${thisFile}?token=${user.entryToken}`
+
     return(
-      <div className = 'highlight-background'>
-        <button onClick = {handleBack}>{text.back[lan]}</button>
-        <div className = 'hightlight-group'>
-            <button className = 'highlight-button' onClick = {() => handleScrollClick('ArrowLeft')}>{'<--'}</button>
-            <img className = 'highlight-image' alt = '' src = {`${baseURL}/${highlight.current.fileName}`}/>
-            <button className = 'highlight-button' onClick = {() => handleScrollClick('ArrowRight')}>{'-->'}</button>
+      <div className = 'outer-highlight-container'>
+        <div>
+          <CloseButton onClick = {handleBack}/>
         </div>
-        
+        <div className = 'highlight-group'>
+          <Image alt = '' src = {imagePath} className = {thisClass} onLoad = {handleLoad}/>
+        </div>
+        <div className = 'highlight-group'>
+          {thisClass === 'single-image-hidden' && textLan.loading + '...'}
+        </div>
+        {thisClass !== 'single-image-hidden' &&
+          <div className = 'bs-button-container'>
+            <Button variant = 'outline-dark' onClick = {() => handleScrollClick('ArrowLeft')}>{'<--'}</Button>
+            <a download className = 'regular-text' href = {imagePath}><Button variant = 'outline-dark'>{textLan.download}</Button></a>
+            <Button variant = 'outline-dark' onClick = {() => handleScrollClick('ArrowRight')}>{'-->'}</Button>
+          </div>
+        }
       </div>
     )
   

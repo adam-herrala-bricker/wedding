@@ -1,7 +1,7 @@
 html {
-    scroll-padding-top: 120px;
+    scroll-padding-top: 55px;
     font-family: Helvetica, sans-serif;
-    font-weight: lighter;
+    font-weight: 100;
   }
 
 h1 {
@@ -13,8 +13,65 @@ h1 {
 h2 {
     font-weight: 100;
     font-size: 30px;
+}
+
+.new-section {
+    font-weight: 700;
+    font-size: 40px;
+    font-variant: small-caps;
 
 }
+
+h4 {
+    font-weight: 100;
+}
+
+p {
+    font-weight: 100;
+}
+
+.entry-container{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 50px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.user-container {
+    display: flex;
+    justify-content: space-between;
+
+    column-gap: 5px;
+    padding : 5px;
+}
+
+.generic-button {
+    background-color: transparent;
+    border-style: none;
+    font-weight: 500;
+    
+    padding: 0px;
+}
+
+.generic-button:hover {
+    color: brown;
+}
+
+.generic-button:active {
+    color: chocolate;
+}
+
+.login-button-container {
+    display: flex;
+    justify-content: flex-end;
+    column-gap: 20px;
+}
+ 
 
 .flexbox-header {
     position: sticky;
@@ -50,23 +107,63 @@ h2 {
     margin-bottom: 5px;
 }
 
+#headingsSection{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+
+    /*
+    min-width: 765px;
+    */
+}
+
+.music-div{
+    margin-bottom: 5vh;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
+/*
+@media (max-width: 765px) {
+    .music-div, .music-container {
+      flex-direction: column;
+      column-gap: 0cap;
+      text-align: start;
+      row-gap: 2px;
+      align-items: start;
+    }
+  }
+*/
+
+
 .music-container {
     display: flex;
     align-items: center;
+    flex-wrap: wrap-reverse;
     column-gap: 10px;
 
     font-size: 20px;
 }
 
-.hightlight-group {
+.outer-highlight-container {
+    padding:10px;
+}
+
+.highlight-group {
     display: flex;
     justify-content: center;
+
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .highlight-button {
-    flex-grow: 1;
 
-    background-color: transparent;
     border-style: none;
 }
 
@@ -75,11 +172,15 @@ h2 {
 }
 
 .highlight-image {
-    height: 90vh;
-    
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+   max-width: 100%;
+   max-height: 85vh;
+}
+
+.bs-button-container {
+    display:flex;
+    justify-content: center;
+    column-gap: 20px;
+
 }
 
 .highlight-background {
@@ -88,30 +189,48 @@ h2 {
 }
 
 .single-image {
-    height: 150px;
-    padding: 10px;
+    height: 180px;
+    padding: 1px;
 }
 
-.image-button {
+.single-image-hidden {
+    height: 100px;
+    padding: 10px;
+    opacity: 0%;
+
+}
+
+.loading-text {
+    text-align: center;
+}
+
+.image-button, .hidden-image {
     background-color: white;
 
-    border-style: solid;
-    border-width: 2px;
-    border-color: black;
+    border-style: none;
     
-    margin-bottom: 5px;
+    margin-bottom: 2px;
+
+    filter:grayscale(100%)
+
 }
 
-.image-button:hover {
-    background-color:lightgrey;
+.image-button:hover, .hidden-image:hover {
+    filter:grayscale(0%);
+    
 }
 
 .image-button:active {
-    background-color: darkblue;
+    filter:grayscale(0%)
+    
 }
 
 .hidden-image {
     opacity : .5;
+}
+
+.group-hidden {
+    visibility:collapse;
 }
 
 .image-grouping {
@@ -120,8 +239,8 @@ h2 {
     flex-wrap: wrap;
     justify-content: flex-start;
 
-    row-gap: 15px;
-    column-gap: 10px;
+    row-gap: 1px;
+    column-gap: 1px;
 }
 
 .under-image-container {
@@ -132,9 +251,9 @@ h2 {
 }
 
 .language-container {
-    align-self: center;
-    display: grid;
-    row-gap: 5px;
+    display: flex;
+    
+    column-gap: 5px;
 }
 
 .flag-icon {
@@ -169,8 +288,9 @@ h2 {
     
     justify-content: flex-start;
     align-items: center;
+    flex-wrap: wrap;
 
-    gap: 15px;
+    gap: 5px;
     margin-bottom: 10px;
 }
 
@@ -205,4 +325,24 @@ h2 {
 
 .scene-unlinked {
     opacity : .5
+}
+
+.regular-text {
+    color:black;
+    text-decoration: none;
+}
+
+.regular-text:hover {
+    color:white;
+}
+
+.single-image-container {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.login-container {
+    padding : 10px;
 }
