@@ -14,7 +14,9 @@ on:
 jobs:
   deployment_pipeline:
     runs-on: ubuntu-20.04
-    #env goes here
+    env:
+      ENTRY_HASH: ${{ secrets.ENTRY_HASH }}
+      ENTRY_KEY: ${{ secrets.ENTRY_KEY }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -26,3 +28,7 @@ jobs:
         run: cd backend && npm install
       - name: Style check (backend)
         run: cd backend && npm run lint
+      - name: Create temporary media folder for testing
+        run: cd backend && bash build_temp_media_folder.sh
+      - name: Backend integration tests
+        run: cd backend && npm run test
