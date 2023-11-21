@@ -31,7 +31,7 @@ const Music = () => {
             </h2>
             {music.map(i =>
                 <div className='music-container' key={i.id}>
-                    <audio controls src={`/api/audio/${i.fileName}`} />
+                    <audio controls src={`/api/audio/${i.fileName}?token=${user.entryToken}`} />
                     <h2>{helpers.fileToName(i) ? textLan[helpers.fileToName(i)] : 'song title missing'}</h2>
                     {user.adminToken && <DeleteSong songID={i.id} />}
                 </div>

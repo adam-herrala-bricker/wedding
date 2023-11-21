@@ -6,6 +6,7 @@ const User = require('../models/userModel');
 const {ENTRY_HASH, ENTRY_KEY} = require('../utils/config');
 
 const sampleImage = '_DSC0815.jpg';
+const sampleAudio = 'down-the-aisle.mp3';
 
 // for entry, an entry key is checked against a pseudouser called 'entry'
 const entryUserCredentials = {
@@ -83,7 +84,12 @@ describe('no entry token --> rejected media requests', () => {
         .expect('Content-Type', /application\/json/);
     expect(response.body.error).toEqual('entry token required');
   });
-  // need to add same functionality for audio
+  test('audio request', async () => {
+    const response = await api.get(`/api/audio/${sampleAudio}`)
+        .expect(401)
+        .expect('Content-Type', /application\/json/);
+    expect(response.body.error).toEqual('entry token required');
+  });
 });
 
 // still to do: invalid entry token, wrong entry token type (?)
@@ -93,7 +99,6 @@ describe('entry token --> access granted', () => {
     const entryCredentials = {username: 'entry', password: ENTRY_KEY};
     const entryResponse = await api.post('/api/login').send(entryCredentials);
     const entryToken = entryResponse.body.token;
-    console.log(ENTRY_KEY);
 
     return entryToken;
   };
@@ -112,6 +117,14 @@ describe('entry token --> access granted', () => {
         .get(`/api/images/${sampleImage}?token=${entryToken}`)
         .expect(200)
         .expect('Content-Type', /image\/jpeg/);
+  });
+
+  test('audio request', async () => {
+    const entryToken = await getEntryToken();
+    await api
+        .get(`/api/audio/${sampleAudio}?token=${entryToken}`)
+        .expect(200)
+        .expect('Content-Type', /audio\/mpeg/);
   });
 });
 

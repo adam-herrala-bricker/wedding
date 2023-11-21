@@ -28,8 +28,9 @@ mongoose.connect(mongourl)
 
 app.use(cors());
 app.use(express.json());
-// using this to serve static png files with authorization middleware
+// using this to serve static files with authorization middleware
 app.use('/api/images', middleware.staticAuthorization);
+app.use('/api/audio', middleware.staticAuthorization);
 // virtual path to images and audio folders
 app.use('/api/images', express.static('media/images'));
 app.use('/api/audio', express.static('media/audio'));
