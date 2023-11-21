@@ -93,7 +93,7 @@ describe('entry token --> access granted', () => {
     const entryCredentials = {username: 'entry', password: ENTRY_KEY};
     const entryResponse = await api.post('/api/login').send(entryCredentials);
     const entryToken = entryResponse.body.token;
-    console.log(entryResponse.body.token);
+    console.log(ENTRY_KEY);
 
     return entryToken;
   };
