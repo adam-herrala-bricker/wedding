@@ -1,0 +1,26 @@
+name: Deployment pipeline
+
+on:
+  push:
+    branches:
+      - main #only check on push to main (which requires a PR)
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  deployment_pipeline:
+    runs-on: ubuntu-20.04
+    #env goes here
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14.17' #default node version in render production environment
+      - name: Install frontend dependencies
+        run: cd frontend && npm install
+      - name: Install backend dependencies
+        run: cd backend && npm install
