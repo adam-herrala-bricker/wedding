@@ -17,6 +17,7 @@ jobs:
     env:
       ENTRY_HASH: ${{ secrets.ENTRY_HASH }}
       ENTRY_KEY: ${{ secrets.ENTRY_KEY }}
+      TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI}}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
