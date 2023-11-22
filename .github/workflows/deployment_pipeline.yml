@@ -16,13 +16,14 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       ADMIN_KEY: ${{ secrets.ADMIN_KEY}}
+      BAD_ENTRY_TOKEN: ${{ secrets.BAD_ENTRY_TOKEN }}
       ENTRY_HASH: ${{ secrets.ENTRY_HASH }}
       ENTRY_KEY: ${{ secrets.ENTRY_KEY }}
       PORT: ${{ secrets.PORT }}
       SECRET_ADMIN: ${{ secrets.SECRET_ADMIN }}
       SECRET_ENTER: ${{ secrets.SECRET_ENTER }}
       SECRET_USER: ${{ secrets.SECRET_USER }}
-      TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI}}
+      TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
