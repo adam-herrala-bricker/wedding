@@ -6,7 +6,7 @@ const Audio = require('../models/audioModel');
 const Image = require('../models/imageModel');
 const Scene = require('../models/sceneModel');
 const User = require('../models/userModel');
-const {ENTRY_HASH, ENTRY_KEY} = require('../utils/config');
+const {ENTRY_HASH, ENTRY_KEY, BAD_ENTRY_TOKEN} = require('../utils/config');
 
 const sampleImage = '_DSC0815.jpg';
 const sampleAudio = 'down-the-aisle.mp3';
@@ -62,6 +62,7 @@ describe('requests to root path', () => {
   test('getting app returns 200', async () => {
     await api.get('/').expect(200);
   });
+
   test('getting app returns expected title', async () => {
     const response = await api.get('/');
     expect(response.text).toContain('Herrala Bricker 2023');
@@ -118,6 +119,7 @@ describe('no entry token --> rejected media requests', () => {
         .expect('Content-Type', /application\/json/);
     expect(response.body.error).toEqual('entry token required');
   });
+
   test('audio request', async () => {
     const response = await api.get(`/api/audio/${sampleAudio}`)
         .expect(401)
@@ -126,9 +128,33 @@ describe('no entry token --> rejected media requests', () => {
   });
 });
 
-// still to do: invalid entry token, wrong entry token type (?)
+describe('invalid entry token --> bad metadata requests', () => {
+  test('audio metadata', async () => {
+    const response = await api
+        .get('/api/audio-data')
+        .set('Authorization', `Bearer ${BAD_ENTRY_TOKEN}`)
+        .expect(400);
+    expect(response.body.error).toEqual('invalid signature');
+  });
 
-describe('entry token --> access granted', () => {
+  test('image metadata', async () => {
+    const response = await api
+        .get('/api/image-data')
+        .set('Authorization', `Bearer ${BAD_ENTRY_TOKEN}`)
+        .expect(400);
+    expect(response.body.error).toEqual('invalid signature');
+  });
+
+  test('scene metadata', async () => {
+    const response = await api
+        .get('/api/scenes')
+        .set('Authorization', `Bearer ${BAD_ENTRY_TOKEN}`)
+        .expect(400);
+    expect(response.body.error).toEqual('invalid signature');
+  });
+});
+
+describe('entry token --> requests granted', () => {
   // helper function to get entry token
   const getEntryToken = async () => {
     const entryCredentials = {username: 'entry', password: ENTRY_KEY};
@@ -145,7 +171,7 @@ describe('entry token --> access granted', () => {
   };
 
   // and then the actual tests
-  test('image request (web res)', async () => {
+  test('image file (web res)', async () => {
     const entryToken = await getEntryToken();
     await api
         .get(`/api/images/web-res/${sampleImage}?token=${entryToken}`)
@@ -153,7 +179,7 @@ describe('entry token --> access granted', () => {
         .expect('Content-Type', /image\/jpeg/);
   });
 
-  test('image request (full res)', async () => {
+  test('image file (full res)', async () => {
     const entryToken = await getEntryToken();
     await api
         .get(`/api/images/${sampleImage}?token=${entryToken}`)
@@ -175,7 +201,7 @@ describe('entry token --> access granted', () => {
     expect(imageData.scenes[0].id).toEqual(scene1.id);
   });
 
-  test('audio request', async () => {
+  test('audio file', async () => {
     const entryToken = await getEntryToken();
     await api
         .get(`/api/audio/${sampleAudio}?token=${entryToken}`)

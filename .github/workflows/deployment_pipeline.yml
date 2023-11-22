@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       ADMIN_KEY: ${{ secrets.ADMIN_KEY}}
+      BAD_ENTRY_TOKEN: ${{ secrets.BAD_ENTRY_TOKEN}}
       ENTRY_HASH: ${{ secrets.ENTRY_HASH }}
       ENTRY_KEY: ${{ secrets.ENTRY_KEY }}
       PORT: ${{ secrets.PORT }}
