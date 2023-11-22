@@ -112,9 +112,16 @@ describe('no entry token --> bad metadata requests', () => {
 });
 
 describe('no entry token --> rejected media requests', () => {
-  test('image request', async () => {
+  test('image request (full res)', async () => {
     // content type check is especially important bc it's inconsistent w media
     const response = await api.get(`/api/images/${sampleImage}`)
+        .expect(401)
+        .expect('Content-Type', /application\/json/);
+    expect(response.body.error).toEqual('entry token required');
+  });
+
+  test('image request (web res)', async () => {
+    const response = await api.get(`/api/images/web-res/${sampleImage}`)
         .expect(401)
         .expect('Content-Type', /application\/json/);
     expect(response.body.error).toEqual('entry token required');
@@ -154,6 +161,29 @@ describe('invalid entry token --> bad metadata requests', () => {
   });
 });
 
+describe('invalid entry token --> bad media requests', () => {
+  test('image request (full res)', async () => {
+    const response = await api
+        .get(`/api/images/${sampleImage}?token=${BAD_ENTRY_TOKEN}`)
+        .expect(400);
+    expect(response.body.error).toEqual('invalid signature');
+  });
+
+  test('image request (web res)', async () => {
+    const response = await api
+        .get(`/api/images/web-res/${sampleImage}?token=${BAD_ENTRY_TOKEN}`)
+        .expect(400);
+    expect(response.body.error).toEqual('invalid signature');
+  });
+
+  test('audio request', async () => {
+    const response = await api
+        .get(`/api/audio/${sampleAudio}?token=${BAD_ENTRY_TOKEN}`)
+        .expect(400);
+    expect(response.body.error).toEqual('invalid signature');
+  });
+});
+
 describe('entry token --> requests granted', () => {
   // helper function to get entry token
   const getEntryToken = async () => {
@@ -171,18 +201,18 @@ describe('entry token --> requests granted', () => {
   };
 
   // and then the actual tests
-  test('image file (web res)', async () => {
-    const entryToken = await getEntryToken();
-    await api
-        .get(`/api/images/web-res/${sampleImage}?token=${entryToken}`)
-        .expect(200)
-        .expect('Content-Type', /image\/jpeg/);
-  });
-
   test('image file (full res)', async () => {
     const entryToken = await getEntryToken();
     await api
         .get(`/api/images/${sampleImage}?token=${entryToken}`)
+        .expect(200)
+        .expect('Content-Type', /image\/jpeg/);
+  });
+
+  test('image file (web res)', async () => {
+    const entryToken = await getEntryToken();
+    await api
+        .get(`/api/images/web-res/${sampleImage}?token=${entryToken}`)
         .expect(200)
         .expect('Content-Type', /image\/jpeg/);
   });
