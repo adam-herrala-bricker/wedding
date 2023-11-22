@@ -6,32 +6,15 @@ const Audio = require('../models/audioModel');
 const Image = require('../models/imageModel');
 const Scene = require('../models/sceneModel');
 const User = require('../models/userModel');
-const {ENTRY_HASH, ENTRY_KEY, BAD_ENTRY_TOKEN} = require('../utils/config');
+const {ENTRY_KEY, BAD_ENTRY_TOKEN} = require('../utils/config');
+const {
+  sampleImage,
+  sampleAudio,
+  entryUserCredentials,
+  image1,
+  audio1,
+} = require('../utils/test_constants');
 
-const sampleImage = '_DSC0815.jpg';
-const sampleAudio = 'down-the-aisle.mp3';
-
-// for entry, an entry key is checked against a pseudouser called 'entry'
-const entryUserCredentials = {
-  username: 'entry',
-  displayname: 'entry',
-  email: 'entryuser@gmail.com',
-  passwordHash: ENTRY_HASH,
-  isAdmin: false,
-  adminHash: '',
-};
-
-// image metadata
-const image1 = {
-  fileName: '_DSC9999.jpg',
-  people: [],
-
-};
-
-// audio metadata
-const audio1 = {
-  fileName: 'groovyJamz.mp3',
-};
 
 // runs once at beginning, before any tests, to set up DB
 beforeAll(async () => {
@@ -70,7 +53,7 @@ describe('requests to root path', () => {
 });
 
 describe('entry token creation', () => {
-  test('entry key returns token + user object', async () => {
+  test('valid entry key returns token + user object', async () => {
     const entryCredentials = {username: 'entry', password: ENTRY_KEY};
     const response = await api.post('/api/login')
         .send(entryCredentials)
