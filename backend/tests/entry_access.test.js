@@ -119,6 +119,14 @@ describe('entry token --> access granted', () => {
         .expect('Content-Type', /image\/jpeg/);
   });
 
+  test.only('image metadata', async () => {
+    const entryToken = await getEntryToken();
+    const response = await api
+        .get('/api/image-data')
+        .set('Authorization', `Bearer ${entryToken}`)
+        .expect(200);
+  });
+
   test('audio request', async () => {
     const entryToken = await getEntryToken();
     await api
