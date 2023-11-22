@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const supertest = require('supertest');
 const app = require('../app');
 const api = supertest(app);
+const Audio = require('../models/audioModel');
 const Image = require('../models/imageModel');
 const Scene = require('../models/sceneModel');
 const User = require('../models/userModel');
@@ -27,6 +28,11 @@ const image1 = {
 
 };
 
+// audio metadata
+const audio1 = {
+  fileName: 'groovyJamz.mp3',
+};
+
 // runs once at beginning, before any tests, to set up DB
 beforeAll(async () => {
   // add entry 'user'
@@ -45,6 +51,11 @@ beforeAll(async () => {
   const addImage1 = new Image({...image1, scenes: [scene1ID]});
   await addImage1.save();
   await addImage1.populate('scenes', {sceneName: 1});
+
+  // add audio metadata
+  await Audio.deleteMany({});
+  const addAudio1 = new Audio(audio1);
+  await addAudio1.save();
 });
 
 describe('requests to root path', () => {
@@ -173,6 +184,16 @@ describe('entry token --> access granted', () => {
         .get(`/api/audio/${sampleAudio}?token=${entryToken}`)
         .expect(200)
         .expect('Content-Type', /audio\/mpeg/);
+  });
+
+  test('audio metadata', async () => {
+    const entryToken = await getEntryToken();
+    const response = await api
+        .get('/api/audio-data')
+        .set('Authorization', `Bearer ${entryToken}`)
+        .expect(200);
+
+    expect(response.body[0].fileName).toEqual('groovyJamz.mp3');
   });
 
   test('scene metadata', async () => {
