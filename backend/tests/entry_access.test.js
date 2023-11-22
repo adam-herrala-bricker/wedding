@@ -8,9 +8,9 @@ const Scene = require('../models/sceneModel');
 const User = require('../models/userModel');
 const {ENTRY_KEY, BAD_ENTRY_TOKEN} = require('../utils/config');
 const {
+  entryUserCredentials,
   sampleImage,
   sampleAudio,
-  entryUserCredentials,
   image1,
   audio1,
 } = require('../utils/test_constants');
