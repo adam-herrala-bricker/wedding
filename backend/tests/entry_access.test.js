@@ -184,7 +184,7 @@ describe('invalid entry token --> bad media requests', () => {
   });
 });
 
-describe('entry token --> requests granted', () => {
+describe('valid entry token --> requests granted', () => {
   // helper function to get entry token
   const getEntryToken = async () => {
     const entryCredentials = {username: 'entry', password: ENTRY_KEY};
