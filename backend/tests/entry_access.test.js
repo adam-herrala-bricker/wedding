@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const supertest = require('supertest');
 const app = require('../app');
 const api = supertest(app);
+const Image = require('../models/imageModel');
+const Scene = require('../models/sceneModel');
 const User = require('../models/userModel');
 const {ENTRY_HASH, ENTRY_KEY} = require('../utils/config');
 
@@ -18,11 +20,32 @@ const entryUserCredentials = {
   adminHash: '',
 };
 
+// image metadata
+const image1 = {
+  fileName: '_DSC9999.jpg',
+  people: [],
+
+};
+
+// runs once at beginning, before any tests, to set up DB
 beforeAll(async () => {
+  // add entry 'user'
   await User.deleteMany({});
   const entryUser = new User(entryUserCredentials);
   await entryUser.save();
-}); // runs once at beginning, before any tests
+
+  // add scene metadata
+  await Scene.deleteMany({});
+  const scene1 = new Scene({sceneName: 'scene1'});
+  const scene1ID = scene1._id;
+  await scene1.save();
+
+  // add image metadata
+  await Image.deleteMany({});
+  const addImage1 = new Image({...image1, scenes: [scene1ID]});
+  await addImage1.save();
+  await addImage1.populate('scenes', {sceneName: 1});
+});
 
 describe('requests to root path', () => {
   test('getting app returns 200', async () => {
@@ -95,6 +118,7 @@ describe('no entry token --> rejected media requests', () => {
 // still to do: invalid entry token, wrong entry token type (?)
 
 describe('entry token --> access granted', () => {
+  // helper function to get entry token
   const getEntryToken = async () => {
     const entryCredentials = {username: 'entry', password: ENTRY_KEY};
     const entryResponse = await api.post('/api/login').send(entryCredentials);
@@ -103,6 +127,16 @@ describe('entry token --> access granted', () => {
     return entryToken;
   };
 
+  // helper function to get the scene 1 metadata
+  const getScene1 = async (entryToken) => {
+    const response = await api
+        .get('/api/scenes')
+        .set('Authorization', `Bearer ${entryToken}`);
+
+    return response.body[0];
+  };
+
+  // and then the actual tests
   test('image request (web res)', async () => {
     const entryToken = await getEntryToken();
     await api
@@ -119,12 +153,18 @@ describe('entry token --> access granted', () => {
         .expect('Content-Type', /image\/jpeg/);
   });
 
-  test.only('image metadata', async () => {
+  test('image metadata', async () => {
     const entryToken = await getEntryToken();
+    const scene1 = await getScene1(entryToken);
     const response = await api
         .get('/api/image-data')
         .set('Authorization', `Bearer ${entryToken}`)
         .expect(200);
+
+    const imageData = response.body[0];
+    expect(imageData.fileName).toEqual('_DSC9999.jpg');
+    expect(imageData.scenes[0].sceneName).toEqual(scene1.sceneName);
+    expect(imageData.scenes[0].id).toEqual(scene1.id);
   });
 
   test('audio request', async () => {
@@ -133,6 +173,17 @@ describe('entry token --> access granted', () => {
         .get(`/api/audio/${sampleAudio}?token=${entryToken}`)
         .expect(200)
         .expect('Content-Type', /audio\/mpeg/);
+  });
+
+  test('scene metadata', async () => {
+    const entryToken = await getEntryToken();
+    const response = await api
+        .get('/api/scenes')
+        .set('Authorization', `Bearer ${entryToken}`)
+        .expect(200);
+
+    const scene1 = response.body[0];
+    expect(scene1.sceneName).toEqual('scene1');
   });
 });
 
