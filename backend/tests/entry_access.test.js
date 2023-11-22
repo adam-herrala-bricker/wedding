@@ -138,13 +138,10 @@ describe('entry token --> access granted', () => {
     return entryToken;
   };
 
-  // helper function to get the scene 1 metadata
+  // helper function to get the scene 1 metadata (directly from DB)
   const getScene1 = async (entryToken) => {
-    const response = await api
-        .get('/api/scenes')
-        .set('Authorization', `Bearer ${entryToken}`);
-
-    return response.body[0];
+    const scenes = await Scene.find({});
+    return scenes[0];
   };
 
   // and then the actual tests
