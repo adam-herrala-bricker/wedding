@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const {ENTRY_HASH, ADMIN_KEY} = require('./config');
 
+const badAdminToken = '777777777777777777777777777777777';
+
 const sampleImage = '_DSC0815.jpg';
 const sampleAudio = 'down-the-aisle.mp3';
 
@@ -33,6 +35,28 @@ const getAdminUserCredentials = async () => {
   return thisUser;
 };
 
+// "imposter" user (somehow gets onto DB as isAdmin = true,
+// but didn't have ADMIN_KEY)
+const getImposterCredentials = async () => {
+  const dummyPassword = 'example';
+  const saltRounds = 10;
+  const badAdminKey = 'this_is_not_a_valid_admin_key';
+
+  const passwordHash = await bcrypt.hash(dummyPassword, saltRounds);
+  const adminHash = await bcrypt.hash(badAdminKey, saltRounds);
+
+  const thisUser = {
+    username: 'test.imposter',
+    displayname: 'Test Imposter',
+    email: 'test.imposter@gmail.org',
+    passwordHash: passwordHash,
+    isAdmin: true,
+    adminHash: adminHash,
+  };
+
+  return thisUser;
+};
+
 // image metadata
 const image1 = {
   fileName: '_DSC9999.jpg',
@@ -46,10 +70,12 @@ const audio1 = {
 };
 
 module.exports = {
+  badAdminToken,
   sampleImage,
   sampleAudio,
   entryUserCredentials,
   getAdminUserCredentials,
+  getImposterCredentials,
   image1,
   audio1,
 };

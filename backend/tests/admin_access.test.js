@@ -6,7 +6,9 @@ const Audio = require('../models/audioModel');
 const Image = require('../models/imageModel');
 const Scene = require('../models/sceneModel');
 const User = require('../models/userModel');
+const {ENTRY_KEY} = require('../utils/config');
 const {
+  badAdminToken,
   entryUserCredentials,
   image1,
   audio1,
@@ -28,7 +30,7 @@ beforeAll(async () => {
   await adminUser.save();
 });
 
-describe('metadata requests', () => {
+describe('metadata requests ...', () => {
   // setup DB for metadata tests
   beforeAll(async () => {
     // add scene metadata
@@ -116,11 +118,166 @@ describe('metadata requests', () => {
     });
   });
 
-  // fails with bad token
+  describe('fail when malformed token given', () => {
+    test('image PUT', async () => {
+      // need this to get id of image in DB
+      const thisImage = await Image
+          .findOne({})
+          .populate('scenes', {sceneName: 1});
+      const imageID = thisImage._id.toString();
+      const sceneIDs = thisImage.scenes.map((i) => i._id.toString());
 
-  // fails with entry token
+      const response = await api
+          .put(`/api/image-data/${imageID}`)
+          .set('Authorization', `Bearer ${badAdminToken}`)
+          .send({
+            fileName: '_DSC0001.jpg',
+            scenes: sceneIDs,
+          })
+          .expect(400);
 
-  describe('succeeds with valid admin token', () => {
+      expect(response.body.error).toEqual('jwt malformed');
+    });
+
+    test('image DELETE', async () => {
+      // get id of image in DB
+      const thisImage = await Image.findOne({});
+      const imageID = thisImage._id.toString();
+
+      const response = await api
+          .delete(`/api/image-data/${imageID}`)
+          .set('Authorization', `Bearer ${badAdminToken}`)
+          .expect(400);
+
+      expect(response.body.error).toEqual('jwt malformed');
+    });
+
+    test('audio DELETE', async () => {
+      // get id of audio in DB
+      const thisAudio = await Audio.findOne({});
+      const audioID = thisAudio._id.toString();
+
+      const response = await api
+          .delete(`/api/audio-data/${audioID}`)
+          .set('Authorization', `Bearer ${badAdminToken}`)
+          .expect(400);
+
+      expect(response.body.error).toEqual('jwt malformed');
+    });
+
+    test('scene POST', async () => {
+      const sceneName = 'scene-22';
+      const response = await api
+          .post('/api/scenes')
+          .set('Authorization', `Bearer ${badAdminToken}`)
+          .send({sceneName})
+          .expect(400);
+
+      expect(response.body.error).toEqual('jwt malformed');
+    });
+
+    test('scene DELETE', async () => {
+      // get id of scene in DB
+      const thisScene = await Scene.findOne({});
+      const sceneID = thisScene._id.toString();
+
+      const response = await api
+          .delete(`/api/scenes/${sceneID}`)
+          .set('Authorization', `Bearer ${badAdminToken}`)
+          .expect(400);
+
+      expect(response.body.error).toEqual('jwt malformed');
+    });
+  });
+
+  describe('fail when invalid (i.e. entry) token given', () => {
+    // helper function to get entry token
+    const getEntryToken = async () => {
+      const entryCredentials = {username: 'entry', password: ENTRY_KEY};
+      const entryResponse = await api.post('/api/login').send(entryCredentials);
+      const entryToken = entryResponse.body.token;
+
+      return entryToken;
+    };
+
+    test('image PUT', async () => {
+      const entryToken = await getEntryToken();
+      console.log(entryToken);
+      // need this to get id of image in DB
+      const thisImage = await Image
+          .findOne({})
+          .populate('scenes', {sceneName: 1});
+      const imageID = thisImage._id.toString();
+      const sceneIDs = thisImage.scenes.map((i) => i._id.toString());
+
+      const response = await api
+          .put(`/api/image-data/${imageID}`)
+          .set('Authorization', `Bearer ${entryToken}`)
+          .send({
+            fileName: '_DSC0001.jpg',
+            scenes: sceneIDs,
+          })
+          .expect(400);
+
+      expect(response.body.error).toEqual('invalid signature');
+    });
+
+    test('image DELETE', async () => {
+      const entryToken = await getEntryToken();
+      // get id of image in DB
+      const thisImage = await Image.findOne({});
+      const imageID = thisImage._id.toString();
+
+      const response = await api
+          .delete(`/api/image-data/${imageID}`)
+          .set('Authorization', `Bearer ${entryToken}`)
+          .expect(400);
+
+      expect(response.body.error).toEqual('invalid signature');
+    });
+
+    test('audio DELETE', async () => {
+      const entryToken = await getEntryToken();
+      // get id of audio in DB
+      const thisAudio = await Audio.findOne({});
+      const audioID = thisAudio._id.toString();
+
+      const response = await api
+          .delete(`/api/audio-data/${audioID}`)
+          .set('Authorization', `Bearer ${entryToken}`)
+          .expect(400);
+
+      expect(response.body.error).toEqual('invalid signature');
+    });
+
+    test('scene POST', async () => {
+      const entryToken = await getEntryToken();
+      const sceneName = 'scene-22';
+      const response = await api
+          .post('/api/scenes')
+          .set('Authorization', `Bearer ${entryToken}`)
+          .send({sceneName})
+          .expect(400);
+
+      expect(response.body.error).toEqual('invalid signature');
+    });
+
+    test('scene DELETE', async () => {
+      const entryToken = await getEntryToken();
+      // get id of scene in DB
+      const thisScene = await Scene.findOne({});
+      const sceneID = thisScene._id.toString();
+
+      const response = await api
+          .delete(`/api/scenes/${sceneID}`)
+          .set('Authorization', `Bearer ${entryToken}`)
+          .expect(400);
+
+      expect(response.body.error).toEqual('invalid signature');
+    });
+  });
+
+  describe('succeed with valid admin token', () => {
     // login function to get admin to get token
     const getAdminToken = async () => {
       const adminCredentials = {username: 'test.admin', password: 'example'};
