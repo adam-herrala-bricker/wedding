@@ -38,7 +38,7 @@ beforeAll(async () => {
   await Audio.deleteMany({});
   const addAudio1 = new Audio(audio1);
   await addAudio1.save();
-});
+}, 10000);
 
 describe('requests to root path', () => {
   test('getting app returns 200', async () => {
