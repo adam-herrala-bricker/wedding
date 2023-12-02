@@ -337,7 +337,6 @@ describe('metadata requests ...', () => {
   });
 });
 
-
 afterAll(async () => {
   await mongoose.connection.close();
 });
