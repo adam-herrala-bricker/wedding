@@ -15,6 +15,29 @@ const {
   getAdminUserCredentials,
 } = require('../utils/test_constants');
 
+// variables to use throughout (you can't introduce variables in beforeAll)
+let adminToken;
+let entryToken;
+
+// login function to get admin token
+const getAdminToken = async () => {
+  const adminCredentials = {username: 'test.admin', password: 'example'};
+  const response = await api
+      .post('/api/login')
+      .send(adminCredentials);
+
+  return response.body.adminToken;
+};
+
+// login funtion to get entry token
+const getEntryToken = async () => {
+  const entryCredentials = {username: 'entry', password: ENTRY_KEY};
+  const entryResponse = await api.post('/api/login').send(entryCredentials);
+  const entryToken = entryResponse.body.token;
+
+  return entryToken;
+};
+
 // setup test DB
 beforeAll(async () => {
   // clear users from DB
@@ -28,6 +51,9 @@ beforeAll(async () => {
   const adminUserCredentials = await getAdminUserCredentials();
   const adminUser = new User(adminUserCredentials);
   await adminUser.save();
+
+  adminToken = await getAdminToken();
+  entryToken = await getEntryToken();
 });
 
 describe('metadata requests ...', () => {
@@ -191,18 +217,7 @@ describe('metadata requests ...', () => {
   });
 
   describe('fail when invalid (i.e. entry) token given', () => {
-    // helper function to get entry token
-    const getEntryToken = async () => {
-      const entryCredentials = {username: 'entry', password: ENTRY_KEY};
-      const entryResponse = await api.post('/api/login').send(entryCredentials);
-      const entryToken = entryResponse.body.token;
-
-      return entryToken;
-    };
-
     test('image PUT', async () => {
-      const entryToken = await getEntryToken();
-      console.log(entryToken);
       // need this to get id of image in DB
       const thisImage = await Image
           .findOne({})
@@ -223,7 +238,6 @@ describe('metadata requests ...', () => {
     });
 
     test('image DELETE', async () => {
-      const entryToken = await getEntryToken();
       // get id of image in DB
       const thisImage = await Image.findOne({});
       const imageID = thisImage._id.toString();
@@ -237,7 +251,6 @@ describe('metadata requests ...', () => {
     });
 
     test('audio DELETE', async () => {
-      const entryToken = await getEntryToken();
       // get id of audio in DB
       const thisAudio = await Audio.findOne({});
       const audioID = thisAudio._id.toString();
@@ -251,7 +264,6 @@ describe('metadata requests ...', () => {
     });
 
     test('scene POST', async () => {
-      const entryToken = await getEntryToken();
       const sceneName = 'scene-22';
       const response = await api
           .post('/api/scenes')
@@ -263,7 +275,6 @@ describe('metadata requests ...', () => {
     });
 
     test('scene DELETE', async () => {
-      const entryToken = await getEntryToken();
       // get id of scene in DB
       const thisScene = await Scene.findOne({});
       const sceneID = thisScene._id.toString();
@@ -278,19 +289,7 @@ describe('metadata requests ...', () => {
   });
 
   describe('succeed with valid admin token', () => {
-    // login function to get admin to get token
-    const getAdminToken = async () => {
-      const adminCredentials = {username: 'test.admin', password: 'example'};
-      const response = await api
-          .post('/api/login')
-          .send(adminCredentials);
-
-      return response.body.adminToken;
-    };
-
     test('image PUT', async () => {
-      const adminToken = await getAdminToken();
-
       // get id of image in DB
       const thisImage = await Image
           .findOne({})
@@ -312,8 +311,6 @@ describe('metadata requests ...', () => {
     });
 
     test('scene POST', async () => {
-      const adminToken = await getAdminToken();
-
       const sceneName = 'scene-22';
       const response = await api
           .post('/api/scenes')
@@ -325,8 +322,6 @@ describe('metadata requests ...', () => {
     });
 
     test('scene DELETE', async () => {
-      const adminToken = await getAdminToken();
-
       // get id of scene in DB
       const thisScene = await Scene.findOne({});
       const sceneID = thisScene._id.toString();

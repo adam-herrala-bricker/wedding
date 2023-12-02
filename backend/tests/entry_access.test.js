@@ -15,7 +15,6 @@ const {
   audio1,
 } = require('../utils/test_constants');
 
-
 // runs once at beginning, before any tests, to set up DB
 beforeAll(async () => {
   // add entry 'user'
@@ -168,6 +167,8 @@ describe('invalid entry token --> bad media requests', () => {
 });
 
 describe('valid entry token --> requests granted', () => {
+  let entryToken;
+
   // helper function to get entry token
   const getEntryToken = async () => {
     const entryCredentials = {username: 'entry', password: ENTRY_KEY};
@@ -183,9 +184,13 @@ describe('valid entry token --> requests granted', () => {
     return scenes[0];
   };
 
+  // only need to get the entry token once
+  beforeAll(async () => {
+    entryToken = await getEntryToken();
+  });
+
   // and then the actual tests
   test('image file (full res)', async () => {
-    const entryToken = await getEntryToken();
     await api
         .get(`/api/images/${sampleImage}?token=${entryToken}`)
         .expect(200)
@@ -193,7 +198,6 @@ describe('valid entry token --> requests granted', () => {
   });
 
   test('image file (web res)', async () => {
-    const entryToken = await getEntryToken();
     await api
         .get(`/api/images/web-res/${sampleImage}?token=${entryToken}`)
         .expect(200)
@@ -201,7 +205,6 @@ describe('valid entry token --> requests granted', () => {
   });
 
   test('image metadata', async () => {
-    const entryToken = await getEntryToken();
     const scene1 = await getScene1(entryToken);
     const response = await api
         .get('/api/image-data')
@@ -215,7 +218,6 @@ describe('valid entry token --> requests granted', () => {
   });
 
   test('audio file', async () => {
-    const entryToken = await getEntryToken();
     await api
         .get(`/api/audio/${sampleAudio}?token=${entryToken}`)
         .expect(200)
@@ -223,7 +225,6 @@ describe('valid entry token --> requests granted', () => {
   });
 
   test('audio metadata', async () => {
-    const entryToken = await getEntryToken();
     const response = await api
         .get('/api/audio-data')
         .set('Authorization', `Bearer ${entryToken}`)
@@ -233,7 +234,6 @@ describe('valid entry token --> requests granted', () => {
   });
 
   test('scene metadata', async () => {
-    const entryToken = await getEntryToken();
     const response = await api
         .get('/api/scenes')
         .set('Authorization', `Bearer ${entryToken}`)
