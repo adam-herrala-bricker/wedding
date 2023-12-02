@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const {ENTRY_HASH, ADMIN_KEY} = require('./config');
 
 const badAdminToken = '777777777777777777777777777777777';
+const badAdminKey = 'this_is_not_a_valid_admin_key';
 
 const sampleImage = '_DSC0815.jpg';
 const sampleAudio = 'down-the-aisle.mp3';
@@ -32,6 +33,15 @@ const adminUserInfo = {
   password: 'example',
   isAdmin: true,
   adminKey: ADMIN_KEY,
+};
+
+const imposterInfo = {
+  username: 'test.imposter',
+  displayname: 'Test Imposter',
+  email: 'test.imposter@gmail.org',
+  password: 'example',
+  isAdmin: true,
+  adminKey: badAdminKey,
 };
 
 // admin user (replicate what happens on the BE)
@@ -76,7 +86,6 @@ const getStandardUserCredentials = async () => {
 const getImposterCredentials = async () => {
   const dummyPassword = 'example';
   const saltRounds = 10;
-  const badAdminKey = 'this_is_not_a_valid_admin_key';
 
   const passwordHash = await bcrypt.hash(dummyPassword, saltRounds);
   const adminHash = await bcrypt.hash(badAdminKey, saltRounds);
@@ -112,6 +121,7 @@ module.exports = {
   entryUserCredentials,
   standardUserInfo,
   adminUserInfo,
+  imposterInfo,
   getStandardUserCredentials,
   getAdminUserCredentials,
   getImposterCredentials,

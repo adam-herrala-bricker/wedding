@@ -37,7 +37,15 @@ loginRouter.post('/', async (request, response) => {
         false :
         await bcrypt.compare(ADMIN_KEY, user.adminHash);
 
-  // 2. gives seperate admin token
+  // 2. returns unauthorized if user's DB entry was generated
+  // using an invalid admin key
+  if (user.isAdmin && !adminCorrect) {
+    return response
+        .status(401)
+        .json({error: 'invalid admin key used to create user'});
+  };
+
+  // 3. gives seperate admin token for vaild admin user
   const adminToken = adminCorrect ?
     jwt.sign(userForToken, SECRET_ADMIN) :
     null;

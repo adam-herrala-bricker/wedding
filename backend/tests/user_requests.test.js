@@ -3,12 +3,15 @@ const supertest = require('supertest');
 const app = require('../app');
 const api = supertest(app);
 const User = require('../models/userModel');
+const {ENTRY_KEY} = require('../utils/config');
 const {
   entryUserCredentials,
   standardUserInfo,
   adminUserInfo,
+  imposterInfo,
   getStandardUserCredentials,
   getAdminUserCredentials,
+  getImposterCredentials,
 } = require('../utils/test_constants');
 
 describe('user creation', () => {
@@ -151,19 +154,91 @@ describe('login requests', () => {
     await standardUser.save();
 
     // add 'imposter' admin user
+    const imposterCredentials = await getImposterCredentials();
+    const imposterUser = new User(imposterCredentials);
+    await imposterUser.save();
 
     // add valid admin user
     const adminUserCredentials = await getAdminUserCredentials();
     const adminUser = new User(adminUserCredentials);
     await adminUser.save();
+  }, 10000);
+
+  test('entry "user" returns user token only', async () => {
+    const response = await api
+        .post('/api/login')
+        .send({
+          username: 'entry',
+          password: ENTRY_KEY})
+        .expect(200);
+
+    expect(response.body.token).toBeTruthy();
+    expect(response.body.adminToken).toEqual(null);
+    expect(response.body.isAdmin).toEqual(false);
   });
 
-  test('dummy', () => {
-    expect('1').toEqual('1');
+  test('standard user returns user token only', async () => {
+    const response = await api
+        .post('/api/login')
+        .send({
+          username: standardUserInfo.username,
+          password: standardUserInfo.password})
+        .expect(200);
+
+    expect(response.body.token).toBeTruthy();
+    expect(response.body.adminToken).toEqual(null);
+    expect(response.body.isAdmin).toEqual(false);
+  });
+
+  test('admin user returns user + admin tokens', async () => {
+    const response = await api
+        .post('/api/login')
+        .send({
+          username: adminUserInfo.username,
+          password: adminUserInfo.password})
+        .expect(200);
+
+    expect(response.body.token).toBeTruthy();
+    expect(response.body.adminToken).toBeTruthy();
+    expect(response.body.isAdmin).toEqual(true);
+  });
+
+  test('"imposter" login attempt fails', async () => {
+    const response = await api
+        .post('/api/login')
+        .send({
+          username: imposterInfo.username,
+          password: imposterInfo.password})
+        .expect(401);
+
+    expect(response.body.error)
+        .toEqual('invalid admin key used to create user');
+  });
+
+  test('unknown user login attempt fails', async () => {
+    const response = await api
+        .post('/api/login')
+        .send({
+          username: 'mystery.user',
+          password: 'example'})
+        .expect(401);
+
+    expect(response.body.error)
+        .toEqual('invalid username or password');
+  });
+
+  test('known user login attempt with incorrect password fails', async () => {
+    const response = await api
+        .post('/api/login')
+        .send({
+          username: standardUserInfo.username,
+          password: 'this_is_the_wrong_password'})
+        .expect(401);
+
+    expect(response.body.error)
+        .toEqual('invalid username or password');
   });
 });
-
-// logins: entry, regular, "imposter" admin, valid admin
 
 afterAll(async () => {
   await mongoose.connection.close();
