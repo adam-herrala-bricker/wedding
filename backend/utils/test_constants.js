@@ -16,6 +16,24 @@ const entryUserCredentials = {
   adminHash: '',
 };
 
+const standardUserInfo = {
+  username: 'test.standard',
+  displayname: 'Test Standard',
+  email: 'test.standard@gmail.org',
+  password: 'example',
+  isAdmin: false,
+  adminKey: '',
+};
+
+const adminUserInfo = {
+  username: 'test.admin',
+  displayname: 'Test Admin',
+  email: 'test.admin@gmail.org',
+  password: 'example',
+  isAdmin: true,
+  adminKey: ADMIN_KEY,
+};
+
 // admin user (replicate what happens on the BE)
 const getAdminUserCredentials = async () => {
   const dummyPasswordAdmin = 'example';
@@ -30,6 +48,24 @@ const getAdminUserCredentials = async () => {
     passwordHash: passwordHash,
     isAdmin: true,
     adminHash: adminHash,
+  };
+
+  return thisUser;
+};
+
+// standard user (also replicates BE)
+const getStandardUserCredentials = async () => {
+  const dummyPasswordAdmin = 'example';
+  const saltRounds = 10;
+  const passwordHash = await bcrypt.hash(dummyPasswordAdmin, saltRounds);
+
+  const thisUser = {
+    username: 'test.standard',
+    displayname: 'Test Standard',
+    email: 'test.standard@gmail.org',
+    passwordHash: passwordHash,
+    isAdmin: false,
+    adminHash: '',
   };
 
   return thisUser;
@@ -74,6 +110,9 @@ module.exports = {
   sampleImage,
   sampleAudio,
   entryUserCredentials,
+  standardUserInfo,
+  adminUserInfo,
+  getStandardUserCredentials,
   getAdminUserCredentials,
   getImposterCredentials,
   image1,
