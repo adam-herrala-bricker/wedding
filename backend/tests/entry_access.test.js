@@ -15,7 +15,7 @@ const {
   audio1,
 } = require('../utils/test_constants');
 
-// runs once at beginning, before any tests, to set up DB
+// runs once at beginning, before any tests, to set up the DB
 beforeAll(async () => {
   // add entry 'user'
   await User.deleteMany({});
