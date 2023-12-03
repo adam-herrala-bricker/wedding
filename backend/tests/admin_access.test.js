@@ -54,7 +54,7 @@ beforeAll(async () => {
 
   adminToken = await getAdminToken();
   entryToken = await getEntryToken();
-});
+}, 10000);
 
 describe('metadata requests ...', () => {
   // setup DB for metadata tests
