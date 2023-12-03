@@ -16,20 +16,14 @@ const {ENTRY_KEY} = require('../utils/config');
 const {
   entryUserCredentials,
   getAdminUserCredentials,
+  imageDestinationPath,
+  imageSourcePath,
+  audioDestinationPath,
+  audioSourcePath,
+  imageUploadFile,
+  audioUploadFile,
+  fakeID,
 } = require('../utils/test_constants');
-
-// CRITICAL: paths are from WHERE THE TESTS ARE RUN
-// (i.e. /backend), not the test directory
-const imageDestinationPath = './media/images';
-const imageSourcePath = './media_testing/images';
-
-const audioDestinationPath = './media/audio';
-const audioSourcePath = './media_testing/audio';
-
-const imageUploadFile = '_DSC2591.jpg';
-const audioUploadFile = 'test36.1c.wav';
-
-const fakeID = '656c6ab67ce7c394fd83d425';
 
 let adminToken;
 let entryToken;
