@@ -77,7 +77,7 @@ imagesRouter.put('/:id', async (request, response, next) => {
 
   await savedUpdates.populate('scenes', {sceneName: 1});
 
-  response.json(savedUpdates);
+  response.status(200).json(savedUpdates);
 
   next();
 });

@@ -6,34 +6,16 @@ const Audio = require('../models/audioModel');
 const Image = require('../models/imageModel');
 const Scene = require('../models/sceneModel');
 const User = require('../models/userModel');
-const {ENTRY_HASH, ENTRY_KEY, BAD_ENTRY_TOKEN} = require('../utils/config');
+const {ENTRY_KEY, BAD_ENTRY_TOKEN} = require('../utils/config');
+const {
+  entryUserCredentials,
+  sampleImage,
+  sampleAudio,
+  image1,
+  audio1,
+} = require('../utils/test_constants');
 
-const sampleImage = '_DSC0815.jpg';
-const sampleAudio = 'down-the-aisle.mp3';
-
-// for entry, an entry key is checked against a pseudouser called 'entry'
-const entryUserCredentials = {
-  username: 'entry',
-  displayname: 'entry',
-  email: 'entryuser@gmail.com',
-  passwordHash: ENTRY_HASH,
-  isAdmin: false,
-  adminHash: '',
-};
-
-// image metadata
-const image1 = {
-  fileName: '_DSC9999.jpg',
-  people: [],
-
-};
-
-// audio metadata
-const audio1 = {
-  fileName: 'groovyJamz.mp3',
-};
-
-// runs once at beginning, before any tests, to set up DB
+// runs once at beginning, before any tests, to set up the DB
 beforeAll(async () => {
   // add entry 'user'
   await User.deleteMany({});
@@ -56,7 +38,7 @@ beforeAll(async () => {
   await Audio.deleteMany({});
   const addAudio1 = new Audio(audio1);
   await addAudio1.save();
-});
+}, 10000);
 
 describe('requests to root path', () => {
   test('getting app returns 200', async () => {
@@ -70,7 +52,7 @@ describe('requests to root path', () => {
 });
 
 describe('entry token creation', () => {
-  test('entry key returns token + user object', async () => {
+  test('valid entry key returns token + user object', async () => {
     const entryCredentials = {username: 'entry', password: ENTRY_KEY};
     const response = await api.post('/api/login')
         .send(entryCredentials)
@@ -184,7 +166,9 @@ describe('invalid entry token --> bad media requests', () => {
   });
 });
 
-describe('entry token --> requests granted', () => {
+describe('valid entry token --> requests granted', () => {
+  let entryToken;
+
   // helper function to get entry token
   const getEntryToken = async () => {
     const entryCredentials = {username: 'entry', password: ENTRY_KEY};
@@ -200,9 +184,13 @@ describe('entry token --> requests granted', () => {
     return scenes[0];
   };
 
+  // only need to get the entry token once
+  beforeAll(async () => {
+    entryToken = await getEntryToken();
+  });
+
   // and then the actual tests
   test('image file (full res)', async () => {
-    const entryToken = await getEntryToken();
     await api
         .get(`/api/images/${sampleImage}?token=${entryToken}`)
         .expect(200)
@@ -210,7 +198,6 @@ describe('entry token --> requests granted', () => {
   });
 
   test('image file (web res)', async () => {
-    const entryToken = await getEntryToken();
     await api
         .get(`/api/images/web-res/${sampleImage}?token=${entryToken}`)
         .expect(200)
@@ -218,7 +205,6 @@ describe('entry token --> requests granted', () => {
   });
 
   test('image metadata', async () => {
-    const entryToken = await getEntryToken();
     const scene1 = await getScene1(entryToken);
     const response = await api
         .get('/api/image-data')
@@ -232,7 +218,6 @@ describe('entry token --> requests granted', () => {
   });
 
   test('audio file', async () => {
-    const entryToken = await getEntryToken();
     await api
         .get(`/api/audio/${sampleAudio}?token=${entryToken}`)
         .expect(200)
@@ -240,7 +225,6 @@ describe('entry token --> requests granted', () => {
   });
 
   test('audio metadata', async () => {
-    const entryToken = await getEntryToken();
     const response = await api
         .get('/api/audio-data')
         .set('Authorization', `Bearer ${entryToken}`)
@@ -250,7 +234,6 @@ describe('entry token --> requests granted', () => {
   });
 
   test('scene metadata', async () => {
-    const entryToken = await getEntryToken();
     const response = await api
         .get('/api/scenes')
         .set('Authorization', `Bearer ${entryToken}`)
