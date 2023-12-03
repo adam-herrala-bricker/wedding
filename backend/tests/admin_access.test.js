@@ -40,43 +40,47 @@ const getEntryToken = async () => {
 
 // setup test DB
 beforeAll(async () => {
-  // clear users from DB
+  // clear entries from DB
   await User.deleteMany({});
+  await Scene.deleteMany({});
+  await Image.deleteMany({});
+  await Audio.deleteMany({});
 
   // add entry 'user'
   const entryUser = new User(entryUserCredentials);
-  await entryUser.save();
 
   // add admin user
   const adminUserCredentials = await getAdminUserCredentials();
   const adminUser = new User(adminUserCredentials);
-  await adminUser.save();
 
+  // scene metadata
+  const scene1 = new Scene({sceneName: 'scene1'});
+  const scene1ID = scene1._id;
+
+  // image metadata
+  const addImage1 = new Image({...image1, scenes: [scene1ID]});
+
+  // audio metadata
+  const addAudio1 = new Audio(audio1);
+
+  // fulfil (most) DB promises at once
+  const promiseArray = [
+    entryUser.save(),
+    adminUser.save(),
+    scene1.save(),
+    addImage1.save(),
+    addAudio1.save(),
+  ];
+
+  await Promise.all(promiseArray);
+  await addImage1.populate('scenes', {sceneName: 1});
+
+  // set tokens
   adminToken = await getAdminToken();
   entryToken = await getEntryToken();
 }, 10000);
 
 describe('metadata requests ...', () => {
-  // setup DB for metadata tests
-  beforeAll(async () => {
-    // add scene metadata
-    await Scene.deleteMany({});
-    const scene1 = new Scene({sceneName: 'scene1'});
-    const scene1ID = scene1._id;
-    await scene1.save();
-
-    // add image metadata
-    await Image.deleteMany({});
-    const addImage1 = new Image({...image1, scenes: [scene1ID]});
-    await addImage1.save();
-    await addImage1.populate('scenes', {sceneName: 1});
-
-    // add audio metadata
-    await Audio.deleteMany({});
-    const addAudio1 = new Audio(audio1);
-    await addAudio1.save();
-  }, 10000);
-
   describe('fail when no admin token given', () => {
     test('image PUT', async () => {
       // need this to get id of image in DB
@@ -307,7 +311,18 @@ describe('metadata requests ...', () => {
           })
           .expect(200);
 
+      // returns correct metadata
       expect(response.body.fileName).toEqual('_DSC0001.jpg');
+
+      const returnedSceneIDs = response.body.scenes.map((i) => i.id);
+      expect(returnedSceneIDs).toMatchObject(sceneIDs);
+
+      // correct metadata in DB
+      const metadataDB = await Image.findById(imageID);
+      expect(metadataDB.fileName).toEqual('_DSC0001.jpg');
+
+      const sceneIDsDB = metadataDB.scenes.map((i) => i.toString());
+      expect(sceneIDsDB).toMatchObject(sceneIDs);
     });
 
     test('scene POST', async () => {
@@ -318,7 +333,13 @@ describe('metadata requests ...', () => {
           .send({sceneName})
           .expect(201);
 
+      // returns correct metadata
       expect(response.body.sceneName).toEqual('scene-22');
+
+      // metadata in DB
+      const metadataDB = await Scene.findOne({sceneName: sceneName});
+      expect(metadataDB.sceneName).toEqual('scene-22');
+      expect(metadataDB.images).toEqual([]);
     });
 
     test('scene DELETE', async () => {
@@ -330,6 +351,10 @@ describe('metadata requests ...', () => {
           .delete(`/api/scenes/${sceneID}`)
           .set('Authorization', `Bearer ${adminToken}`)
           .expect(204);
+
+      // entry removed from DB
+      const updatedEntry = await Scene.findById(sceneID);
+      expect(updatedEntry).toEqual(null);
     });
 
     // note: tests that require deleting files

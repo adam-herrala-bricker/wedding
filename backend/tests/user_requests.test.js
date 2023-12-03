@@ -74,7 +74,7 @@ describe('user creation', () => {
 
     const returnedUser = response.body;
 
-    // all the same values out that we put in
+    // returns all the same values out that we put in
     expect(returnedUser.username).toEqual(standardUserInfo.username);
     expect(returnedUser.displayname).toEqual(standardUserInfo.displayname);
     expect(returnedUser.email).toEqual(standardUserInfo.email);
@@ -86,6 +86,15 @@ describe('user creation', () => {
     // doesn't return password or admin hash
     expect(returnedUser.passwordHash).toBeUndefined();
     expect(returnedUser.adminHash).toBeUndefined();
+
+    // plus user is in database as expected
+    const userDB = await User.findById(returnedUser.id);
+    expect(userDB.username).toEqual(standardUserInfo.username);
+    expect(userDB.displayname).toEqual(standardUserInfo.displayname);
+    expect(userDB.email).toEqual(standardUserInfo.email);
+    expect(userDB.isAdmin).toEqual(false);
+    expect(userDB.passwordHash).toBeTruthy();
+    expect(userDB.adminHash).toEqual('');
   });
 
   // note that this requires the previous test to run first
@@ -135,6 +144,15 @@ describe('user creation', () => {
     // doesn't return password or admin hash
     expect(returnedUser.passwordHash).toBeUndefined();
     expect(returnedUser.adminHash).toBeUndefined();
+
+    // plus user is in the database as expected
+    const userDB = await User.findById(returnedUser.id);
+    expect(userDB.username).toEqual(adminUserInfo.username);
+    expect(userDB.displayname).toEqual(adminUserInfo.displayname);
+    expect(userDB.email).toEqual(adminUserInfo.email);
+    expect(userDB.isAdmin).toEqual(true);
+    expect(userDB.passwordHash).toBeTruthy();
+    expect(userDB.adminHash).toBeTruthy();
   });
 });
 
@@ -144,24 +162,30 @@ describe('login requests', () => {
     // clear users from DB
     await User.deleteMany({});
 
-    // add entry 'user'
+    // entry 'user'
     const entryUser = new User(entryUserCredentials);
-    await entryUser.save();
 
-    // add standard user
+    // standard user
     const standardUserCredentials = await getStandardUserCredentials();
     const standardUser = new User(standardUserCredentials);
-    await standardUser.save();
 
-    // add 'imposter' admin user
+    // 'imposter' admin user
     const imposterCredentials = await getImposterCredentials();
     const imposterUser = new User(imposterCredentials);
-    await imposterUser.save();
 
-    // add valid admin user
+    // valid admin user
     const adminUserCredentials = await getAdminUserCredentials();
     const adminUser = new User(adminUserCredentials);
-    await adminUser.save();
+
+    // fulfil all promises at once
+    const promiseArray = [
+      entryUser.save(),
+      standardUser.save(),
+      imposterUser.save(),
+      adminUser.save(),
+    ];
+
+    await Promise.all(promiseArray);
   }, 10000);
 
   test('entry "user" returns user token only', async () => {

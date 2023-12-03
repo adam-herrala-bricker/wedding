@@ -17,27 +17,37 @@ const {
 
 // runs once at beginning, before any tests, to set up the DB
 beforeAll(async () => {
-  // add entry 'user'
+  // clear database
   await User.deleteMany({});
-  const entryUser = new User(entryUserCredentials);
-  await entryUser.save();
-
-  // add scene metadata
   await Scene.deleteMany({});
+  await Image.deleteMany({});
+  await Audio.deleteMany({});
+
+  // entry 'user'
+  const entryUser = new User(entryUserCredentials);
+
+  // scene metadata
   const scene1 = new Scene({sceneName: 'scene1'});
   const scene1ID = scene1._id;
-  await scene1.save();
 
-  // add image metadata
-  await Image.deleteMany({});
+  // image metadata
   const addImage1 = new Image({...image1, scenes: [scene1ID]});
-  await addImage1.save();
-  await addImage1.populate('scenes', {sceneName: 1});
 
-  // add audio metadata
-  await Audio.deleteMany({});
+  // audio metadata
   const addAudio1 = new Audio(audio1);
-  await addAudio1.save();
+
+  // fulfil (most) promises at once
+  const promiseArray = [
+    entryUser.save(),
+    scene1.save(),
+    addImage1.save(),
+    addAudio1.save(),
+  ];
+
+  await Promise.all(promiseArray);
+
+  // down here because Promise.all() fulfils promises in parallel
+  await addImage1.populate('scenes', {sceneName: 1});
 }, 10000);
 
 describe('requests to root path', () => {
