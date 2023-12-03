@@ -48,10 +48,6 @@ const getEntryToken = async () => {
 
 // make sure the test documents to upload are not already in ../media
 beforeAll(async () => {
-  // set the admin token
-  adminToken = await getAdminToken();
-  entryToken = await getEntryToken();
-
   // clear the DB of image and audio metadata
   await Audio.deleteMany({});
   await Image.deleteMany({});
@@ -67,6 +63,10 @@ beforeAll(async () => {
   const adminUserCredentials = await getAdminUserCredentials();
   const adminUser = new User(adminUserCredentials);
   await adminUser.save();
+
+  // set the admin token
+  adminToken = await getAdminToken();
+  entryToken = await getEntryToken();
 
   // remove the target files from ./media (if they're there)
   console.log('prior to testing ...');
