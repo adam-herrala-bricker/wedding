@@ -55,14 +55,16 @@ beforeAll(async () => {
   // clear DB of users
   await User.deleteMany({});
 
-  // add entry 'user'
+  // entry 'user'
   const entryUser = new User(entryUserCredentials);
-  await entryUser.save();
 
-  // add admin user
+  // admin user
   const adminUserCredentials = await getAdminUserCredentials();
   const adminUser = new User(adminUserCredentials);
-  await adminUser.save();
+
+  // fulfil DB promises in one go
+  const promiseArray = [entryUser.save(), adminUser.save()];
+  await Promise.all(promiseArray);
 
   // set the admin token
   adminToken = await getAdminToken();

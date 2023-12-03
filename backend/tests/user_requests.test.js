@@ -144,24 +144,30 @@ describe('login requests', () => {
     // clear users from DB
     await User.deleteMany({});
 
-    // add entry 'user'
+    // entry 'user'
     const entryUser = new User(entryUserCredentials);
-    await entryUser.save();
 
-    // add standard user
+    // standard user
     const standardUserCredentials = await getStandardUserCredentials();
     const standardUser = new User(standardUserCredentials);
-    await standardUser.save();
 
-    // add 'imposter' admin user
+    // 'imposter' admin user
     const imposterCredentials = await getImposterCredentials();
     const imposterUser = new User(imposterCredentials);
-    await imposterUser.save();
 
-    // add valid admin user
+    // valid admin user
     const adminUserCredentials = await getAdminUserCredentials();
     const adminUser = new User(adminUserCredentials);
-    await adminUser.save();
+
+    // fulfil all promises at once
+    const promiseArray = [
+      entryUser.save(),
+      standardUser.save(),
+      imposterUser.save(),
+      adminUser.save(),
+    ];
+
+    await Promise.all(promiseArray);
   }, 10000);
 
   test('entry "user" returns user token only', async () => {
