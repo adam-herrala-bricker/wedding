@@ -38,4 +38,9 @@ module.exports = {
     'react/no-unknown-property': 0,
     'react-hooks/exhaustive-deps': 0,
   },
+  'settings': {
+    'react': {
+      'version': 'detect',
+    },
+  },
 };
