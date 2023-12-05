@@ -1,50 +1,62 @@
-//reducer for assorted states that handle the view the user is given: language, scroll height, resolution
-import { createSlice } from '@reduxjs/toolkit'
-import text from '../resources/text'
+// reducer for assorted states that handle the view the user is given:
+// language, scroll height, resolution
+import {createSlice} from '@reduxjs/toolkit';
+import text from '../resources/text';
 
-//initial state
-const defaultTextAll = text //will keep this fixed - only change in text.js
-const defaultLan = 'suo' //options are 'suo' or 'eng'
-const defaultRes = 'web' //options are 'web' or 'high'
-const defaultScroll = 0
+//  initial state
+const defaultTextAll = text; //  will keep this fixed - only change in text.js
+const defaultLan = 'suo'; //  options are 'suo' or 'eng'
+const defaultRes = 'web'; //  options are 'web' or 'high'
+const defaultScroll = 0; // verical scroll height
 
-//helper for setting object (textLan = text object in just the language given by lan)
+// helper for setting object
+// (textLan = text object in just the language given by lan)
 const asObject = (textAll, textLan, lan, res, scroll) => {
-    return {textAll, textLan, lan, res, scroll}
-}
+  return {textAll, textLan, lan, res, scroll};
+};
 
-//helper for getting textObject in the right language
+// helper for getting textObject in the right language
 const selectedLan = (textObject, lan) => {
-    const textOut = Object.keys(textObject).reduce((accumulator, thisKey) => {
-        const thisValue = textObject[thisKey][lan]
+  const textOut = Object.keys(textObject).reduce((accumulator, thisKey) => {
+    const thisValue = textObject[thisKey][lan];
 
-        return {...accumulator, [thisKey]: thisValue}
+    return {...accumulator, [thisKey]: thisValue};
+  }, {});
 
-    }, {})
+  return textOut;
+};
 
-    return textOut
-}
-
-//main slice
+// main slice
 const viewSlice = createSlice({
-    name: 'view',
-    initialState: asObject(defaultTextAll, selectedLan(defaultTextAll, defaultLan), defaultLan, defaultRes, defaultScroll),
-    reducers: {
-        setLan(state, action) {
-            const newLan = action.payload
-            return {...state, lan: newLan, textLan: selectedLan(state.textAll, newLan)}
-        },
+  name: 'view',
 
-        setScroll(state, action) {
-            return {...state, scroll: action.payload}
-        },
+  initialState: asObject(
+      defaultTextAll,
+      selectedLan(defaultTextAll, defaultLan),
+      defaultLan,
+      defaultRes,
+      defaultScroll),
 
-        setRes(state, action) {
-            return {...state, res: action.payload}
-        }
-    }
-})
+  reducers: {
+    setLan(state, action) {
+      const newLan = action.payload;
+      return {
+        ...state,
+        lan: newLan,
+        textLan: selectedLan(state.textAll, newLan),
+      };
+    },
 
-export const { setLan, setScroll, setRes } = viewSlice.actions
+    setScroll(state, action) {
+      return {...state, scroll: action.payload};
+    },
 
-export default viewSlice.reducer
+    setRes(state, action) {
+      return {...state, res: action.payload};
+    },
+  },
+});
+
+export const {setLan, setScroll, setRes} = viewSlice.actions;
+
+export default viewSlice.reducer;
