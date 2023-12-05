@@ -1,20 +1,16 @@
-import axios from 'axios'
-import  { getEntryToken } from './tokenHelpers'
+import axios from 'axios';
+import {getEntryToken} from './tokenHelpers';
 
-const baseURL = '/api/audio-data'
+const baseURL = '/api/audio-data';
 
-//GET request for all audio data
+// GET request for all audio metadata (requires ENTRY token)
 const getAudioData = async () => {
-    const entryToken = getEntryToken()
+  const entryToken = getEntryToken();
+  const config = {headers: {Authorization: entryToken}};
 
-    const config = {
-        headers : {Authorization: entryToken}
-    }
+  const response = await axios.get(baseURL, config);
 
-    const response = await axios.get(baseURL, config)
-    
-    return response.data
-}
+  return response.data;
+};
 
-
-export default { getAudioData}
+export default {getAudioData};

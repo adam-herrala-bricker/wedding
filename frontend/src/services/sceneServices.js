@@ -1,68 +1,52 @@
-import axios from 'axios'
-import { getEntryToken, getAdminToken } from './tokenHelpers'
+import axios from 'axios';
+import {getEntryToken, getAdminToken} from './tokenHelpers';
 
-const baseURL = '/api/scenes'
+const baseURL = '/api/scenes';
 
-//GET request for loading all the scenes (requires ENTRY token)
+// GET request for loading all the scenes (requires ENTRY token)
 const getScenes = async () => {
-    const entryToken = getEntryToken()
+  const entryToken = getEntryToken();
 
-    const config = {
-        headers : {Authorization : entryToken}
-    }
+  const config = {headers: {Authorization: entryToken}};
 
-    const response = await axios.get(baseURL, config)
+  const response = await axios.get(baseURL, config);
 
-    return response.data
+  return response.data;
+};
 
-}
-
-//POST request to add new scene (requires ADMIN token)
+// POST request to add new scene (requires ADMIN token)
 const addScene = async (newScene) => {
-    const adminToken = getAdminToken()
+  const adminToken = getAdminToken();
 
-    const config = {
-        headers : {Authorization : adminToken}
-    }
-    
-    const response = await axios.post(baseURL, newScene, config)
-    
-    return response.data
+  const config = {headers: {Authorization: adminToken}};
 
-}
+  const response = await axios.post(baseURL, newScene, config);
 
-//PUT request to update scenes (requires ADMIN token)
+  return response.data;
+};
+
+// PUT request to update scenes (requires ADMIN token)
 const updateScene = async (updatedScene) => {
-    const adminToken = getAdminToken()
+  const adminToken = getAdminToken();
 
-    const config = {
-        headers : {Authorization : adminToken}
-    }
+  const config = {headers: {Authorization: adminToken}};
+  const id = updatedScene.id;
 
-    const id = updatedScene.id
+  const response = await axios.put(`${baseURL}/${id}`, updatedScene, config);
 
+  return response.data;
+};
 
-    //await axios.put(`/api/`)
-
-    const response = await axios.put(`${baseURL}/${id}`, updatedScene, config)
-
-    return response.data
-
-}
-
-//DELETE request to remove a scene from the DB (requires ADMIN token)
+// DELETE request to remove a scene from the DB (requires ADMIN token)
 const deleteScene = async (sceneToRemove) => {
-    const adminToken = getAdminToken()
+  const adminToken = getAdminToken();
 
-    const config = {
-        headers : {Authorization : adminToken}
-    }
+  const config = {headers: {Authorization: adminToken}};
+  const id = sceneToRemove.id;
 
-    const id = sceneToRemove.id
-    const response = await axios.delete(`${baseURL}/${id}`, config)
+  const response = await axios.delete(`${baseURL}/${id}`, config);
 
-    return response.data
+  return response.data;
+};
 
-}
-
-export default { getScenes, updateScene, addScene, deleteScene }
+export default {getScenes, updateScene, addScene, deleteScene};
