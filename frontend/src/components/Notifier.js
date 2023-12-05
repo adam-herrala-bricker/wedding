@@ -1,12 +1,11 @@
-import { useSelector } from 'react-redux'
+import {useSelector} from 'react-redux';
 
 const Notifier = () => {
-    const notification = useSelector(i => i.notification)
-    return(
-        <div className = {notification.type}>
-            {notification.message}
-        </div>
-    )
-}
+  const notification = useSelector((i) => i.notification);
+  return (
+    <div className = {notification.type}>
+      {notification.message}
+    </div>);
+};
 
-export default Notifier
+export default Notifier;

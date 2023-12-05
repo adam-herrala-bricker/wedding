@@ -7,6 +7,8 @@ module.exports = {
   'extends': [
     'google',
     'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
+    'plugin:react-hooks/recommended',
   ],
   'overrides': [
     {
@@ -29,8 +31,11 @@ module.exports = {
     'react',
   ],
   'rules': {
-    'operator-linebreak': [2, 'before'],
+    'operator-linebreak': [2, 'before', {'overrides': {'&&': 'after'}}],
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 0,
+    'react/jsx-equals-spacing': [2, 'always'],
+    'react/no-unknown-property': 0,
+    'react-hooks/exhaustive-deps': 0,
   },
 };

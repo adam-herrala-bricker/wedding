@@ -31,9 +31,11 @@ jobs:
           node-version: '16.19'
       - name: Install frontend dependencies
         run: cd frontend && npm install
+      - name: Frontend style check
+        run: cd frontend && npm run lint
       - name: Install backend dependencies
         run: cd backend && npm install
-      - name: Style check (backend)
+      - name: Backend style check
         run: cd backend && npm run lint
       - name: Create temporary media folder for testing
         run: cd backend && bash build_temp_media_folder.sh

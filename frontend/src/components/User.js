@@ -30,30 +30,30 @@ const LoginForm = ({setShowLogin}) => {
   };
 
   return (
-    <div className='login-container'>
+    <div className = 'login-container'>
       <h2>{textLan.login}</h2>
       <Notifier />
-      <form autoComplete='off' onSubmit = {handleLogin}>
+      <form autoComplete = 'off' onSubmit = {handleLogin}>
         <div className = 'user-input'>
           {textLan.username}
           <input
-            name='Username'
-            value={username}
+            name = 'Username'
+            value = {username}
             onChange = {handleFormChange}/>
         </div>
         <div className = 'user-input'>
           {textLan.password}
           <input
-            name='Password'
-            type='password'
-            value={password}
+            name = 'Password'
+            type = 'password'
+            value = {password}
             onChange = {handleFormChange}/>
         </div>
         <div className = 'login-button-container'>
           <button
             className = 'generic-button'
             id = 'login-button'
-            type='submit'>
+            type = 'submit'>
             {textLan.login}
           </button>
           <button
@@ -90,8 +90,8 @@ const LoginSelect = () => {
     showLogin
       ? <Offcanvas
         show = {showLogin}
-        placement='end'
-        style={{backgroundColor: 'rgb(234, 243, 238)'}}>
+        placement = 'end'
+        style = {{backgroundColor: 'rgb(234, 243, 238)'}}>
         <LoginForm setShowLogin = {setShowLogin} />
       </Offcanvas>
       : <button

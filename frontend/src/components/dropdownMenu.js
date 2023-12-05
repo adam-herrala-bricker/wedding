@@ -45,8 +45,8 @@ const CurrentScenes = () => {
           }}>
           {textLan[i.sceneName.replace('-', '')] || i.sceneName}
         </button>
-        {user.adminToken
-        && <button key = {`${i.id}-del`} onClick = {() => handleDeleteScene(i)}>
+        {user.adminToken &&
+        <button key = {`${i.id}-del`} onClick = {() => handleDeleteScene(i)}>
           -
         </button>
         }
