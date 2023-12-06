@@ -44,8 +44,9 @@ jobs:
       - name: Backend integration tests
         run: cd backend && npm run test
       - name: E2E tests
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v6
         with: 
-          command: cd frontend && npm run test:e2e
-          start: cd backend && npm run start:test
+          command: npm run test:e2e
+          start: cd ../backend && npm run start:test
           wait-on: http://localhost:3003
+          working-directory: frontend
