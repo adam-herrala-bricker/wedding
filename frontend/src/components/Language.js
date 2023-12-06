@@ -16,11 +16,13 @@ const Language = () => {
     <div className = 'language-container'>
       <button
         className = 'flag-button'
+        name = 'suo-flag'
         onClick = {() => handleLanChange('suo')}>
         <img className = 'flag-icon' alt = 'suomeksi' src = {finFlag}/>
       </button>
       <button
         className = 'flag-button'
+        name = 'eng-flag'
         onClick = {() => handleLanChange('eng')}>
         <img className = 'flag-icon' alt = 'English' src = {usFlag}/>
       </button>

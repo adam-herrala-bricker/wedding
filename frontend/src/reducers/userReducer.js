@@ -3,6 +3,7 @@ import {notifier} from './notiReducer';
 import {setScroll} from './viewReducer';
 import {getText} from '../resources/text';
 import userServices from '../services/userServices';
+import dictionary from '../resources/dictionary';
 
 // initial state
 const defaultUsername = 'guest';
@@ -95,7 +96,8 @@ export const entryCheck = (entryKey) => {
       dispatch(setEntryToken(thisKey.token));
       window.localStorage.setItem('entryKey', JSON.stringify(thisKey));
     } catch (exception) {
-      dispatch(notifier(getText('entryError'), 'error-message', 5));
+      dispatch(notifier(`${dictionary['entryError'].suo} // ${dictionary['entryError'].eng}`, // eslint-disable-line max-len
+          'error-message', 5));
     }
   };
 };

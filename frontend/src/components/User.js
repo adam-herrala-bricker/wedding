@@ -58,6 +58,7 @@ const LoginForm = ({setShowLogin}) => {
           </button>
           <button
             className = 'generic-button'
+            name = 'cancel'
             onClick = {() => setShowLogin(false)}>
             {textLan.cancel}
           </button>
@@ -96,6 +97,7 @@ const LoginSelect = () => {
       </Offcanvas>
       : <button
         className = 'generic-button'
+        name = 'show-login'
         onClick = {() => setShowLogin(true)}>
         {textLan.login}
       </button>);

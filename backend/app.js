@@ -13,6 +13,7 @@ const middleware = require('./utils/middleware');
 const morgan = require('morgan');
 const logger = require('./utils/logger');
 const mongoose = require('mongoose');
+const {NODE_ENV} = require('./utils/config');
 
 mongoose.set('strictQuery', false);
 
@@ -51,6 +52,11 @@ app.use('/api/admin/upload', uploadRouter);
 app.use('/api/image-data', imagesRouter);
 app.use('/api/audio-data', audioRouter);
 app.use('/api/scenes', sceneRouter);
+
+if (NODE_ENV === 'testing') {
+  const testingRouter = require('./controllers/testingRouter');
+  app.use('/api/testing', testingRouter);
+}
 
 app.use(middleware.errorHandler);
 

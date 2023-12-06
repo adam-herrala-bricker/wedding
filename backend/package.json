@@ -6,6 +6,7 @@
   "scripts": {
     "test": "NODE_ENV=testing jest --verbose --runInBand",
     "start": "NODE_ENV=production node index.js",
+    "start:test": "NODE_ENV=testing node index.js",
     "dev": "NODE_ENV=development nodemon index.js",
     "lint": "eslint ."
   },

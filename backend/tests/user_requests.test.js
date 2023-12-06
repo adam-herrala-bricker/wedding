@@ -97,9 +97,9 @@ describe('user creation', () => {
     expect(userDB.adminHash).toEqual('');
   });
 
-  // note that this requires the previous test to run first
-  // it won't work as test.only()
-  test('fails with duplicate username and email', async () => {
+  // note that the next two require the previous test to run first
+  // and won't work as test.only()
+  test('fails with duplicate username', async () => {
     const response = await api
         .post('/api/users')
         .send(standardUserInfo)
@@ -107,6 +107,13 @@ describe('user creation', () => {
 
     expect(response.body.error)
         .toContain('expected `username` to be unique');
+  });
+
+  test('fails with duplicate email', async () => {
+    const response = await api
+        .post('/api/users')
+        .send(standardUserInfo)
+        .expect(400);
 
     expect(response.body.error)
         .toContain('expected `email` to be unique');
