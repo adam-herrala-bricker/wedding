@@ -31,11 +31,12 @@ const Image = ({imagePath}) => {
 };
 
 // component for rendering everything below an image
-const BelowImage = ({imageID}) => {
+const BelowImage = ({imageData}) => {
   const dispatch = useDispatch();
   const scenes = useSelector((i) => i.scenes.list);
   const imageList = useSelector((i) => i.media.images.display);
   const textLan = useSelector((i) => i.view.textLan);
+  const imageID = imageData.id;
 
   // helper function for testing whether the image is aleady linked to a scene
   const isLinked = (scene, imageID) => {
@@ -79,6 +80,7 @@ const BelowImage = ({imageID}) => {
               ? 'scene-linked'
               : 'scene-unlinked'}
           key = {i.id}
+          name = {`${imageData.fileName}-${i.sceneName}`}
           onClick = {() => handleSceneLink(i, imageID)}>
           {textLan[i.sceneName.replace('-', '')] || i.sceneName}
         </button>)}
@@ -132,11 +134,12 @@ const ImageGroup = ({groupClass, setGroupClass}) => {
               className = {i.scenes.map((i) => i.sceneName).includes('scene-0')
                   ? 'image-button'
                   : 'hidden-image'}
+              name = {`button${i.fileName}`}
               onClick = {() => handleToHighlight(i.fileName)}>
               <Image key = {`${i.id}-img`} imagePath = {i.fileName} />
             </button>
             {user.adminToken &&
-            <BelowImage key = {`${i.id}-bel`} imageID = {i.id}/>}
+            <BelowImage key = {`${i.id}-bel`} imageData = {i}/>}
           </div>)}
       </div>
     </div>);

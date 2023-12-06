@@ -31,3 +31,9 @@ export const loginAsAdmin = () => {
   cy.get('input[name="Password"]').type(adminUserInfo.password);
   cy.get('button[id="login-button"]').click();
 };
+
+export const uploadImage = (fileName) => {
+  cy.get('input[type="file"]')
+      .selectFile(`../backend/media_testing/images/${fileName}`);
+  cy.get('button').contains('submit').click();
+};
