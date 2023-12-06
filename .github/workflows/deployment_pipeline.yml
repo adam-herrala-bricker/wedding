@@ -33,6 +33,9 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJson(github.event.pull_request.body) }}
         run: echo "$GITHUB_CONTEXT"
+      -name: contains skip
+        if: ${{contains(github.event.pull_request.body, '#skipFE')}}
+        run: echo "It works!"
   
       - name: Install frontend dependencies
         run: cd frontend && npm ci
