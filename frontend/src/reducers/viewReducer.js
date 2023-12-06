@@ -1,10 +1,10 @@
 // reducer for assorted states that handle the view the user is given:
 // language, scroll height, resolution
 import {createSlice} from '@reduxjs/toolkit';
-import text from '../resources/text';
+import dictionary from '../resources/dictionary';
 
 //  initial state
-const defaultTextAll = text; //  will keep this fixed - only change in text.js
+const defaultTextAll = dictionary; //  keep fixed - only change in dictionary.js
 const defaultLan = 'suo'; //  options are 'suo' or 'eng'
 const defaultRes = 'web'; //  options are 'web' or 'high'
 const defaultScroll = 0; // verical scroll height

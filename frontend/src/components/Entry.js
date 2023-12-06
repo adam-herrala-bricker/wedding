@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import {entryCheck, setEntryToken} from '../reducers/userReducer';
-import text from '../resources/text';
+import dictionary from '../resources/dictionary';
 import Notifier from './Notifier';
 
 // root component for entry page
@@ -11,7 +11,7 @@ const Entry = () => {
 
   // helper function for dual-lan text
   const duoLingo = (phrase) => {
-    return (`${text[phrase].suo} // ${text[phrase].eng}`);
+    return (`${dictionary[phrase].suo} // ${dictionary[phrase].eng}`);
   };
 
   // event handers
