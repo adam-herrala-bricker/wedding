@@ -96,6 +96,7 @@ const LoginSelect = () => {
       </Offcanvas>
       : <button
         className = 'generic-button'
+        name = 'show-login'
         onClick = {() => setShowLogin(true)}>
         {textLan.login}
       </button>);

@@ -1,26 +1,44 @@
 import text from '../../src/resources/dictionary';
+import {configDB, enterSite, loginAsAdmin} from '../utils/functions';
+import {baseURL} from '../utils/constants';
 
-describe('Site entry', () => {
-  beforeEach(() => {
-    cy.visit('http://localhost:3003');
+describe('Correct site function', () => {
+  // this is like beforeAll()
+  before(() => {
+    configDB();
   });
 
-  it('Entry page renders', () => {
-    const langCodes = ['eng', 'suo'];
-    const textFields = ['header', 'entryKey', 'enter'];
+  // need to navitage to page before every test
+  beforeEach(() => {
+    cy.visit(baseURL);
+  });
 
-    langCodes.map((code) => {
-      textFields.map((field) => {
-        cy.contains(text[field][code]);
+  describe('Site entry', () => {
+    it('Entry page renders', () => {
+      const langCodes = ['eng', 'suo'];
+      const textFields = ['header', 'entryKey', 'enter'];
+
+      langCodes.map((code) => {
+        textFields.map((field) => {
+          cy.contains(text[field][code]);
+        });
       });
+    });
+
+    it('Entry to main site', () => {
+      enterSite();
+      cy.contains(text['welcomeTxt'].suo);
     });
   });
 
-  it('Entry to main site', () => {
-    const ENTRY_KEY = Cypress.env('ENTRY_KEY');
-    cy.get('input[name="entry"]').type(ENTRY_KEY);
-    cy.get('button').click();
+  describe('Admin user', () => {
+    beforeEach(() => {
+      cy.visit(baseURL);
+      enterSite();
+    });
 
-    cy.contains(text['welcomeTxt'].suo);
+    it('Log in as admin', () => {
+      loginAsAdmin();
+    });
   });
 });

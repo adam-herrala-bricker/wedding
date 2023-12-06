@@ -7,7 +7,8 @@ module.exports = defineConfig({
       // implement node event listeners here
     },
     env: {
-      ENTRY_KEY: process.env.ENTRY_KEY
+      ENTRY_KEY: process.env.ENTRY_KEY,
+      ADMIN_KEY: process.env.ADMIN_KEY
     }
   },
 });

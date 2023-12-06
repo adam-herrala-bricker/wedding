@@ -30,13 +30,13 @@ jobs:
         with:
           node-version: '16.19'
       - name: Install frontend dependencies
-        run: cd frontend && npm install
+        run: cd frontend && npm ci
       - name: Frontend style check
         run: cd frontend && npm run lint
       - name: Build production frontend
         run: cd frontend && npm run build
       - name: Install backend dependencies
-        run: cd backend && npm install
+        run: cd backend && npm ci
       - name: Backend style check
         run: cd backend && npm run lint
       - name: Create temporary media folder for testing
