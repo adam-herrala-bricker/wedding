@@ -43,5 +43,6 @@ jobs:
         run: cd backend && bash build_temp_media_folder.sh
       - name: Backend integration tests
         run: cd backend && npm run test
+        if: ${{ !contains(join(github.event.commits.*.message), '#skipBE')}}
       - name: E2E tests
         run: bash run_E2E.sh

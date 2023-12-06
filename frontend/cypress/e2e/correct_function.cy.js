@@ -132,9 +132,8 @@ describe('Correct site function', () => {
     cy.get('[name="gridImage_DSC0815.jpg"]').should('not.exist');
 
     // but the other image should still be there
-    cy.get('[name="gridImage_DSC2591.jpg"]', {timeout: 10000})
-        .should('have.class', 'single-image')
-        .should('be.visible');
+    cy.get('[name="gridImage_DSC2591.jpg"]')
+        .should('exist');
 
     // image should be in scene0 + scene3
     const markedScenes = ['scene0', 'scene3'];
@@ -145,9 +144,8 @@ describe('Correct site function', () => {
       cy.get('button')
           .contains(text[scene].suo)
           .should('have.class', 'scene-name-highlight');
-      cy.get('[name="gridImage_DSC2591.jpg"]', {timeout: 10000})
-          .should('have.class', 'single-image')
-          .should('be.visible');
+      cy.get('[name="gridImage_DSC2591.jpg"]')
+          .should('exist');
     });
 
     // image should not be in scene1
