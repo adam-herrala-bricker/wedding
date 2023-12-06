@@ -29,6 +29,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16.19'
+      - name: github context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
       - name: commits
         env:
           COMMITS: ${{ toJson(github.event.commits) }}
