@@ -12,13 +12,9 @@ import {
 } from '../utils/constants';
 
 describe('Correct site function', () => {
-  // this is like beforeAll()
+  // need to setup the DB and navigate to the page before every test
   beforeEach(() => {
     configDB();
-  });
-
-  // need to navitage to page before every test
-  beforeEach(() => {
     cy.visit(baseURL);
   });
 
