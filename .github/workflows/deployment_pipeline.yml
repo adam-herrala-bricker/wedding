@@ -29,14 +29,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16.19'
-      - name: PR body
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github.event.pull_request.body) }}
-        run: echo "$GITHUB_CONTEXT"
-      - name: contains skip
-        run: echo "It works!"
-        if: ${{contains(github.event.pull_request.body, '#skipFE')}}
-  
       - name: Install frontend dependencies
         run: cd frontend && npm ci
       - name: Frontend style check
@@ -51,7 +43,7 @@ jobs:
         run: cd backend && bash build_temp_media_folder.sh
       - name: Backend integration tests
         run: cd backend && npm run test
-        if: ${{ !contains(join(github.event.commits.*.message), '#skipBE')}}
+        if: ${{github.event_name == 'push' || !contains(github.event.pull_request.body, '#skipBE')}}
       - name: E2E tests
         run: bash run_E2E.sh
-        if: ${{ !contains(join(github.event.commits.*.message), '#skipFE')}}
+        if: ${{github.event_name == 'push' || !contains(github.event.pull_request.body, '#skipFE')}}
