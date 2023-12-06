@@ -29,6 +29,14 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16.19'
+      - name: commits
+        env:
+          COMMITS: ${{ toJson(github.event.commits) }}
+        run: echo "$COMMITS"
+      - name: commit messages
+        env:
+          COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
+        run: echo "$COMMIT_MESSAGES"
       - name: Install frontend dependencies
         run: cd frontend && npm ci
       - name: Frontend style check
@@ -46,3 +54,4 @@ jobs:
         if: ${{ !contains(join(github.event.commits.*.message), '#skipBE')}}
       - name: E2E tests
         run: bash run_E2E.sh
+        if: ${{ !contains(join(github.event.commits.*.message), '#skipFE')}}
