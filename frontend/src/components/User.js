@@ -58,6 +58,7 @@ const LoginForm = ({setShowLogin}) => {
           </button>
           <button
             className = 'generic-button'
+            name = 'cancel'
             onClick = {() => setShowLogin(false)}>
             {textLan.cancel}
           </button>

@@ -22,6 +22,7 @@ const Image = ({imagePath}) => {
     <div className = 'single-image-container'>
       <img
         className = {thisClass}
+        name = {`gridImage${imagePath}`}
         alt = 'single image'
         loading = 'eager'
         src = {`${webResURL}/${imagePath}?token=${user.entryToken}`}
