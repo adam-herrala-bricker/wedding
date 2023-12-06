@@ -7,4 +7,5 @@ it('Bad entry key', () => {
   cy.get('button').click();
 
   cy.contains(text['entryError'].suo);
+  cy.contains(text['entryError'].eng);
 });
