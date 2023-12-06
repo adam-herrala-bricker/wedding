@@ -31,7 +31,7 @@ jobs:
           node-version: '16.19'
       - name: PR body
         env:
-          GITHUB_CONTEXT: ${{ toJson(github.event.pullrequest.body) }}
+          GITHUB_CONTEXT: ${{ toJson(github.event.pull_request.body) }}
         run: echo "$GITHUB_CONTEXT"
   
       - name: Install frontend dependencies
