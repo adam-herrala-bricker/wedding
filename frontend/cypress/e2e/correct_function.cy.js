@@ -3,6 +3,7 @@ import {
   configDB,
   enterSite,
   loginAsAdmin,
+  uploadAudio,
   uploadImage} from '../utils/functions';
 import {
   adminUserInfo,
@@ -84,6 +85,20 @@ describe('Correct site function', () => {
     uploadImage('_DSC0815.jpg');
     // check that the image is there
     cy.get('[name="gridImage_DSC0815.jpg"]').should('be.visible');
+  });
+
+  it('Upload audio', () => {
+    enterSite();
+    loginAsAdmin();
+    uploadAudio('down-the-aisle.mp3');
+
+    // audio is there with the right label
+    cy.get('audio').should('be.visible');
+    cy.contains(text['song2'].suo); // this happens to be 'song2' in the dict
+
+    // delete audio
+    cy.get('button').contains('-').click(); // only one delete button on screen
+    cy.get('audio').should('not.exist');
   });
 
   it('Scenes functionality', () => {
