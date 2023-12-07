@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {notifier} from './notiReducer';
+import {notifier, clearNotification} from './notiReducer';
 import {setScroll} from './viewReducer';
 import {getText} from '../resources/text';
 import userServices from '../services/userServices';
@@ -93,11 +93,27 @@ export const entryCheck = (entryKey) => {
         password: entryKey,
       });
 
+      // save the entry token
       dispatch(setEntryToken(thisKey.token));
       window.localStorage.setItem('entryKey', JSON.stringify(thisKey));
-    } catch (exception) {
-      dispatch(notifier(`${dictionary['entryError'].suo} // ${dictionary['entryError'].eng}`, // eslint-disable-line max-len
-          'error-message', 5));
+
+      // clear any lingering notifications
+      dispatch(clearNotification());
+    } catch (error) {
+      console.log(error.response.data.error);
+      console.log(error.response);
+      const errorStatus = error.response.status;
+      const errorMessage = error.response.data.error;
+
+      // translated error message for wrong key
+      if (errorStatus === 401 &&
+          errorMessage === 'invalid username or password') {
+        dispatch(notifier(`${dictionary['entryError'].suo} // ${dictionary['entryError'].eng}`, // eslint-disable-line max-len
+            'error-message', 5));
+      } else {
+        dispatch(notifier(`Status ${errorStatus}: ${error.response.data}`,
+            'error-message', 20));
+      }
     }
   };
 };
@@ -118,8 +134,16 @@ export const login = (username, password) => {
       if (thisUser.isAdmin) {
         dispatch(setAdmin(thisUser.adminToken));
       }
-    } catch (except) {
-      dispatch(notifier(getText('loginError'), 'error-message', 5));
+      // clear any lingering notifications
+      dispatch(clearNotification());
+    } catch (error) {
+      if (error.response.status === 401 &&
+          error.response.data.error === 'invalid username or password') {
+        dispatch(notifier(getText('loginError'), 'error-message', 5));
+      } else {
+        dispatch(notifier(`Status ${error.response.status}: ${error.response.data}`, // eslint-disable-line max-len
+            'error-message', 15));
+      }
     }
   };
 };
@@ -128,6 +152,7 @@ export const logOut = () => {
   return (dispatch) => {
     dispatch(guestUser());
     dispatch(setScroll(window.scrollY));
+    dispatch(clearNotification()); // clear any lingering notifications
   };
 };
 

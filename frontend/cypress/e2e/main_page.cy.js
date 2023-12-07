@@ -92,6 +92,21 @@ describe('Correct site function', () => {
   });
 
   // can't upload same image twice
+  it('Cannot upload same image twice', () => {
+    enterSite();
+    loginAsAdmin();
+    uploadImage(image1);
+
+    // it's there ther first time
+    cy.get(`[name="gridImage${image1}"]`).should('be.visible');
+
+    // but second time gives an error message
+    uploadImage(image1);
+    cy.contains('Image validation failed');
+
+    // and there's only one image rendered
+    cy.get('[name="image-grouping"]').should('have.length', 1);
+  });
 
   // uploads display in correct order
   it('Uploads render in correct order', () => {

@@ -31,7 +31,10 @@ const notificationSlice = createSlice({
       return ({...state, timeoutID: action.payload});
     },
 
-    clearNotification() {
+    clearNotification(state) {
+      const lastTimeoutID = state.timeoutID;
+      clearTimeout(lastTimeoutID);
+
       return (asObject(defaultMessage, defaultType, defaultTimeoutID));
     },
   },
@@ -52,7 +55,7 @@ export const notifier = (message, type, duration) => {
       dispatch(clearNotification());
     }, duration*1000);
 
-    setLastTimeoutID(thisTimeoutID);
+    dispatch(setLastTimeoutID(thisTimeoutID));
   };
 };
 

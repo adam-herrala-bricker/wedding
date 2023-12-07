@@ -7,6 +7,7 @@ import {clearUser,
   setUser,
   setAdmin,
 } from '../reducers/userReducer';
+import {clearNotification} from '../reducers/notiReducer';
 import Notifier from './Notifier';
 
 const LoginForm = ({setShowLogin}) => {
@@ -27,6 +28,11 @@ const LoginForm = ({setShowLogin}) => {
   const handleLogin = async (event) => {
     event.preventDefault();
     dispatch(login(username, password));
+  };
+
+  const handleCancel = () => {
+    dispatch(clearNotification());
+    setShowLogin(false);
   };
 
   return (
@@ -59,7 +65,7 @@ const LoginForm = ({setShowLogin}) => {
           <button
             className = 'generic-button'
             name = 'cancel'
-            onClick = {() => setShowLogin(false)}>
+            onClick = {handleCancel}>
             {textLan.cancel}
           </button>
         </div>
@@ -113,6 +119,7 @@ const Login = () => {
 
   // event handler
   const handleExit = () => {
+    dispatch(clearNotification());
     dispatch(clearUser());
   };
 
