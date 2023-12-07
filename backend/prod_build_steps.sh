@@ -5,10 +5,13 @@
 
 echo "Build script"
 
+#go to FE directory and run ci (install deps)
 cd ../frontend && npm ci --production &&
 
-cd npm run build &&
+# run build
+npm run build &&
 
+# return to BE directory and install deps
 cd - && npm ci --production &&
 
 echo "Production build run successfully!"
