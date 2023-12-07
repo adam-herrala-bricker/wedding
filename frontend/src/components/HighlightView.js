@@ -76,13 +76,14 @@ const HighlightView = () => {
   return (
     <div className = 'outer-highlight-container'>
       <div>
-        <CloseButton onClick = {handleBack}/>
+        <CloseButton name = 'close-button' onClick = {handleBack}/>
       </div>
       <div className = 'highlight-group'>
         <Image
           alt = ''
           src = {imagePath}
           className = {thisClass}
+          name = {`highlight${thisFile}`}
           onLoad = {handleLoad}/>
       </div>
       <div className = 'highlight-group'>
@@ -92,6 +93,7 @@ const HighlightView = () => {
       <div className = 'bs-button-container'>
         <Button
           variant = 'outline-dark'
+          name = 'scroll-left'
           onClick = {() => handleScrollClick('ArrowLeft')}>{'<--'}
         </Button>
         <a
@@ -104,6 +106,7 @@ const HighlightView = () => {
         </a>
         <Button
           variant = 'outline-dark'
+          name = 'scroll-right'
           onClick = {() => handleScrollClick('ArrowRight')}>{'-->'}
         </Button>
       </div>}

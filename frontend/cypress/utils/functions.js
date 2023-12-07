@@ -37,3 +37,9 @@ export const uploadImage = (fileName) => {
       .selectFile(`../backend/media_testing/images/${fileName}`);
   cy.get('button').contains('submit').click();
 };
+
+export const uploadAudio = (fileName) => {
+  cy.get('input[type="file"]')
+      .selectFile(`../backend/media_testing/audio/${fileName}`);
+  cy.get('button').contains('submit').click();
+};
