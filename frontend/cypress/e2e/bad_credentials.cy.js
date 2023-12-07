@@ -27,17 +27,31 @@ describe('Bad credentials', () => {
 
     // renders correct error message
     cy.contains(text['loginError'].suo);
+
+    // doesn't display username
+    cy.contains(adminUserInfo.username).should('not.exist');
+
+    // doesn't render upload field
+    cy.get('input[type="file"]').should('not.exist');
   });
 
-  it.only('Bad user login (eng)', () => {
+  it('Bad user login (eng)', () => {
     enterSite();
     cy.get('button[name="eng-flag"]').click(); // sets to English
 
+    // try to log in
     cy.get('button[name="show-login"]').click();
     cy.get('input[name="Username"]').type(adminUserInfo.username);
     cy.get('input[name="Password"]').type('wrong_admin_password');
     cy.get('button[id="login-button"]').click();
 
+    // renders correct error message
     cy.contains(text['loginError'].eng);
+
+    // doesn't display username
+    cy.contains(adminUserInfo.username).should('not.exist');
+
+    // doesn't render upload field
+    cy.get('input[type="file"]').should('not.exist');
   });
 });
