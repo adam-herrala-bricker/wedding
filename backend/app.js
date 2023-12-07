@@ -9,6 +9,7 @@ const uploadRouter = require('./controllers/uploadRouter');
 const imagesRouter = require('./controllers/imagesRouter');
 const audioRouter = require('./controllers/audioRouter');
 const sceneRouter = require('./controllers/sceneRouter');
+const healthRouter = require('./controllers/healthRouter');
 const middleware = require('./utils/middleware');
 const morgan = require('morgan');
 const logger = require('./utils/logger');
@@ -46,6 +47,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 app.use(middleware.userExtractor);
 
 // routers
+app.use('/api/health', healthRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/admin/upload', uploadRouter);
