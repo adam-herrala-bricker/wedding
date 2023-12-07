@@ -30,6 +30,11 @@ const LoginForm = ({setShowLogin}) => {
     dispatch(login(username, password));
   };
 
+  const handleCancel = () => {
+    dispatch(clearNotification());
+    setShowLogin(false);
+  };
+
   return (
     <div className = 'login-container'>
       <h2>{textLan.login}</h2>
@@ -60,7 +65,7 @@ const LoginForm = ({setShowLogin}) => {
           <button
             className = 'generic-button'
             name = 'cancel'
-            onClick = {() => setShowLogin(false)}>
+            onClick = {handleCancel}>
             {textLan.cancel}
           </button>
         </div>

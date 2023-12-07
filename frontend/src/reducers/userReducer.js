@@ -99,9 +99,21 @@ export const entryCheck = (entryKey) => {
 
       // clear any lingering notifications
       dispatch(clearNotification());
-    } catch (exception) {
-      dispatch(notifier(`${dictionary['entryError'].suo} // ${dictionary['entryError'].eng}`, // eslint-disable-line max-len
-          'error-message', 5));
+    } catch (error) {
+      console.log(error.response.data.error);
+      console.log(error.response);
+      const errorStatus = error.response.status;
+      const errorMessage = error.response.data.error;
+
+      // translated error message for wrong key
+      if (errorStatus === 401 &&
+          errorMessage === 'invalid username or password') {
+        dispatch(notifier(`${dictionary['entryError'].suo} // ${dictionary['entryError'].eng}`, // eslint-disable-line max-len
+            'error-message', 5));
+      } else {
+        dispatch(notifier(`Status ${errorStatus}: ${error.response.data}`,
+            'error-message', 20));
+      }
     }
   };
 };
@@ -124,8 +136,14 @@ export const login = (username, password) => {
       }
       // clear any lingering notifications
       dispatch(clearNotification());
-    } catch (except) {
-      dispatch(notifier(getText('loginError'), 'error-message', 5));
+    } catch (error) {
+      if (error.response.status === 401 &&
+          error.response.data.error === 'invalid username or password') {
+        dispatch(notifier(getText('loginError'), 'error-message', 5));
+      } else {
+        dispatch(notifier(`Status ${error.response.status}: ${error.response.data}`, // eslint-disable-line max-len
+            'error-message', 15));
+      }
     }
   };
 };
