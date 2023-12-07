@@ -2,6 +2,7 @@
 // note that this is just the metadata, not the actual files themselves
 import {createSlice} from '@reduxjs/toolkit';
 import {resetLoaded} from './sceneReducer';
+import {notifier, clearNotification} from './notiReducer';
 import imageServices from '../services/imageServices';
 import audioServices from '../services/audioServices';
 import adminServices from '../services/adminServices';
@@ -197,26 +198,34 @@ export const deleteSong = (songID) => {
 
 export const uploadMedia = (file) => {
   return async (dispatch) => {
-    // route for images
-    if (file.type === 'image/png' | file.type === 'image/jpeg') {
-      const newImage = await adminServices.postImage(file);
+    try {
+      // remove possible lingering notification from last attempt
+      dispatch(clearNotification());
 
-      // add image to images.all
-      dispatch(addImage(newImage));
+      // route for images
+      if (file.type === 'image/png' | file.type === 'image/jpeg') {
+        const newImage = await adminServices.postImage(file);
 
-      // return to default scene after upload
-      // (avoids confusion re. 'missing' uploads)
-      dispatch(displayAllImages());
-      dispatch(resetLoaded());
+        // add image to images.all
+        dispatch(addImage(newImage));
 
-    // route for audio
-    } else if (file.type === 'audio/wav'
-    | file.type === 'audio/x-wav'
-    | file.type === 'audio/mp3'
-    | file.type === 'audio/mpeg') {
-      const newAudio = await adminServices.postAudio(file);
+        // return to default scene after upload
+        // (avoids confusion re. 'missing' uploads)
+        dispatch(displayAllImages());
+        dispatch(resetLoaded());
 
-      dispatch(addSong(newAudio));
+      // route for audio
+      } else if (file.type === 'audio/wav'
+          | file.type === 'audio/x-wav'
+          | file.type === 'audio/mp3'
+          | file.type === 'audio/mpeg') {
+        const newAudio = await adminServices.postAudio(file);
+
+        dispatch(addSong(newAudio));
+      }
+    } catch (error) {
+      console.log(error.response.data.error);
+      dispatch(notifier(error.response.data.error, 'error-message', 20));
     }
   };
 };
