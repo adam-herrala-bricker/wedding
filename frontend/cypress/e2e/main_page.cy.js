@@ -86,9 +86,9 @@ describe('Correct site function', () => {
   it('Upload image', () => {
     enterSite();
     loginAsAdmin();
-    uploadImage('_DSC0815.jpg');
+    uploadImage(image1);
     // check that the image is there
-    cy.get('[name="gridImage_DSC0815.jpg"]').should('be.visible');
+    cy.get(`[name="gridImage${image1}"]`).should('be.visible');
   });
 
   // can't upload same image twice
@@ -178,7 +178,7 @@ describe('Correct site function', () => {
 
     // but the other image should still be there
     cy.get(`[name="gridImage${image2}"]`)
-        .should('exist');
+        .should('be.visible');
 
     // image should be in scene0 + scene3
     const markedScenes = ['scene0', 'scene3'];
@@ -190,7 +190,7 @@ describe('Correct site function', () => {
           .contains(text[scene].suo)
           .should('have.class', 'scene-name-highlight');
       cy.get(`[name="gridImage${image2}"]`)
-          .should('exist');
+          .should('be.visible');
     });
 
     // image should not be in scene1

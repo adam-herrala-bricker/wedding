@@ -22,7 +22,7 @@ describe('Highlight view', () => {
     images.map((image) => {
       uploadImage(image);
       cy.get(`[name="gridImage${image}"]`)
-          .should('exist');
+          .should('be.visible');
     });
 
     // expand scene menu
