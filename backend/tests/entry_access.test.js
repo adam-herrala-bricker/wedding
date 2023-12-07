@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const fs = require('fs');
 const supertest = require('supertest');
 const app = require('../app');
 const api = supertest(app);
@@ -13,6 +14,10 @@ const {
   sampleAudio,
   image1,
   audio1,
+  audioSourcePath,
+  audioDestinationPath,
+  imageSourcePath,
+  imageDestinationPath,
 } = require('../utils/test_constants');
 
 // runs once at beginning, before any tests, to set up the DB
@@ -48,6 +53,24 @@ beforeAll(async () => {
 
   // down here because Promise.all() fulfils promises in parallel
   await addImage1.populate('scenes', {sceneName: 1});
+
+  // add sampleImage + sampleAudio to /media (if not already)
+  console.log('Prior to entry access tests ...');
+  try {
+    fs.linkSync(`${audioSourcePath}/${sampleAudio}`,
+        `${audioDestinationPath}/${sampleAudio}`);
+    console.log(`${sampleAudio} added to ${audioDestinationPath}`);
+  } catch (EEXIST) {
+    console.log(`${sampleAudio} already in ${audioDestinationPath}`);
+  }
+
+  try {
+    fs.linkSync(`${imageSourcePath}/${sampleImage}`,
+        `${imageDestinationPath}/${sampleImage}`);
+    console.log(`${sampleImage} added to ${imageDestinationPath}`);
+  } catch (EEXIST) {
+    console.log(`${sampleImage} already in ${imageDestinationPath}`);
+  }
 }, 10000);
 
 describe('requests to root path', () => {
