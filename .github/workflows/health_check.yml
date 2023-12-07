@@ -2,7 +2,7 @@ name: Daily health check
 
 on:
   schedule:
-    - cron: '0 6,16 * * *' #6.00 16.00 and UTC every day
+    - cron: '17 6,16 * * *' #6.17 16.17 and UTC every day
     - cron: '0,15,30,45 * * * *' #Every 15 minutes for testing
 
 jobs: 
