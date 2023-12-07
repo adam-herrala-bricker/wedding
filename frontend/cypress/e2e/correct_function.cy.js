@@ -87,15 +87,18 @@ describe('Correct site function', () => {
   });
 
   it('Scenes functionality', () => {
+    const scenes = ['scene0', 'scene1', 'scene2', 'scene3'];
+    const image1 = '_DSC0815.jpg';
+    const image2 = '_DSC2591.jpg';
+
     enterSite();
     loginAsAdmin();
-    uploadImage('_DSC0815.jpg');
+    uploadImage(image1);
 
     // expand scene menu
     cy.get('button').contains(text['filter'].suo).click();
 
     // make first four scenes
-    const scenes = ['scene0', 'scene1', 'scene2', 'scene3'];
     scenes.map((scene) => {
       cy.get('button').contains(text['new'].suo).click();
       cy.contains(text[scene].suo);
@@ -106,33 +109,33 @@ describe('Correct site function', () => {
     cy.get('button').contains(text['scene2'].suo).should('not.exist');
 
     // upload second image
-    uploadImage('_DSC2591.jpg');
+    uploadImage(image2);
 
     // tag second image as scene0 + scene3
-    cy.get('button[name="_DSC2591.jpg-scene-0"]').click();
-    cy.get('button[name="_DSC2591.jpg-scene-0"]')
+    cy.get(`button[name="${image2}-scene-0"]`).click();
+    cy.get(`button[name="${image2}-scene-0"]`)
         .should('have.class', 'scene-linked');
-    cy.get('button[name="_DSC2591.jpg-scene-3"]').click();
-    cy.get('button[name="_DSC2591.jpg-scene-3"]')
+    cy.get(`button[name="${image2}-scene-3"]`).click();
+    cy.get(`button[name="${image2}-scene-3"]`)
         .should('have.class', 'scene-linked');
 
     // confirm scene1 is unlinked
-    cy.get('button[name="_DSC2591.jpg-scene-1"]')
+    cy.get(`button[name="${image2}-scene-1"]`)
         .should('have.class', 'scene-unlinked');
 
     // expect first image to be hidden, second visible
-    cy.get('[name="button_DSC0815.jpg"]')
+    cy.get(`[name="button${image1}"]`)
         .should('have.class', 'hidden-image');
-    cy.get('[name="button_DSC2591.jpg"]')
+    cy.get(`[name="button${image2}"]`)
         .should('have.class', 'image-button');
 
     // after logout, hidden image + under image buttons shouldn't be rendered
     cy.get('button').contains(text['logout'].suo).click();
-    cy.get('button[name="_DSC2591.jpg-scene-0"]').should('not.exist');
-    cy.get('[name="gridImage_DSC0815.jpg"]').should('not.exist');
+    cy.get(`button[name="${image2}-scene-0"]`).should('not.exist');
+    cy.get(`[name="gridImage${image1}"]`).should('not.exist');
 
     // but the other image should still be there
-    cy.get('[name="gridImage_DSC2591.jpg"]')
+    cy.get(`[name="gridImage${image2}"]`)
         .should('exist');
 
     // image should be in scene0 + scene3
@@ -144,7 +147,7 @@ describe('Correct site function', () => {
       cy.get('button')
           .contains(text[scene].suo)
           .should('have.class', 'scene-name-highlight');
-      cy.get('[name="gridImage_DSC2591.jpg"]')
+      cy.get(`[name="gridImage${image2}"]`)
           .should('exist');
     });
 
@@ -155,7 +158,7 @@ describe('Correct site function', () => {
     cy.get('button')
         .contains(text['scene1'].suo)
         .should('have.class', 'scene-name-highlight');
-    cy.get('[name="gridImage_DSC2591.jpg"]')
+    cy.get(`[name="gridImage${image2}]`)
         .should('not.exist');
 
     // scene menu closes as expected
