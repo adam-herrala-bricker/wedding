@@ -6,12 +6,12 @@
 echo "Build script"
 
 #go to FE directory and run ci (install deps)
-cd ../frontend && npm ci --production &&
+cd ../frontend && npm ci &&
 
 # run build
 npm run build &&
 
 # return to BE directory and install deps
-cd - && npm ci --production &&
+cd - && npm ci &&
 
 echo "Production build run successfully!"
