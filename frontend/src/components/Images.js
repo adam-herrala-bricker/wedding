@@ -127,9 +127,12 @@ const ImageGroup = ({groupClass, setGroupClass}) => {
         now = {loadProgress}
         max = {imageList.length}
         style = {{maxWidth: 500}}/>}
-      <div className = 'image-grouping' onLoad = {handleNewLoad}>
+      <div
+        className = 'image-grouping'
+        name = 'image-grouping'
+        onLoad = {handleNewLoad}>
         {imageList.map((i) =>
-          <div id = {i.id} key = {i.id}>
+          <div id = {`group${i.fileName}`} key = {i.id}>
             <button
               className = {i.scenes.map((i) => i.sceneName).includes('scene-0')
                   ? 'image-button'

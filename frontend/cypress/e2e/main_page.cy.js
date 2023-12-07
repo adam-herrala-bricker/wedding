@@ -8,8 +8,12 @@ import {
 import {
   adminUserInfo,
   baseURL,
+  image1,
+  image2,
+  image3,
   logInFields,
   mainPageFields,
+  scenes,
 } from '../utils/constants';
 
 describe('Correct site function', () => {
@@ -87,6 +91,33 @@ describe('Correct site function', () => {
     cy.get('[name="gridImage_DSC0815.jpg"]').should('be.visible');
   });
 
+  // can't upload same image twice
+
+  // uploads display in correct order
+  it('Uploads render in correct order', () => {
+    enterSite();
+    loginAsAdmin();
+
+    const imagesUnsorted = [image2, image3, image1]; // out of order
+
+    // upload out of order
+    imagesUnsorted.map((image) => {
+      uploadImage(image);
+      cy.get(`[name="gridImage${image}"]`)
+          .should('be.visible');
+    });
+
+    // check that they're rendered in order
+    cy.get('[name="image-grouping"]')
+        .children()
+        .first()
+        .should('have.id', `group${image1}`)
+        .next()
+        .should('have.id', `group${image2}`)
+        .next()
+        .should('have.id', `group${image3}`);
+  });
+
   it('Upload audio', () => {
     enterSite();
     loginAsAdmin();
@@ -102,10 +133,6 @@ describe('Correct site function', () => {
   });
 
   it('Scenes functionality', () => {
-    const scenes = ['scene0', 'scene1', 'scene2', 'scene3'];
-    const image1 = '_DSC0815.jpg';
-    const image2 = '_DSC2591.jpg';
-
     enterSite();
     loginAsAdmin();
     uploadImage(image1);
