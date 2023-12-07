@@ -100,8 +100,6 @@ export const entryCheck = (entryKey) => {
       // clear any lingering notifications
       dispatch(clearNotification());
     } catch (error) {
-      console.log(error.response.data.error);
-      console.log(error.response);
       const errorStatus = error.response.status;
       const errorMessage = error.response.data.error;
 
