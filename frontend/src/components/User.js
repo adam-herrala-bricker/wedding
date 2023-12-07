@@ -7,6 +7,7 @@ import {clearUser,
   setUser,
   setAdmin,
 } from '../reducers/userReducer';
+import {clearNotification} from '../reducers/notiReducer';
 import Notifier from './Notifier';
 
 const LoginForm = ({setShowLogin}) => {
@@ -113,6 +114,7 @@ const Login = () => {
 
   // event handler
   const handleExit = () => {
+    dispatch(clearNotification());
     dispatch(clearUser());
   };
 

@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {uploadMedia} from '../reducers/mediaReducer';
+import Notifier from './Notifier';
 
 // NOTE: The name is a bit unfortunate,
 // since we're using this to handle uploading audio files as well,
@@ -39,6 +40,7 @@ const ImageUpload = () => {
           multiple onChange = {handleUpload}/>
         <button type = 'submit'>submit</button>
       </form>
+      <Notifier/>
     </div>);
 };
 
