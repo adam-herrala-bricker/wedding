@@ -8,7 +8,7 @@ const audioPath = './media/audio';
 
 // getting all the audio data (requires ENTRY token)
 audioRouter.get('/', async (request, response) => {
-  const isDemo = request.body.isDemo;
+  const isDemo = request.isDemo;
   // 'entry-demo' creation uses user, not entry secret
   const entrySecret= isDemo ? SECRET_USER : SECRET_ENTER;
 

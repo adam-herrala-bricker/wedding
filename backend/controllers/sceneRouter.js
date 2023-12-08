@@ -27,7 +27,7 @@ sceneRouter.post('/', async (request, response, next) => {
 
 // getting all scenes (requires ENTRY token)
 sceneRouter.get('/', async (request, response, next) => {
-  const isDemo = request.body.isDemo;
+  const isDemo = request.isDemo;
   // 'entry-demo' creation uses user, not entry secret
   const entrySecret= isDemo ? SECRET_USER : SECRET_ENTER;
   const entryTokenFound = jwt.verify(request.token, entrySecret).id;

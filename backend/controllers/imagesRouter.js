@@ -8,7 +8,7 @@ const imagePath = './media/images';
 
 // getting all the image data (requires ENTRY authentication)
 imagesRouter.get('/', async (request, response) => {
-  const isDemo = request.body.isDemo;
+  const isDemo = request.isDemo;
   // 'entry-demo' creation uses user, not entry secret
   const entrySecret= isDemo ? SECRET_USER : SECRET_ENTER;
 

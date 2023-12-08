@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const {SECRET_ENTER} = require('../utils/config');
+const {SECRET_ENTER, SECRET_USER} = require('../utils/config');
 const logger = require('./logger');
 
 // for use with blog router
@@ -18,9 +18,12 @@ const userExtractor = (request, response, next) => {
 // but there doesn't seem to be any quick way to do that with the <img> element
 const staticAuthorization = (request, response, next) => {
   const token = request.query.token;
+  const isDemo = request.isDemo;
+  // 'entry-demo' creation uses user, not entry secret
+  const entrySecret = isDemo ? SECRET_USER : SECRET_ENTER;
 
   if (token) {
-    const isAuthorized = jwt.verify(token, SECRET_ENTER).id;
+    const isAuthorized = jwt.verify(token, entrySecret).id;
 
     if (!isAuthorized) {
       return response.status(401).json({error: 'entry token invalid'});
@@ -47,7 +50,7 @@ const demoHandler = (request, response, next) => {
     };
 
     // general change --> add isDemo to request body
-    request.body.isDemo = isDemo;
+    request.isDemo = isDemo;
 
     console.log(request.body);
   }
