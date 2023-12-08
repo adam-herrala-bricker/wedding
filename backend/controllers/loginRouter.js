@@ -2,10 +2,15 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const loginRouter = require('express').Router(); // eslint-disable-line new-cap
 const User = require('../models/userModel');
-const {ADMIN_KEY,
+const {
+  ADMIN_KEY,
+  ADMIN_KEY_DEMO,
   SECRET_USER,
   SECRET_ADMIN,
-  SECRET_ENTER} = require('../utils/config');
+  SECRET_ENTER,
+  SECRET_ENTER_DEMO,
+  SECRET_ADMIN_DEMO,
+} = require('../utils/config');
 
 // POST request to login
 loginRouter.post('/', async (request, response) => {
@@ -26,15 +31,19 @@ loginRouter.post('/', async (request, response) => {
     id: user._id,
   };
 
-  // different tokens for user vs. 'entry' pseudo-user
+  // different tokens for user vs. 'entry' or 'entry-demo' pseudo-users
   const token = user.username === 'entry' ?
     jwt.sign(userForToken, SECRET_ENTER) :
-    jwt.sign(userForToken, SECRET_USER);
+      user.username === 'entry-demo' ?
+      jwt.sign(userForToken, SECRET_ENTER_DEMO) :
+      jwt.sign(userForToken, SECRET_USER);
 
   // additional steps for admin token if user is admin:
   // 1. checks to make sure that the admin key is correct
   const adminCorrect = !user.isAdmin ?
         false :
+        user.isDemo ?
+        await bcrypt.compare(ADMIN_KEY_DEMO, user.adminHash):
         await bcrypt.compare(ADMIN_KEY, user.adminHash);
 
   // 2. returns unauthorized if user's DB entry was generated
@@ -47,7 +56,9 @@ loginRouter.post('/', async (request, response) => {
 
   // 3. gives seperate admin token for vaild admin user
   const adminToken = adminCorrect ?
-    jwt.sign(userForToken, SECRET_ADMIN) :
+      user.isDemo ?
+      jwt.sign(userForToken, SECRET_ADMIN_DEMO) :
+      jwt.sign(userForToken, SECRET_ADMIN) :
     null;
 
   response.status(200).send({

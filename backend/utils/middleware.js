@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const {SECRET_ENTER, SECRET_USER} = require('../utils/config');
+const {SECRET_ENTER, SECRET_ENTER_DEMO} = require('../utils/config');
 const logger = require('./logger');
 
 // adds token to request data
@@ -19,8 +19,8 @@ const userExtractor = (request, response, next) => {
 const staticAuthorization = (request, response, next) => {
   const token = request.query.token;
   const isDemo = request.isDemo;
-  // 'entry-demo' creation uses user, not entry secret
-  const entrySecret = isDemo ? SECRET_USER : SECRET_ENTER;
+  // 'entry-demo' creation uses different secret
+  const entrySecret = isDemo ? SECRET_ENTER_DEMO : SECRET_ENTER;
 
   if (token) {
     const isAuthorized = jwt.verify(token, entrySecret).id;

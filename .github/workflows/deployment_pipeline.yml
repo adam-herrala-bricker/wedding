@@ -16,12 +16,15 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       ADMIN_KEY: ${{ secrets.ADMIN_KEY}}
+      ADMIN_KEY_DEMO: ${{ secrets.ADMIN_KEY_DEMO}}
       BAD_ENTRY_TOKEN: ${{ secrets.BAD_ENTRY_TOKEN }}
       ENTRY_HASH: ${{ secrets.ENTRY_HASH }}
       ENTRY_KEY: ${{ secrets.ENTRY_KEY }}
       PORT: ${{ secrets.PORT }}
       SECRET_ADMIN: ${{ secrets.SECRET_ADMIN }}
+      SECRET_ADMIN_DEMO: ${ secrets.SECRET_ADMIN_DEMO}
       SECRET_ENTER: ${{ secrets.SECRET_ENTER }}
+      SECRET_ENTER_DEMO: ${{ secrets.SECRET_ENTER_DEMO}}
       SECRET_USER: ${{ secrets.SECRET_USER }}
       TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
     steps:

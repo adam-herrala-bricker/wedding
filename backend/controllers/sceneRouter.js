@@ -1,7 +1,12 @@
 const sceneRouter = require('express').Router(); // eslint-disable-line new-cap
 const jwt = require('jsonwebtoken');
 const Scene = require('../models/sceneModel');
-const {SECRET_ADMIN, SECRET_USER, SECRET_ENTER} = require('../utils/config');
+const {
+  SECRET_ADMIN,
+  SECRET_ADMIN_DEMO,
+  SECRET_ENTER,
+  SECRET_ENTER_DEMO,
+} = require('../utils/config');
 
 // creating new scene (requires ADMIN token)
 sceneRouter.post('/', async (request, response, next) => {
@@ -9,7 +14,9 @@ sceneRouter.post('/', async (request, response, next) => {
   let {sceneName} = request.body;
 
   // token bits
-  const adminTokenFound = jwt.verify(request.token, SECRET_ADMIN);
+  const adminTokenFound = request.isDemo ?
+    jwt.verify(request.token, SECRET_ADMIN_DEMO) :
+    jwt.verify(request.token, SECRET_ADMIN);
 
   if (!adminTokenFound) {
     return response.status(401).json({error: 'valid admin token required'});
@@ -35,8 +42,8 @@ sceneRouter.post('/', async (request, response, next) => {
 // getting all scenes (requires ENTRY token)
 sceneRouter.get('/', async (request, response, next) => {
   const isDemo = request.isDemo;
-  // 'entry-demo' creation uses user, not entry secret
-  const entrySecret= isDemo ? SECRET_USER : SECRET_ENTER;
+  // 'entry-demo' creation uses different secret
+  const entrySecret= isDemo ? SECRET_ENTER_DEMO : SECRET_ENTER;
   const entryTokenFound = jwt.verify(request.token, entrySecret).id;
 
   if (!entryTokenFound) {
@@ -54,7 +61,9 @@ sceneRouter.get('/', async (request, response, next) => {
 
 // deleting entire scene (requires ADMIN token)
 sceneRouter.delete('/:id', async (request, response, next) => {
-  const adminTokenFound = jwt.verify(request.token, SECRET_ADMIN).id;
+  const adminTokenFound = request.isDemo ?
+    jwt.verify(request.token, SECRET_ADMIN_DEMO).id :
+    jwt.verify(request.token, SECRET_ADMIN).id;
 
   if (!adminTokenFound) {
     return response.status(401).json({error: 'valid admin required'});

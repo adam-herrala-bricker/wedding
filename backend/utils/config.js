@@ -10,7 +10,11 @@ const SECRET_ENTER = process.env.SECRET_ENTER;
 const SECRET_USER = process.env.SECRET_USER;
 const SECRET_ADMIN = process.env.SECRET_ADMIN;
 
+const SECRET_ENTER_DEMO = process.env.SECRET_ENTER_DEMO;
+const SECRET_ADMIN_DEMO = process.env.SECRET_ADMIN_DEMO;
+
 const ADMIN_KEY = process.env.ADMIN_KEY;
+const ADMIN_KEY_DEMO = process.env.ADMIN_KEY_DEMO;
 
 const ENTRY_HASH = process.env.ENTRY_HASH;
 const ENTRY_KEY = process.env.ENTRY_KEY;
@@ -39,6 +43,7 @@ module.exports = {
   mongourl,
   sceneAllID,
   ADMIN_KEY,
+  ADMIN_KEY_DEMO,
   PORT,
   TOKEN,
   RANDY_HASH,
@@ -46,6 +51,8 @@ module.exports = {
   SECRET_ENTER,
   SECRET_USER,
   SECRET_ADMIN,
+  SECRET_ENTER_DEMO,
+  SECRET_ADMIN_DEMO,
   ENTRY_HASH,
   ENTRY_KEY,
   BAD_ENTRY_TOKEN,
