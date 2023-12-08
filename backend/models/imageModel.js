@@ -7,6 +7,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 const imageSchema = new mongoose.Schema({
   fileName: {type: String, required: true, unique: true},
   time: {type: String}, // unused feature for future expansion
+  isDemo: {type: Boolean, default: false},
   people: [
     {
       type: mongoose.Schema.Types.ObjectId,

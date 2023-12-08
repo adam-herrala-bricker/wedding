@@ -3,6 +3,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 const sceneSchema = new mongoose.Schema({
   sceneName: {type: String, required: true, unique: true},
+  isDemo: {type: Boolean, default: false},
   images: [
     {
       type: mongoose.Schema.Types.ObjectId,
