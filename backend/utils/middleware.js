@@ -32,6 +32,26 @@ const staticAuthorization = (request, response, next) => {
   next();
 };
 
+// manipulates requests + responses to just see demo content
+// markeds as isDemo: true in DB
+const demoHandler = (request, response, next) => {
+  // only run if the referer is given
+  if (request.headers.referer) {
+    const referer = request.headers.referer;
+    const isDemo = referer.includes('demo');
+    console.log(referer, true);
+
+    // entry authentication
+    if (isDemo && request.body.username === 'entry') {
+      request.body.username = 'entry-demo';
+    };
+
+    console.log(request.body);
+  }
+
+  next();
+};
+
 // something's going on here; figure out
 const errorHandler = (error, request, response, next) => {
   logger.error(error.message);
@@ -47,4 +67,9 @@ const errorHandler = (error, request, response, next) => {
   next(error);
 };
 
-module.exports = {errorHandler, userExtractor, staticAuthorization};
+module.exports = {
+  errorHandler,
+  userExtractor,
+  staticAuthorization,
+  demoHandler,
+};

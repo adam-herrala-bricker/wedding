@@ -11,7 +11,9 @@ usersRouter.post('/', async (request, response, next) => {
     password,
     email,
     isAdmin,
-    adminKey} = request.body;
+    adminKey,
+    isDemo,
+  } = request.body;
 
   if (!password) {
     response.status(400).json({error: 'password required'});
@@ -34,6 +36,7 @@ usersRouter.post('/', async (request, response, next) => {
       passwordHash,
       isAdmin,
       adminHash,
+      isDemo,
     });
 
     const savedUser = await user.save();
