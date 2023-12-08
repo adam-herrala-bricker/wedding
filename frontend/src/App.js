@@ -2,8 +2,8 @@ import {useEffect} from 'react';
 import {Routes, Route} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {initializeScenes} from './reducers/sceneReducer.js';
-import {initializeImages} from './reducers/mediaReducer.js';
-import {initializeMusic} from './reducers/mediaReducer.js';
+import {initializeImages, initializeMusic} from './reducers/mediaReducer.js';
+import {verifyEntryToken} from './reducers/userReducer.js';
 import ImageUpload from './components/ImageUpload';
 import Music from './components/Music';
 import Images from './components/Images';
@@ -67,6 +67,7 @@ const App = () => {
 
   // initialize states
   useEffect(() => {
+    dispatch(verifyEntryToken(entryToken));
     dispatch(initializeScenes(entryToken));
     dispatch(initializeImages(entryToken, adminToken));
     dispatch(initializeMusic(entryToken));

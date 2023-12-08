@@ -154,4 +154,20 @@ export const logOut = () => {
   };
 };
 
+// check entry token is valid
+export const verifyEntryToken = (entryToken) => {
+  return async (dispatch) => {
+    // only check if there is an entry token to check
+    if (entryToken) {
+      // everything is good --> don't have to do anything
+      try {
+        await userServices.entryCheck(entryToken);
+      } catch (error) {
+        dispatch(clearUser());
+        dispatch(notifier('invalid entry token', 'error-message', 5));
+      }
+    }
+  };
+};
+
 export default userSlice.reducer;

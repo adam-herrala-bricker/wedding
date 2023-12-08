@@ -10,6 +10,7 @@ const imagesRouter = require('./controllers/imagesRouter');
 const audioRouter = require('./controllers/audioRouter');
 const sceneRouter = require('./controllers/sceneRouter');
 const healthRouter = require('./controllers/healthRouter');
+const entryCheckRouter = require('./controllers/entryCheckRouter');
 const middleware = require('./utils/middleware');
 const morgan = require('morgan');
 const logger = require('./utils/logger');
@@ -53,6 +54,7 @@ app.use(middleware.userExtractor);
 
 // routers
 app.use('/api/health', healthRouter);
+app.use('/api/entry-check', entryCheckRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/admin/upload', uploadRouter);
