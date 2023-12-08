@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const {SECRET_ENTER, SECRET_USER} = require('../utils/config');
 const logger = require('./logger');
 
-// for use with blog router
+// adds token to request data
 const userExtractor = (request, response, next) => {
   const authorization = request.get('authorization');
 

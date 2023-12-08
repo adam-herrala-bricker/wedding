@@ -5,7 +5,8 @@ const {SECRET_ADMIN, SECRET_USER, SECRET_ENTER} = require('../utils/config');
 
 // creating new scene (requires ADMIN token)
 sceneRouter.post('/', async (request, response, next) => {
-  const {sceneName} = request.body;
+  const isDemo = request.isDemo;
+  let {sceneName} = request.body;
 
   // token bits
   const adminTokenFound = jwt.verify(request.token, SECRET_ADMIN);
@@ -14,8 +15,14 @@ sceneRouter.post('/', async (request, response, next) => {
     return response.status(401).json({error: 'valid admin token required'});
   }
 
+  // avoid duplicate entries in the DB
+  if (isDemo) {
+    sceneName = `${sceneName}-demo`;
+  }
+
   const scene = new Scene({
     sceneName,
+    isDemo,
   });
 
   const savedScene = await scene.save();
@@ -35,7 +42,7 @@ sceneRouter.get('/', async (request, response, next) => {
   if (!entryTokenFound) {
     return response.status(401).json({error: 'valid token required'});
   }
-  const sceneData = await Scene.find({});
+  const sceneData = await Scene.find({isDemo: isDemo});
 
   if (sceneData) {
     response.json(sceneData);
