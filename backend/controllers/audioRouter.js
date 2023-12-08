@@ -2,19 +2,23 @@ const audioRouter = require('express').Router(); // eslint-disable-line new-cap
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const Audio = require('../models/audioModel');
-const {SECRET_ADMIN, SECRET_ENTER} = require('../utils/config');
+const {SECRET_ADMIN, SECRET_ENTER, SECRET_USER} = require('../utils/config');
 
 const audioPath = './media/audio';
 
 // getting all the audio data (requires ENTRY token)
 audioRouter.get('/', async (request, response) => {
-  const entryTokenFound = jwt.verify(request.token, SECRET_ENTER).id;
+  const isDemo = request.body.isDemo;
+  // 'entry-demo' creation uses user, not entry secret
+  const entrySecret= isDemo ? SECRET_USER : SECRET_ENTER;
+
+  const entryTokenFound = jwt.verify(request.token, entrySecret).id;
 
   if (!entryTokenFound) {
     return response.status(401).json({error: 'valid token required'});
   }
 
-  const audioData = await Audio.find({});
+  const audioData = await Audio.find({isDemo: isDemo});
 
   if (audioData) {
     response.json(audioData);

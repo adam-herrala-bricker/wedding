@@ -1,7 +1,7 @@
 const sceneRouter = require('express').Router(); // eslint-disable-line new-cap
 const jwt = require('jsonwebtoken');
 const Scene = require('../models/sceneModel');
-const {SECRET_ADMIN, SECRET_ENTER} = require('../utils/config');
+const {SECRET_ADMIN, SECRET_USER, SECRET_ENTER} = require('../utils/config');
 
 // creating new scene (requires ADMIN token)
 sceneRouter.post('/', async (request, response, next) => {
@@ -27,7 +27,10 @@ sceneRouter.post('/', async (request, response, next) => {
 
 // getting all scenes (requires ENTRY token)
 sceneRouter.get('/', async (request, response, next) => {
-  const entryTokenFound = jwt.verify(request.token, SECRET_ENTER).id;
+  const isDemo = request.body.isDemo;
+  // 'entry-demo' creation uses user, not entry secret
+  const entrySecret= isDemo ? SECRET_USER : SECRET_ENTER;
+  const entryTokenFound = jwt.verify(request.token, entrySecret).id;
 
   if (!entryTokenFound) {
     return response.status(401).json({error: 'valid token required'});

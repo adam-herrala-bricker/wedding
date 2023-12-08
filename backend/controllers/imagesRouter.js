@@ -2,20 +2,25 @@ const imagesRouter = require('express').Router(); // eslint-disable-line new-cap
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const Image = require('../models/imageModel');
-const {SECRET_ADMIN, SECRET_ENTER} = require('../utils/config');
+const {SECRET_ADMIN, SECRET_USER, SECRET_ENTER} = require('../utils/config');
 
 const imagePath = './media/images';
 
 // getting all the image data (requires ENTRY authentication)
 imagesRouter.get('/', async (request, response) => {
+  const isDemo = request.body.isDemo;
+  // 'entry-demo' creation uses user, not entry secret
+  const entrySecret= isDemo ? SECRET_USER : SECRET_ENTER;
+
   // token bit
-  const entryTokenFound = jwt.verify(request.token, SECRET_ENTER).id;
+  const entryTokenFound = jwt.verify(request.token, entrySecret).id;
 
   if (!entryTokenFound) {
     return response.status(401).json({error: 'valid entry token required'});
   }
 
-  const imageData = await Image.find({}).populate('scenes', {sceneName: 1});
+  const imageData = await Image.find({isDemo: isDemo})
+      .populate('scenes', {sceneName: 1});
 
   if (imageData) {
     response.json(imageData);
