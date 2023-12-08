@@ -38,22 +38,22 @@ const staticAuthorization = (request, response, next) => {
 // manipulates requests + responses to just see demo content
 // markeds as isDemo: true in DB
 const demoHandler = (request, response, next) => {
+  let isDemo = false; // default --> handle requests as normal
+
   // only run if the referer is given (it's not on page loads)
   if (request.headers.referer) {
     const referer = request.headers.referer;
-    const isDemo = referer.includes('demo');
-    console.log(referer, isDemo);
+    // only set to demo if referer includes 'demo'
+    isDemo = referer.includes('demo');
 
     // entry authentication
     if (isDemo && request.body.username === 'entry') {
       request.body.username = 'entry-demo';
     };
-
-    // general change --> add isDemo to request body
-    request.isDemo = isDemo;
-
-    console.log(request.body);
   }
+
+  // general change --> add isDemo to request body
+  request.isDemo = isDemo;
 
   next();
 };

@@ -119,7 +119,6 @@ const getImposterCredentials = async () => {
 const image1 = {
   fileName: '_DSC9999.jpg',
   people: [],
-
 };
 
 // audio metadata
