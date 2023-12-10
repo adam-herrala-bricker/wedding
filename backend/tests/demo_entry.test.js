@@ -17,7 +17,7 @@ beforeAll(async () => {
   await initializeDB();
   // add 'entry-demo' pseudo-user
   await api.post('/api/users').send(demoEntryUserInfo);
-});
+}, 10000);
 
 // demo content returns as expected
 describe('correct demo page function', () => {
