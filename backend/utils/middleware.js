@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const Image = require('../models/imageModel');
 const {SECRET_ENTER, SECRET_ENTER_DEMO} = require('../utils/config');
 const logger = require('./logger');
 
@@ -16,9 +17,25 @@ const userExtractor = (request, response, next) => {
 // authorization for static images (entry token passed as variable in query)
 // idk if this is less secure then passing the entry token in the header
 // but there doesn't seem to be any quick way to do that with the <img> element
-const staticAuthorization = (request, response, next) => {
+const staticAuthorization = async (request, response, next) => {
   const token = request.query.token;
   const isDemo = request.isDemo;
+
+  // isDemo, need to verify that the content isn't for the default page,
+  // otherwise someone could feasibly access default content with only
+  // the demo entry key and a bit of coding
+  if (isDemo) {
+    const requestedPath = request._parsedUrl.pathname;
+    const requestedFile = requestedPath.split('/').slice(-1);
+    // need to add different checks based on extension
+    const requestedImage = await Image.findOne({fileName: requestedFile});
+
+    if (requestedImage.isDemo !== true) {
+      return response.status(401)
+          .json({error: 'content not found or unavailable with demo entry token'}); // eslint-disable-line max-len
+    }
+  }
+
   // 'entry-demo' creation uses different secret
   const entrySecret = isDemo ? SECRET_ENTER_DEMO : SECRET_ENTER;
 

@@ -64,6 +64,7 @@ loginRouter.post('/', async (request, response) => {
   response.status(200).send({
     token,
     adminToken,
+    isDemo: user.isDemo,
     isAdmin: user.isAdmin,
     username: user.username,
     displayname: user.displayname});

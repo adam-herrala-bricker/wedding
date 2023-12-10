@@ -19,6 +19,8 @@ const ADMIN_KEY_DEMO = process.env.ADMIN_KEY_DEMO;
 const ENTRY_HASH = process.env.ENTRY_HASH;
 const ENTRY_KEY = process.env.ENTRY_KEY;
 
+const ENTRY_KEY_DEMO = process.env.ENTRY_KEY_DEMO;
+
 const BAD_ENTRY_TOKEN = process.env.BAD_ENTRY_TOKEN;
 
 const NODE_ENV = process.env.NODE_ENV;
@@ -55,5 +57,6 @@ module.exports = {
   SECRET_ADMIN_DEMO,
   ENTRY_HASH,
   ENTRY_KEY,
+  ENTRY_KEY_DEMO,
   BAD_ENTRY_TOKEN,
 };

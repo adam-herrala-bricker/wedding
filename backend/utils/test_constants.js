@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const {ENTRY_HASH, ADMIN_KEY} = require('./config');
+const {ENTRY_HASH, ADMIN_KEY, ENTRY_KEY_DEMO} = require('./config');
 
 const badAdminToken = '777777777777777777777777777777777';
 const badAdminKey = 'this_is_not_a_valid_admin_key';
@@ -28,6 +28,16 @@ const entryUserCredentials = {
   passwordHash: ENTRY_HASH,
   isAdmin: false,
   adminHash: '',
+};
+
+const demoEntryUserInfo = {
+  username: 'entry-demo',
+  displayname: 'entry demo',
+  email: 'entryuser-demo@gmail.com',
+  password: ENTRY_KEY_DEMO,
+  isAdmin: false,
+  isDemo: true,
+  adminKey: '',
 };
 
 const standardUserInfo = {
@@ -121,9 +131,25 @@ const image1 = {
   people: [],
 };
 
+const image2 = {
+  fileName: '_DSC1111.jpg',
+  people: [],
+  isDemo: true,
+};
+
 // audio metadata
 const audio1 = {
   fileName: 'groovyJamz.mp3',
+};
+
+const audio2 = {
+  fileName: 'smoothBeatz,mp3',
+  isDemo: true,
+};
+
+// DB entries for actual images
+const sampleImageDB = { // not demo image
+  fileName: '_DSC0815.jpg',
 };
 
 module.exports = {
@@ -131,6 +157,7 @@ module.exports = {
   sampleImage,
   sampleAudio,
   entryUserCredentials,
+  demoEntryUserInfo,
   standardUserInfo,
   adminUserInfo,
   imposterInfo,
@@ -138,7 +165,10 @@ module.exports = {
   getAdminUserCredentials,
   getImposterCredentials,
   image1,
+  image2,
+  sampleImageDB,
   audio1,
+  audio2,
   imageDestinationPath,
   imageSourcePath,
   audioDestinationPath,
