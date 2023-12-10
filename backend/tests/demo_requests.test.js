@@ -6,8 +6,10 @@ const Scene = require('../models/sceneModel');
 const {initializeDB} = require('../utils/test_functions');
 const {
   demoEntryUserInfo,
-  image2,
   sampleImage,
+  sampleAudio,
+  sampleDemoImage,
+  sampleDemoAudio,
 } = require('../utils/test_constants');
 const {ENTRY_KEY_DEMO} = require('../utils/config');
 
@@ -46,7 +48,7 @@ describe('correct demo page function', () => {
     });
   });
 
-  describe('demo token operations', () => {
+  describe('a valid demo token ...', () => {
     let demoToken;
 
     // helper function to get demo entry token
@@ -67,8 +69,22 @@ describe('correct demo page function', () => {
       demoToken = await getEntryToken();
     });
 
-    describe('returns (only) demo content', () => {
-    // images (full + web res)
+    describe('returns demo content', () => {
+      test('image file (full res)', async () => {
+        await api
+            .get(`/api/images/${sampleDemoImage}?token=${demoToken}`)
+            .set('referer', '/demo')
+            .expect(200)
+            .expect('Content-Type', /image\/jpeg/);
+      });
+
+      test('image file (web res)', async () => {
+        await api
+            .get(`/api/images/web-res/${sampleDemoImage}?token=${demoToken}`)
+            .set('referer', '/demo')
+            .expect(200)
+            .expect('Content-Type', /image\/jpeg/);
+      });
 
       test('image metadata', async () => {
         const scene1Demo = await Scene.findOne({isDemo: true});
@@ -83,34 +99,146 @@ describe('correct demo page function', () => {
         expect(response.body).toHaveLength(1);
         const returnedData = response.body[0];
 
-        expect(returnedData.fileName).toEqual(image2.fileName);
+        expect(returnedData.fileName).toEqual(sampleDemoImage);
         expect(returnedData.scenes[0].sceneName).toEqual(scene1Demo.sceneName);
         expect(returnedData.isDemo).toEqual(true);
       });
 
-    // audio
-    // scenes
+      test('audio file', async () => {
+        await api
+            .get(`/api/audio/${sampleDemoAudio}?token=${demoToken}`)
+            .set('Authorization', `Bearer ${demoToken}`)
+            .set('referer', '/demo')
+            .expect(200);
+      });
+
+      test('audio metadata', async () => {
+        const response = await api
+            .get('/api/audio-data')
+            .set('Authorization', `Bearer ${demoToken}`)
+            .set('referer', '/demo')
+            .expect(200);
+
+        // only one returned item (the other in DB isn't demo)
+        expect(response.body).toHaveLength(1);
+
+        const returnedData = response.body[0];
+        expect(returnedData.fileName).toEqual(sampleDemoAudio);
+        expect(returnedData.isDemo).toEqual(true);
+      });
+
+      test('scene metadata', async () => {
+        const response = await api
+            .get('/api/scenes')
+            .set('Authorization', `Bearer ${demoToken}`)
+            .set('referer', '/demo')
+            .expect(200);
+
+        // again, only one demo scene in DB
+        expect(response.body).toHaveLength(1);
+
+        const returnedData = response.body[0];
+        expect(returnedData.sceneName).toEqual('scene1-demo');
+      });
     });
 
-    describe('cannot access default content', () => {
-      describe('without demo in referer', () => {
+    describe('cannot access non-demo content ...', () => {
+      const tokenError = 'invalid signature';
+      const middleWareError = 'content not found or unavailable with demo entry token'; // eslint-disable-line max-len
+
+      describe('without demo in referer header', () => {
         test('image file (full res)', async () => {
-          await api
+          const response = await api
               .get(`/api/images/${sampleImage}?token=${demoToken}`)
-              .expect(400);
+              .expect(400)
+              .expect('Content-Type', /application\/json/);
+
+          expect(response.body.error).toEqual(tokenError);
+        });
+
+        test('image file (web res)', async () => {
+          const response = await api
+              .get(`/api/images/web-res/${sampleImage}?token=${demoToken}`)
+              .expect(400)
+              .expect('Content-Type', /application\/json/);
+
+          expect(response.body.error).toEqual(tokenError);
+        });
+
+        test('audio file', async () => {
+          const response = await api
+              .get(`/api/audio/${sampleAudio}?token=${demoToken}`)
+              .expect(400)
+              .expect('Content-Type', /application\/json/);
+
+          expect(response.body.error).toEqual(tokenError);
+        });
+
+        test('image metadata', async () => {
+          const response = await api
+              .get('/api/image-data')
+              .set('Authorization', `Bearer ${demoToken}`)
+              .expect(400)
+              .expect('Content-Type', /application\/json/);
+
+          expect(response.body.error).toEqual(tokenError);
+        });
+
+        test('audio metadata', async () => {
+          const response = await api
+              .get('/api/audio-data')
+              .set('Authorization', `Bearer ${demoToken}`)
+              .expect(400)
+              .expect('Content-Type', /application\/json/);
+
+          expect(response.body.error).toEqual(tokenError);
+        });
+
+        test('scene metadata', async () => {
+          const response = await api
+              .get('/api/scenes')
+              .set('Authorization', `Bearer ${demoToken}`)
+              .expect(400)
+              .expect('Content-Type', /application\/json/);
+
+          expect(response.body.error).toEqual(tokenError);
         });
       });
 
-      describe('with demo in referer', () => {
+      describe('with demo in referer header', () => {
         test('image file (full res)', async () => {
           const response = await api
               .get(`/api/images/${sampleImage}?token=${demoToken}`)
               .set('referer', '/demo')
-              .expect(401);
+              .expect(400)
+              .expect('Content-Type', /application\/json/);
 
-          expect(response.body.error)
-              .toEqual('content not found or unavailable with demo entry token'); // eslint-disable-line max-len
+          expect(response.body.error).toEqual(middleWareError);
         });
+
+        test('image file (web res)', async () => {
+          const response = await api
+              .get(`/api/images/web-res/${sampleImage}?token=${demoToken}`)
+              .set('referer', '/demo')
+              .expect(400)
+              .expect('Content-Type', /application\/json/);
+
+          expect(response.body.error).toEqual(middleWareError);
+        });
+
+        test('audio file', async () => {
+          const response = await api
+              .get(`/api/audio/${sampleAudio}?token=${demoToken}`)
+              .set('referer', '/demo')
+              .expect(400)
+              .expect('Content-Type', /application\/json/);
+
+          expect(response.body.error).toEqual(middleWareError);
+        });
+
+        // reminder: metadata requests use the same endpoints for default and
+        // demo entries , so we wouldn't expect them to fail like the media
+        // requests, just to only return demo metadata (as is tested above)
       });
     });
   });

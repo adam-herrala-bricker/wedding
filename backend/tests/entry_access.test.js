@@ -184,7 +184,7 @@ describe('valid entry token --> requests granted', () => {
         .expect(200);
 
     const imageData = response.body[0];
-    expect(imageData.fileName).toEqual('_DSC9999.jpg');
+    expect(imageData.fileName).toEqual(sampleImage);
     expect(imageData.scenes[0].sceneName).toEqual(scene1.sceneName);
     expect(imageData.scenes[0].id).toEqual(scene1.id);
   });
@@ -202,7 +202,7 @@ describe('valid entry token --> requests granted', () => {
         .set('Authorization', `Bearer ${entryToken}`)
         .expect(200);
 
-    expect(response.body[0].fileName).toEqual('groovyJamz.mp3');
+    expect(response.body[0].fileName).toEqual(sampleAudio);
   });
 
   test('scene metadata', async () => {

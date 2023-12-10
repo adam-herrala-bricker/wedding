@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const Audio = require('../models/audioModel');
 const Image = require('../models/imageModel');
 const {SECRET_ENTER, SECRET_ENTER_DEMO} = require('../utils/config');
 const logger = require('./logger');
@@ -26,12 +27,22 @@ const staticAuthorization = async (request, response, next) => {
   // the demo entry key and a bit of coding
   if (isDemo) {
     const requestedPath = request._parsedUrl.pathname;
-    const requestedFile = requestedPath.split('/').slice(-1);
-    // need to add different checks based on extension
-    const requestedImage = await Image.findOne({fileName: requestedFile});
+    const requestedFile = requestedPath.split('/').slice(-1)[0];
+    const fileExtension = requestedFile.split('.').slice(-1)[0];
 
-    if (requestedImage.isDemo !== true) {
-      return response.status(401)
+    let foundMedia;
+
+    // different checks based on extension
+    if (fileExtension === 'jpg' || fileExtension === 'png') {
+      foundMedia = await Image.findOne({fileName: requestedFile});
+    } else if (fileExtension === 'wav' || fileExtension || 'mp3') {
+      foundMedia = await Audio.findOne({fileName: requestedFile});
+    } else {
+      return response.status(404).json({error: 'unexpected file extension'});
+    }
+
+    if (foundMedia.isDemo !== true) {
+      return response.status(400)
           .json({error: 'content not found or unavailable with demo entry token'}); // eslint-disable-line max-len
     }
   }
@@ -52,7 +63,7 @@ const staticAuthorization = async (request, response, next) => {
   next();
 };
 
-// manipulates requests + responses to just see demo content
+// manipulates requests to just see demo content
 // markeds as isDemo: true in DB
 const demoHandler = (request, response, next) => {
   let isDemo = false; // default --> handle requests as normal
