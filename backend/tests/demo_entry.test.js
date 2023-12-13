@@ -138,7 +138,7 @@ describe('correct demo page function', () => {
         expect(response.body).toHaveLength(1);
 
         const returnedData = response.body[0];
-        expect(returnedData.sceneName).toEqual('scene1-demo');
+        expect(returnedData.sceneName).toEqual('scene-0-demo');
       });
     });
 
@@ -244,9 +244,6 @@ describe('correct demo page function', () => {
   });
 });
 
-// cannot access default content with demo tokens
-
-// cannot access demo content with default tokens
 
 afterAll(async () => {
   await mongoose.connection.close();

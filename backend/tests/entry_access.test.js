@@ -212,7 +212,7 @@ describe('valid entry token --> requests granted', () => {
         .expect(200);
 
     const scene1 = response.body[0];
-    expect(scene1.sceneName).toEqual('scene1');
+    expect(scene1.sceneName).toEqual('scene-0');
   });
 });
 

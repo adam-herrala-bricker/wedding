@@ -51,6 +51,12 @@ audioRouter.delete('/:id', async (request, response, next) => {
     return response.status(404).json({error: 'requested audio not found'});
   }
 
+  // prevent demo admin from deleting default audio
+  if (request.isDemo && !audio.isDemo) {
+    return response.status(403)
+        .json({error: 'demo users cannot delete default content'});
+  }
+
   const thisFile = audio.fileName;
 
   // remove from DB

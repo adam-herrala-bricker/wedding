@@ -54,6 +54,12 @@ imagesRouter.delete('/:id', async (request, response, next) => {
     return response.status(404).json({error: 'requested image not found'});
   }
 
+  // demo is trying to delete a default image
+  if (request.isDemo && !image.isDemo) {
+    return response.status(403)
+        .json({error: 'demo users cannot delete default content'});
+  }
+
   const thisFile = image.fileName;
 
   // remove from image DB
@@ -83,6 +89,14 @@ imagesRouter.put('/:id', async (request, response, next) => {
   }
 
   const thisID = request.params.id;
+
+  const image = await Image.findById(thisID);
+  // demo is trying to delete a default image
+  if (request.isDemo && !image.isDemo) {
+    return response.status(403)
+        .json({error: 'demo users cannot change default content'});
+  }
+
   const body = request.body;
   const updates = {fileName: body.fileName,
     time: body.time, scenes: body.scenes,

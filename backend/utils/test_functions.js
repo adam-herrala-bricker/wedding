@@ -4,7 +4,7 @@ const Audio = require('../models/audioModel');
 const Image = require('../models/imageModel');
 const Scene = require('../models/sceneModel');
 const User = require('../models/userModel');
-const {ADMIN_KEY} = require('../utils/config');
+const {ADMIN_KEY, ADMIN_KEY_DEMO} = require('../utils/config');
 const {
   badAdminKey,
   entryUserCredentials,
@@ -22,7 +22,7 @@ const {
   sampleDemoImage,
 } = require('../utils/test_constants');
 
-// admin user (replicate what happens on the BE)
+// admin users (replicate what happens on the BE)
 const getAdminUserCredentials = async () => {
   const dummyPasswordAdmin = 'example';
   const saltRounds = 10;
@@ -36,6 +36,25 @@ const getAdminUserCredentials = async () => {
     passwordHash: passwordHash,
     isAdmin: true,
     adminHash: adminHash,
+  };
+
+  return thisUser;
+};
+
+const getDemoAdminUserCredentials = async () => {
+  const dummyPasswordAdmin = 'f8ofTheFuriou8';
+  const saltRounds = 10;
+  const passwordHash = await bcrypt.hash(dummyPasswordAdmin, saltRounds);
+  const adminHash = await bcrypt.hash(ADMIN_KEY_DEMO, saltRounds);
+
+  const thisUser = {
+    username: 'test.admin.demo',
+    displayname: 'Test Admin Demo',
+    email: 'test.admin@demo.org',
+    passwordHash: passwordHash,
+    isAdmin: true,
+    adminHash: adminHash,
+    isDemo: true,
   };
 
   return thisUser;
@@ -94,12 +113,16 @@ const initializeDB = async () => {
   const adminUserCredentials = await getAdminUserCredentials();
   const adminUser = new User(adminUserCredentials);
 
+  // add demo admin user
+  const demoAdminUserCredentials = await getDemoAdminUserCredentials();
+  const demoAdminUser = new User(demoAdminUserCredentials);
+
   // scene metadata
-  const scene1 = new Scene({sceneName: 'scene1'});
+  const scene1 = new Scene({sceneName: 'scene-0'});
   const scene1ID = scene1._id;
 
   // scene metadata (demo)
-  const scene1Demo = new Scene({sceneName: 'scene1-demo', isDemo: true});
+  const scene1Demo = new Scene({sceneName: 'scene-0-demo', isDemo: true});
   const scene1DemoID = scene1Demo._id;
 
   // image metadata (sample default image)
@@ -118,6 +141,7 @@ const initializeDB = async () => {
   const promiseArray = [
     entryUser.save(),
     adminUser.save(),
+    demoAdminUser.save(),
     scene1.save(),
     scene1Demo.save(),
     addSampleImage.save(),

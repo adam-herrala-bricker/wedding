@@ -70,11 +70,17 @@ sceneRouter.delete('/:id', async (request, response, next) => {
   }
 
   const thisID = request.params.id;
+  const scene = await Scene.findById(thisID);
 
   // scene isn't there
-  const scene = await Scene.findById(thisID);
   if (!scene) {
     return response.status(404).json({error: 'scene not found'});
+  }
+
+  // demo admin can't delete if this is a default scene
+  if (request.isDemo && !scene.isDemo) {
+    return response.status(403)
+        .json({error: 'demo users cannot change default scenes'});
   }
 
   await Scene.findByIdAndDelete(thisID);
