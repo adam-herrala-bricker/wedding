@@ -2,10 +2,17 @@ import {useState} from 'react';
 import {View, Pressable, Text, StyleSheet, TextInput} from 'react-native';
 import {useNavigate} from 'react-router-native';
 import {useDispatch} from 'react-redux';
+import {setAllImages} from '../reducers/mediaReducer';
 import {setEntryToken} from '../reducers/userReducer';
 import {login} from '../services/loginServices';
+import {getImages} from '../services/mediaServices';
 
 const styles = StyleSheet.create({
+  entryContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+
   boxCommon: {
     margin: 8,
     padding: 10,
@@ -28,6 +35,10 @@ const Entry = () => {
       // entry is the 'username' when checking the entry key
       const body = await login('entry', entryText);
       dispatch(setEntryToken(body.token));
+
+      const images = await getImages(body.token);
+      dispatch(setAllImages(images));
+
       navigate('/grid');
     } catch (error) {
       console.log(error);
@@ -35,7 +46,7 @@ const Entry = () => {
   };
 
   return (
-    <View>
+    <View style = {styles.entryContainer}>
       <Text>Entry page!</Text>
       <TextInput
         style = {styles.boxCommon}
