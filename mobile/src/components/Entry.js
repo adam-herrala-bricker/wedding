@@ -1,8 +1,9 @@
 import {useState} from 'react';
-import {useNavigate} from 'react-router-native';
 import {View, Pressable, Text, StyleSheet, TextInput} from 'react-native';
+import {useNavigate} from 'react-router-native';
 import {useDispatch} from 'react-redux';
-import {entryCheck} from '../reducers/userReducer';
+import {setEntryToken} from '../reducers/userReducer';
+import {login} from '../services/loginServices';
 
 const styles = StyleSheet.create({
   boxCommon: {
@@ -23,8 +24,14 @@ const Entry = () => {
 
   // event handler
   const handlePress = async () => {
-    dispatch(entryCheck(entryText));
-    navigate('/grid');
+    try {
+      // entry is the 'username' when checking the entry key
+      const body = await login('entry', entryText);
+      dispatch(setEntryToken(body.token));
+      navigate('/grid');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

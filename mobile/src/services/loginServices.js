@@ -13,5 +13,10 @@ export const login = async (username, password) => {
 
   const body = await response.json();
 
+  // fetch API doesn't automatically throw errors for proimse rejections
+  if (!response.ok) {
+    throw new Error(body.error);
+  }
+
   return body;
 };
