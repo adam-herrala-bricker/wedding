@@ -3,6 +3,7 @@
 // however, that could be added here at a later date as needed
 
 import {createSlice} from '@reduxjs/toolkit';
+import {login} from '../services/loginServices';
 
 // initial state
 const defaultEntryToken = null;
@@ -28,19 +29,8 @@ export const {clearUser, setEntryToken} = userSlice.actions;
 // packaged function for checking entry key to enter app
 export const entryCheck = (entryKey) => {
   return async (dispatch) => {
-    const response = await fetch('https://herrala-bricker-wedding.onrender.com/api/login', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: 'entry',
-        password: entryKey,
-      }),
-    });
-
-    const body = await response.json();
+    // entry is the 'username' when checking the entry key
+    const body = await login('entry', entryKey);
     dispatch(setEntryToken(body.token));
   };
 };
