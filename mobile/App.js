@@ -1,5 +1,5 @@
 import {NativeRouter} from 'react-router-native';
-import Main from './src/components/Main'
+import Main from './src/components/Main';
 
 const App = () => {
   return (
@@ -9,6 +9,6 @@ const App = () => {
       </NativeRouter>
     </>
   );
-}
+};
 
-export default App
+export default App;

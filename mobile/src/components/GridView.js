@@ -1,13 +1,13 @@
-import {View, Text} from 'react-native'
+import {View, Text} from 'react-native';
 
 const GridView = () => {
-    return (
-        <View>
-            <Text>
-                'Grid view!'
-            </Text>
-        </View>
-    )
-}
+  return (
+    <View>
+      <Text>
+        Grid view!
+      </Text>
+    </View>
+  );
+};
 
-export default GridView
+export default GridView;
