@@ -10,10 +10,6 @@ const styles = StyleSheet.create({
 
   listContainer: {
     margin: 10,
-
-    borderStyle: 'solid',
-    borderWidth: 1,
-
   },
 });
 
@@ -23,7 +19,7 @@ const GridView = () => {
   return (
     <View style = {styles.container}>
       <FlatList
-        style = {styles.listContainer}
+        contentContainerStyle = {styles.listContainer}
         numColumns={2}
         data = {media.allImages}
         initialNumToRender = {10}

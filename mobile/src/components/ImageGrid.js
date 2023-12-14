@@ -1,9 +1,10 @@
 import {Image, View, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
+import theme from '../theme';
 
 const styles = StyleSheet.create({
   imageContainer: {
-    margin: 2,
+    margin: 5,
     alignItems: 'center',
 
     flexGrow: 1,
@@ -14,6 +15,7 @@ const styles = StyleSheet.create({
     height: 200,
     width: 170,
     resizeMode: 'cover',
+    borderRadius: theme.radii.subtle,
   },
 });
 

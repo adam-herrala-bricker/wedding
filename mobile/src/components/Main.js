@@ -22,7 +22,7 @@ const Main = () => {
         <Route path = '/' element = {<Entry />}/>
         <Route path = '/welcome' element = {<Welcome />}/>
         <Route path = '/grid' element = {<GridView />}/>
-        <Route path = '*' element = {<Navigate to = '/' replace />}/>
+        <Route path = '*' element = {<Navigate to = '/welcome' replace />}/>
       </Routes>
     </View>
   );

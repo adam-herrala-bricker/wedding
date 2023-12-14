@@ -3,6 +3,9 @@ import {Platform} from 'react-native';
 const theme = {
   color: {
     appBarBackground: '#FFFFFF',
+    dark: '#25383D',
+    accent: '#0095BB',
+    light: '#E2E2E2',
   },
 
   fontFamily: Platform.select({
@@ -17,6 +20,15 @@ const theme = {
 
   fontWeight: {
     bold: '700',
+  },
+
+  icon: {
+    regular: 48,
+  },
+
+  radii: {
+    subtle: 5,
+    standard: 10,
   },
 };
 

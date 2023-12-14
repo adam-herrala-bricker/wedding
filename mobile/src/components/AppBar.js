@@ -28,10 +28,6 @@ const styles = StyleSheet.create({
 
     marginRight: 10,
   },
-
-  pressedText: {
-    color: '#66DBFF',
-  },
 });
 
 const BarItem = ({label, path}) => {
@@ -44,7 +40,9 @@ const BarItem = ({label, path}) => {
       onPressIn = {() => setIsPressed(true)}
       onPress = {() => navigate(path)}
       onPressOut = {() => setIsPressed(false)}>
-      <Text style = {[{color: isPressed ? '#66DBFF' : 'black'}, styles.text]}>
+      <Text style = {[
+        {color: isPressed ? theme.color.accent : 'black'},
+        styles.text]}>
         {label}
       </Text>
     </Pressable>
@@ -55,6 +53,8 @@ const LogOut = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [isPressed, setIsPressed] = useState(false);
+
   // event handler
   const handleLogout = () => {
     dispatch(clearUser());
@@ -62,8 +62,14 @@ const LogOut = () => {
   };
 
   return (
-    <Pressable onPress={handleLogout}>
-      <MaterialIcons name="logout" size={48} color="black" />
+    <Pressable
+      onPressIn = {() => setIsPressed(true)}
+      onPress={handleLogout}
+      onPressOut = {() => setIsPressed(false)}>
+      <MaterialIcons
+        name="logout"
+        size={theme.icon.regular}
+        color={isPressed ? theme.color.accent : 'black'} />
     </Pressable>
   );
 };
