@@ -1,12 +1,17 @@
 import {NativeRouter} from 'react-router-native';
+import {Provider} from 'react-redux';
 import Main from './src/components/Main';
+
+import store from './src/store';
 
 const App = () => {
   return (
     <>
-      <NativeRouter>
-        <Main />
-      </NativeRouter>
+      <Provider store = {store}>
+        <NativeRouter>
+          <Main />
+        </NativeRouter>
+      </Provider>
     </>
   );
 };
