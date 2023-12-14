@@ -39,7 +39,7 @@ const Entry = () => {
       const images = await getImages(body.token);
       dispatch(setAllImages(images));
 
-      navigate('/grid');
+      navigate('/welcome');
     } catch (error) {
       console.log(error);
     }
