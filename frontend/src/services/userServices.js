@@ -9,4 +9,14 @@ const login = async (credentials) => {
   return response.data;
 };
 
-export default {login};
+// POST request for confirming entry token is correct
+// (this is used to keep demo users from viewing a partially rendered main page)
+const entryCheck = async (token) => {
+  const config = {headers: {Authorization: `Bearer ${token}`}};
+
+  const response = await axios.post(`${baseURL}/entry-check`, {}, config);
+
+  return response.data;
+};
+
+export default {login, entryCheck};

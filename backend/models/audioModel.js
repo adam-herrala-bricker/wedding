@@ -4,6 +4,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 const audioSchema = new mongoose.Schema({
   fileName: {type: String, unique: true, required: true},
+  isDemo: {type: Boolean, default: false},
 });
 
 audioSchema.plugin(uniqueValidator);

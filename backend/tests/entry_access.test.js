@@ -1,76 +1,15 @@
 const mongoose = require('mongoose');
-const fs = require('fs');
 const supertest = require('supertest');
 const app = require('../app');
 const api = supertest(app);
-const Audio = require('../models/audioModel');
-const Image = require('../models/imageModel');
 const Scene = require('../models/sceneModel');
-const User = require('../models/userModel');
+const {initializeDB} = require('../utils/test_functions');
 const {ENTRY_KEY, BAD_ENTRY_TOKEN} = require('../utils/config');
-const {
-  entryUserCredentials,
-  sampleImage,
-  sampleAudio,
-  image1,
-  audio1,
-  audioSourcePath,
-  audioDestinationPath,
-  imageSourcePath,
-  imageDestinationPath,
-} = require('../utils/test_constants');
+const {sampleImage, sampleAudio} = require('../utils/test_constants');
 
 // runs once at beginning, before any tests, to set up the DB
 beforeAll(async () => {
-  // clear database
-  await User.deleteMany({});
-  await Scene.deleteMany({});
-  await Image.deleteMany({});
-  await Audio.deleteMany({});
-
-  // entry 'user'
-  const entryUser = new User(entryUserCredentials);
-
-  // scene metadata
-  const scene1 = new Scene({sceneName: 'scene1'});
-  const scene1ID = scene1._id;
-
-  // image metadata
-  const addImage1 = new Image({...image1, scenes: [scene1ID]});
-
-  // audio metadata
-  const addAudio1 = new Audio(audio1);
-
-  // fulfil (most) promises at once
-  const promiseArray = [
-    entryUser.save(),
-    scene1.save(),
-    addImage1.save(),
-    addAudio1.save(),
-  ];
-
-  await Promise.all(promiseArray);
-
-  // down here because Promise.all() fulfils promises in parallel
-  await addImage1.populate('scenes', {sceneName: 1});
-
-  // add sampleImage + sampleAudio to /media (if not already)
-  console.log('Prior to entry access tests ...');
-  try {
-    fs.linkSync(`${audioSourcePath}/${sampleAudio}`,
-        `${audioDestinationPath}/${sampleAudio}`);
-    console.log(`${sampleAudio} added to ${audioDestinationPath}`);
-  } catch (EEXIST) {
-    console.log(`${sampleAudio} already in ${audioDestinationPath}`);
-  }
-
-  try {
-    fs.linkSync(`${imageSourcePath}/${sampleImage}`,
-        `${imageDestinationPath}/${sampleImage}`);
-    console.log(`${sampleImage} added to ${imageDestinationPath}`);
-  } catch (EEXIST) {
-    console.log(`${sampleImage} already in ${imageDestinationPath}`);
-  }
+  await initializeDB();
 }, 10000);
 
 describe('requests to root path', () => {
@@ -212,9 +151,9 @@ describe('valid entry token --> requests granted', () => {
   };
 
   // helper function to get the scene 1 metadata (directly from DB)
-  const getScene1 = async (entryToken) => {
-    const scenes = await Scene.find({});
-    return scenes[0];
+  const getScene1 = async () => {
+    const scenes = await Scene.findOne({isDemo: false});
+    return scenes;
   };
 
   // only need to get the entry token once
@@ -238,14 +177,14 @@ describe('valid entry token --> requests granted', () => {
   });
 
   test('image metadata', async () => {
-    const scene1 = await getScene1(entryToken);
+    const scene1 = await getScene1();
     const response = await api
         .get('/api/image-data')
         .set('Authorization', `Bearer ${entryToken}`)
         .expect(200);
 
     const imageData = response.body[0];
-    expect(imageData.fileName).toEqual('_DSC9999.jpg');
+    expect(imageData.fileName).toEqual(sampleImage);
     expect(imageData.scenes[0].sceneName).toEqual(scene1.sceneName);
     expect(imageData.scenes[0].id).toEqual(scene1.id);
   });
@@ -263,7 +202,7 @@ describe('valid entry token --> requests granted', () => {
         .set('Authorization', `Bearer ${entryToken}`)
         .expect(200);
 
-    expect(response.body[0].fileName).toEqual('groovyJamz.mp3');
+    expect(response.body[0].fileName).toEqual(sampleAudio);
   });
 
   test('scene metadata', async () => {
@@ -273,7 +212,7 @@ describe('valid entry token --> requests granted', () => {
         .expect(200);
 
     const scene1 = response.body[0];
-    expect(scene1.sceneName).toEqual('scene1');
+    expect(scene1.sceneName).toEqual('scene-0');
   });
 });
 

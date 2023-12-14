@@ -15,7 +15,6 @@ const User = require('../models/userModel');
 const {ENTRY_KEY} = require('../utils/config');
 const {
   entryUserCredentials,
-  getAdminUserCredentials,
   imageDestinationPath,
   imageSourcePath,
   audioDestinationPath,
@@ -24,6 +23,7 @@ const {
   audioUploadFile,
   fakeID,
 } = require('../utils/test_constants');
+const {getAdminUserCredentials} = require('../utils/test_functions');
 
 let adminToken;
 let entryToken;

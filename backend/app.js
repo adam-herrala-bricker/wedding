@@ -10,6 +10,7 @@ const imagesRouter = require('./controllers/imagesRouter');
 const audioRouter = require('./controllers/audioRouter');
 const sceneRouter = require('./controllers/sceneRouter');
 const healthRouter = require('./controllers/healthRouter');
+const entryCheckRouter = require('./controllers/entryCheckRouter');
 const middleware = require('./utils/middleware');
 const morgan = require('morgan');
 const logger = require('./utils/logger');
@@ -30,6 +31,8 @@ mongoose.connect(mongourl)
 
 app.use(cors());
 app.use(express.json());
+// MW to change requests based on referer (/ or /demo)
+app.use(middleware.demoHandler);
 // using this to serve static files with authorization middleware
 app.use('/api/images', middleware.staticAuthorization);
 app.use('/api/audio', middleware.staticAuthorization);
@@ -38,6 +41,9 @@ app.use('/api/images', express.static('media/images'));
 app.use('/api/audio', express.static('media/audio'));
 // connection to static FE (not moving it to backend)
 app.use(express.static('../frontend/build'));
+// endpoint for demo version of page
+// same build, MW handles servering different content
+app.use('/demo', express.static('../frontend/build'));
 
 // morgan for outputting requests to console
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms')); // eslint-disable-line max-len
@@ -48,6 +54,7 @@ app.use(middleware.userExtractor);
 
 // routers
 app.use('/api/health', healthRouter);
+app.use('/api/entry-check', entryCheckRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/admin/upload', uploadRouter);

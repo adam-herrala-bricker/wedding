@@ -9,10 +9,12 @@ const {
   standardUserInfo,
   adminUserInfo,
   imposterInfo,
+} = require('../utils/test_constants');
+const {
   getStandardUserCredentials,
   getAdminUserCredentials,
   getImposterCredentials,
-} = require('../utils/test_constants');
+} = require('../utils/test_functions');
 
 describe('user creation', () => {
   // need to clear out the DB before testing adding users

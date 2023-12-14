@@ -5,15 +5,9 @@ const api = supertest(app);
 const Audio = require('../models/audioModel');
 const Image = require('../models/imageModel');
 const Scene = require('../models/sceneModel');
-const User = require('../models/userModel');
 const {ENTRY_KEY} = require('../utils/config');
-const {
-  badAdminToken,
-  entryUserCredentials,
-  image1,
-  audio1,
-  getAdminUserCredentials,
-} = require('../utils/test_constants');
+const {initializeDB} = require('../utils/test_functions');
+const {badAdminToken} = require('../utils/test_constants');
 
 // variables to use throughout (you can't introduce variables in beforeAll)
 let adminToken;
@@ -40,40 +34,7 @@ const getEntryToken = async () => {
 
 // setup test DB
 beforeAll(async () => {
-  // clear entries from DB
-  await User.deleteMany({});
-  await Scene.deleteMany({});
-  await Image.deleteMany({});
-  await Audio.deleteMany({});
-
-  // add entry 'user'
-  const entryUser = new User(entryUserCredentials);
-
-  // add admin user
-  const adminUserCredentials = await getAdminUserCredentials();
-  const adminUser = new User(adminUserCredentials);
-
-  // scene metadata
-  const scene1 = new Scene({sceneName: 'scene1'});
-  const scene1ID = scene1._id;
-
-  // image metadata
-  const addImage1 = new Image({...image1, scenes: [scene1ID]});
-
-  // audio metadata
-  const addAudio1 = new Audio(audio1);
-
-  // fulfil (most) DB promises at once
-  const promiseArray = [
-    entryUser.save(),
-    adminUser.save(),
-    scene1.save(),
-    addImage1.save(),
-    addAudio1.save(),
-  ];
-
-  await Promise.all(promiseArray);
-  await addImage1.populate('scenes', {sceneName: 1});
+  await initializeDB();
 
   // set tokens
   adminToken = await getAdminToken();

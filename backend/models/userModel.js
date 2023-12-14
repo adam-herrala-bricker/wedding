@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
   isAdmin: {type: Boolean, default: false},
   passwordHash: {type: String, required: true},
   adminHash: {type: String},
+  isDemo: {type: Boolean, default: false},
   picturesTaggedIn: [
     {
       // this is for populating w all the pictures they're tagged in
