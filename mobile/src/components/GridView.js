@@ -4,13 +4,16 @@ import ImageGrid from './ImageGrid';
 import SceneMenu from './SceneMenu';
 
 const styles = StyleSheet.create({
+  outerContainer: {
+    flex: 1,
+  },
+
   container: {
-    flexGrow: 1,
-    flexShrink: 1,
+    alignSelf: 'center',
   },
 
   listContainer: {
-    margin: 10,
+    marginTop: 10,
   },
 });
 
@@ -18,9 +21,10 @@ const GridView = () => {
   const media = useSelector((i) => i.media);
 
   return (
-    <View style = {styles.container}>
+    <View style = {styles.outerContainer}>
       <SceneMenu />
       <FlatList
+        style = {styles.container}
         contentContainerStyle = {styles.listContainer}
         numColumns={2}
         data = {media.viewImages}
