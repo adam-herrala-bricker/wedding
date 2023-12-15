@@ -10,8 +10,10 @@ import theme from '../theme';
 
 const styles = StyleSheet.create({
   entryContainer: {
-    flex: 1,
+    flexGrow: 1,
+    flexShrink: 1,
     justifyContent: 'center',
+    alignSelf: 'stretch',
   },
 
   boxCommon: {

@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     marginTop: Constants.statusBarHeight,
     flexDirection: 'row',
     alignItems: 'center',
+    alignSelf: 'stretch',
     justifyContent: 'space-between',
     paddingLeft: 15,
     paddingRight: 15,
