@@ -27,9 +27,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
 
-  text: {
+  buttonText: {
     fontFamily: theme.fontFamily,
     fontWeight: theme.fontWeight.bold,
+  },
+
+  displayText: {
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 20,
+    marginBottom: 0,
+    fontFamily: theme.fontFamily,
+    fontWeight: theme.fontWeight.bold,
+    fontSize: theme.fontSize.heading,
   },
 });
 
@@ -57,6 +67,10 @@ const Entry = () => {
 
   return (
     <View style = {styles.entryContainer}>
+      <Text style = {[{alignSelf: 'flex-start'}, styles.displayText]}>
+        Herrala Bricker Wedding
+      </Text>
+      <Text></Text>
       <TextInput
         style = {[
           {borderColor: isFocus ? theme.color.accent : 'black'},
@@ -73,8 +87,11 @@ const Entry = () => {
           {backgroundColor: pressed ? theme.color.light : 'white'},
           styles.boxCommon]}
         onPress = {handlePress}>
-        <Text style = {styles.text}>enter</Text>
+        <Text style = {styles.buttonText}>enter // sisään</Text>
       </Pressable>
+      <Text style = {[{alignSelf: 'flex-end'}, styles.displayText]}>
+        Herrala Bricker Häät
+      </Text>
     </View>
   );
 };
