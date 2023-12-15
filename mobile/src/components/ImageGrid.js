@@ -4,7 +4,7 @@ import theme from '../theme';
 
 const styles = StyleSheet.create({
   imageContainer: {
-    margin: 5,
+    margin: 3,
     alignItems: 'center',
 
     flexGrow: 1,

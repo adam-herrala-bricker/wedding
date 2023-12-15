@@ -1,6 +1,7 @@
 import {View, StyleSheet, FlatList} from 'react-native';
 import {useSelector} from 'react-redux';
 import ImageGrid from './ImageGrid';
+import SceneMenu from './SceneMenu';
 
 const styles = StyleSheet.create({
   container: {
@@ -18,6 +19,7 @@ const GridView = () => {
 
   return (
     <View style = {styles.container}>
+      <SceneMenu />
       <FlatList
         contentContainerStyle = {styles.listContainer}
         numColumns={2}

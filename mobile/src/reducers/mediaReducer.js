@@ -1,4 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
+import {getImages} from '../services/mediaServices';
 
 // default state
 const defaultAllImages = []; // every image on server
@@ -22,5 +23,16 @@ const mediaSlice = createSlice({
 });
 
 export const {setAllImages} = mediaSlice.actions;
+
+// packaged functions
+export const initializeImages = (entryToken) => {
+  return async (dispatch) => {
+    // only tries to initialize if there's an entry token
+    if (entryToken) {
+      const images = await getImages(entryToken);
+      dispatch(setAllImages(images));
+    }
+  };
+};
 
 export default mediaSlice.reducer;
