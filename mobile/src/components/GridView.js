@@ -23,7 +23,7 @@ const GridView = () => {
       <FlatList
         contentContainerStyle = {styles.listContainer}
         numColumns={2}
-        data = {media.allImages}
+        data = {media.viewImages}
         initialNumToRender = {10}
         renderItem = {({item}) => <ImageGrid fileName={item.fileName}/>}
         keyExtractor = {(item) => item.id}

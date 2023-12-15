@@ -16,6 +16,7 @@ const theme = {
 
   fontSize: {
     heading: 26,
+    subheading: 16,
   },
 
   fontWeight: {
