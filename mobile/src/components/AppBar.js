@@ -79,8 +79,9 @@ const AppBar = () => {
   return (
     <View style = {styles.container}>
       <View style = {styles.textContainer}>
-        <BarItem label = 'photos' path = '/grid'/>
-        <BarItem label = 'music' path = '/music'/>
+        <BarItem label = 'home' path = '/' />
+        <BarItem label = 'photos' path = '/grid' />
+        <BarItem label = 'music' path = '/music' />
       </View>
       <View>
         <LogOut />
