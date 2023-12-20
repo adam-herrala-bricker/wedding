@@ -2,6 +2,7 @@ import {View, Text, FlatList, StyleSheet, Pressable} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {setLoadedScene} from '../reducers/sceneReducer';
 import {filterImages} from '../reducers/mediaReducer';
+import {setScrollIndex} from '../reducers/viewReducer';
 import textDictionary from '../resources/dictionary';
 import theme from '../theme';
 
@@ -53,6 +54,7 @@ const SceneButton = ({sceneCode}) => {
 
   // event handler
   const handleSceneChange = (sceneCode) => {
+    dispatch(setScrollIndex(0)); // reset to view from top
     dispatch(setLoadedScene(sceneCode));
     dispatch(filterImages(sceneCode));
   };
