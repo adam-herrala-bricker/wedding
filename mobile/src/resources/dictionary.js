@@ -51,8 +51,8 @@ const textDictionary = {
 
   photoTxt:
   {
-    suo: 'Galleran kuvat on ottanut valokuvaajamme Milja Nordgerg. Mainitsethan hänet, jos käytät näitä kuvia jossain. Huomaathan myös, että kuvia ei tule leikata tai editoida millään tavalla.', // eslint-disable-line max-len
-    eng: 'This is a gallery of photos taken by our talented photographer Milja Nordberg. We request that if you use these photos anywhere you credit her. Please also note that as per our agreement with her, the photos should not be cropped or edited in any way.', // eslint-disable-line max-len
+    suo: 'Huom! Galleran kuvat on ottanut valokuvaajamme Milja Nordgerg. Mainitsethan hänet, jos käytät näitä kuvia jossain. Huomaathan myös, että kuvia ei tule leikata tai editoida millään tavalla.', // eslint-disable-line max-len
+    eng: 'Note: All photos were taken by our talented photographer Milja Nordberg. We request that if you use these photos anywhere you credit her. Please also note that as per our agreement with her, the photos should not be cropped or edited in any way.', // eslint-disable-line max-len
   },
 
   scene0: {suo: 'kaikki', eng: 'all'},

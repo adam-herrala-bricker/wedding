@@ -11,14 +11,14 @@ const styles = StyleSheet.create({
   },
 
   singleImage: {
-    height: 200,
-    width: 170,
+    height: 400,
+    width: 300,
     resizeMode: 'cover',
     borderRadius: theme.radii.subtle,
   },
 });
 
-const ImageGrid = ({fileName}) => {
+const ImageHighlight = ({fileName}) => {
   const entryToken = useSelector((i) => i.user.entryToken);
   const baseURL = 'https://herrala-bricker-wedding.onrender.com/api/images/web-res/';
   return (
@@ -31,4 +31,4 @@ const ImageGrid = ({fileName}) => {
   );
 };
 
-export default ImageGrid;
+export default ImageHighlight;

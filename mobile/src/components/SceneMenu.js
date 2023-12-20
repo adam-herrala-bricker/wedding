@@ -35,6 +35,7 @@ const ButtonSeperator = () => {
 const SceneButton = ({sceneCode}) => {
   const dispatch = useDispatch();
   const loadedScene = useSelector((i) => i.scenes.loadedScene);
+  const language = useSelector((i) => i.view.language);
 
   // helper to translate scene codes to english or finnish
   const translateScene = (textIn) => {
@@ -44,7 +45,7 @@ const SceneButton = ({sceneCode}) => {
     const dictionaryEntries = Object.keys(textDictionary);
 
     if (dictionaryEntries.includes(textOut)) {
-      textOut = textDictionary[textOut].eng;
+      textOut = textDictionary[textOut][language];
     }
 
     return textOut;

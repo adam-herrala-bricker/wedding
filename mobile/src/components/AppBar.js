@@ -18,6 +18,7 @@ import theme from '../theme';
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: theme.color.light,
     marginTop: Constants.statusBarHeight,
     flexDirection: 'row',
     alignItems: 'center',
@@ -25,6 +26,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingLeft: 15,
     paddingRight: 15,
+    // borderBottomWidth: 1,
+    // borderBottomColor: 'white',
   },
 
   textContainer: {
