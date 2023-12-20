@@ -69,7 +69,7 @@ const Entry = () => {
         selectionColor={theme.color.accent}
         autoCapitalize = 'none'
         secureTextEntry
-        placeholder='entry key'
+        placeholder = 'entry key // sivuavain'
         value = {entryText}
         onFocus = {() => setIsFocus(true)}
         onChangeText={setEntryText}/>

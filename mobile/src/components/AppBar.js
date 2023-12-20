@@ -1,9 +1,18 @@
 import {useState} from 'react';
-import {Pressable, Text, StyleSheet, View} from 'react-native';
+import {Pressable,
+  Text,
+  StyleSheet,
+  View,
+  ScrollView,
+  Image} from 'react-native';
 import {useNavigate} from 'react-router-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {MaterialIcons} from '@expo/vector-icons';
+import {switchLanguage} from '../reducers/viewReducer';
 import {clearUser} from '../reducers/userReducer';
+import usFlag from '../resources/us-flag.png';
+import finFlag from '../resources/fin-flag.png';
+import textDictionary from '../resources/dictionary';
 import Constants from 'expo-constants';
 import theme from '../theme';
 
@@ -29,6 +38,19 @@ const styles = StyleSheet.create({
 
     marginRight: 10,
   },
+
+  button: {
+    alignSelf: 'center',
+  },
+
+  flag: {
+
+    height: 20,
+    width: 30,
+    resizeMode: 'cover',
+
+    borderRadius: 2,
+  },
 });
 
 const BarItem = ({label, path}) => {
@@ -48,6 +70,23 @@ const BarItem = ({label, path}) => {
       </Text>
     </Pressable>
   );
+};
+
+const Flag = () => {
+  const dispatch = useDispatch();
+  const language = useSelector((i) => i.view.language);
+
+  // event handler
+  const handleLanguageSwitch = () => {
+    dispatch(switchLanguage());
+  };
+
+  return (
+    <Pressable style = {styles.button} onPress = {handleLanguageSwitch}>
+      <Image
+        style = {styles.flag}
+        source = {language === 'suo' ? finFlag : usFlag}/>
+    </Pressable>);
 };
 
 const LogOut = () => {
@@ -76,13 +115,16 @@ const LogOut = () => {
 };
 
 const AppBar = () => {
+  const language = useSelector((i) => i.view.language);
+
   return (
-    <View style = {styles.container}>
-      <View style = {styles.textContainer}>
-        <BarItem label = 'home' path = '/' />
-        <BarItem label = 'photos' path = '/grid' />
-        <BarItem label = 'music' path = '/music' />
-      </View>
+    <View horizontal style = {styles.container}>
+      <ScrollView horizontal style = {styles.textContainer}>
+        <BarItem label = {textDictionary['home'][language]} path = '/' />
+        <BarItem label = {textDictionary['photos'][language]} path = '/grid' />
+        <BarItem label = {textDictionary['music'][language]} path = '/music' />
+        <Flag />
+      </ScrollView>
       <View>
         <LogOut />
       </View>

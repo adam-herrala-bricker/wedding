@@ -7,8 +7,9 @@ const textDictionary = {
   enter: {suo: 'sisään', eng: 'enter'},
 
   header: {suo: 'Herrala Bricker Häät', eng: 'Herrala Bricker Wedding'},
-  photos: {suo: 'Kuvat', eng: 'Photos'},
-  music: {suo: 'Musiikki', eng: 'Music'},
+  photos: {suo: 'kuvat', eng: 'photos'},
+  music: {suo: 'musiikki', eng: 'music'},
+  home: {suo: 'etusivu', eng: 'home'},
 
   guest: {suo: 'vieras', eng: 'guest'},
   username: {suo: 'käyttäjätunnus', eng: 'username'},

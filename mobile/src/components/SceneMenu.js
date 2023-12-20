@@ -2,7 +2,7 @@ import {View, Text, FlatList, StyleSheet, Pressable} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {setLoadedScene} from '../reducers/sceneReducer';
 import {filterImages} from '../reducers/mediaReducer';
-import textDictionary from '../rescources/dictionary';
+import textDictionary from '../resources/dictionary';
 import theme from '../theme';
 
 const styles = StyleSheet.create({
