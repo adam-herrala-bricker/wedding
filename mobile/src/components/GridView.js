@@ -1,6 +1,6 @@
 import {View, StyleSheet, FlatList} from 'react-native';
 import {useSelector} from 'react-redux';
-import ImageGrid from './ImageGrid';
+import {ImageGrid} from './ImageComponents';
 import SceneMenu from './SceneMenu';
 
 const styles = StyleSheet.create({

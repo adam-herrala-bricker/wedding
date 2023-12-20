@@ -7,6 +7,7 @@ import {initializeScenes} from '../reducers/sceneReducer';
 import AppBar from './AppBar';
 import Entry from './Entry';
 import GridView from './GridView';
+import HighlightView from './HighlightView';
 import Welcome from './Welcome';
 
 const styles = StyleSheet.create({
@@ -33,6 +34,7 @@ const Main = () => {
       <Routes>
         <Route path = '/' element = {entryToken ? <Welcome />: <Entry />}/>
         <Route path = '/grid' element = {<GridView />}/>
+        <Route path = '/highlight/:fileName' element = {<HighlightView />}/>
         <Route path = '*' element = {<Navigate to = '/' replace />}/>
       </Routes>
     </View>

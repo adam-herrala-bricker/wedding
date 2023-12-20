@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import {useSelector} from 'react-redux';
-import ImageHighlight from './ImageHighlight';
+import {ImageWelcome} from './ImageComponents';
 import textDictionary from '../resources/dictionary';
 import theme from '../theme';
 
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   },
 
   textContainer: {
-    alignItems: 'center'
+    alignItems: 'center',
   },
 
   headerText: {
@@ -48,7 +48,7 @@ const Welcome = () => {
           {textDictionary.welcomeSubTxt[language]}
         </Text>
       </View>
-      <ImageHighlight fileName = '_DSC1924.jpg'/>
+      <ImageWelcome fileName = '_DSC1924.jpg'/>
       <Text style = {styles.photoText}>
         {textDictionary.photoTxt[language]}
       </Text>
