@@ -8,6 +8,7 @@ import AppBar from './AppBar';
 import Entry from './Entry';
 import GridView from './GridView';
 import HighlightView from './HighlightView';
+import Music from './Music';
 import Welcome from './Welcome';
 
 const styles = StyleSheet.create({
@@ -35,6 +36,7 @@ const Main = () => {
         <Route path = '/' element = {entryToken ? <Welcome />: <Entry />}/>
         <Route path = '/grid' element = {<GridView />}/>
         <Route path = '/highlight' element = {<HighlightView />}/>
+        <Route path = '/music' element = {<Music />} />
         <Route path = '*' element = {<Navigate to = '/' replace />}/>
       </Routes>
     </View>
