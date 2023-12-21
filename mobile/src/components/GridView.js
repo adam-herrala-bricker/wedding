@@ -29,7 +29,7 @@ const GridView = () => {
   }, [media]);
 
   // note: getItemLayout is an optional optimization that makes
-  // initialScrollIndex behave better, maybe
+  // initialScrollIndex behave better (definitely)
   return (
     <View style = {styles.outerContainer}>
       <SceneMenu />
@@ -42,7 +42,7 @@ const GridView = () => {
         initialNumToRender = {10}
         initialScrollIndex = {scrollIndex}
         getItemLayout={(data, index) =>
-          ({length: 200, offset: 203 * index, index})}
+          ({length: 206, offset: 206 * index, index})}
         renderItem = {({item}) => <ImageGrid fileName={item.fileName}/>}
         keyExtractor = {(item) => item.id}
       />
