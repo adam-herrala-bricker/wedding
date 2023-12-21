@@ -1,10 +1,16 @@
+// handles states for serving media
+// (all images loaded from server, images for a current scene,
+// the image for highlight view, plus swipe handling between images)
 import {createSlice} from '@reduxjs/toolkit';
 import {getImages} from '../services/mediaServices';
+import {getAdjoining, swipeHelper} from '../utils/helpers';
 
 // default state
 const defaultAllImages = []; // every image on server
 const defaultViewImages = []; // the images to view now
 const defaultAudio = [];
+const defaultSwipe = {x: 0, y: 0};
+const defaultHighlight = '';
 
 const mediaSlice = createSlice({
   name: 'media',
@@ -13,6 +19,9 @@ const mediaSlice = createSlice({
     allImages: defaultAllImages,
     viewImages: defaultViewImages,
     audio: defaultAudio,
+    swipeStart: defaultSwipe,
+    swipeEnd: defaultSwipe,
+    highlight: defaultHighlight,
   },
 
   reducers: {
@@ -41,10 +50,48 @@ const mediaSlice = createSlice({
 
       return {...state, viewImages: filteredImages};
     },
+
+    setHighlight(state, action) {
+      return {...state, highlight: action.payload};
+    },
+
+    setSwipeStart(state, action) {
+      return {...state, swipeStart: action.payload};
+    },
+
+    // this also handles changing the view based on the swipe start and end
+    setSwipeEnd(state, action) {
+      const highlight = state.highlight;
+      const viewImages = state.viewImages;
+      const swipeStart = state.swipeStart;
+      const swipeEnd = action.payload;
+      const swipeDirection = swipeHelper(swipeStart, swipeEnd);
+      if (swipeDirection) {
+        const newImage = getAdjoining(highlight, viewImages, swipeDirection);
+        // sets swipe back to default + changes highlight
+        return {
+          ...state,
+          highlight: newImage,
+          swipeStart: defaultSwipe,
+          swipeEnd: defaultSwipe,
+        };
+      }
+
+      // default = do nothing
+      return {...state};
+    },
+
   },
 });
 
-export const {setAllImages, setViewImages, filterImages} = mediaSlice.actions;
+export const {
+  setAllImages,
+  setViewImages,
+  filterImages,
+  setHighlight,
+  setSwipeStart,
+  setSwipeEnd,
+} = mediaSlice.actions;
 
 // packaged functions
 
@@ -59,7 +106,5 @@ export const initializeImages = (entryToken) => {
     }
   };
 };
-
-// change the displayed images
 
 export default mediaSlice.reducer;

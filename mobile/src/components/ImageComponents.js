@@ -1,6 +1,11 @@
 import {Image, Pressable, View, StyleSheet} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigate} from 'react-router-native';
+import {
+  setHighlight,
+  setSwipeStart,
+  setSwipeEnd,
+} from '../reducers/mediaReducer';
 import {setScrollIndex} from '../reducers/viewReducer';
 import theme from '../theme';
 
@@ -33,46 +38,86 @@ const styles = StyleSheet.create({
   },
 });
 
+// base component that all the image components share
 const ImageBase = ({fileName, thisStyle}) => {
+  const entryToken = useSelector((i) => i.user.entryToken);
+  const baseURL = 'https://herrala-bricker-wedding.onrender.com/api/images/web-res/';
+
+  return (
+    <Image
+      style = {thisStyle}
+      source = {{uri: `${baseURL}/${fileName}?token=${entryToken}`}}
+    />
+  );
+};
+
+// component for images in the grid view
+export const ImageGrid = ({fileName}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const entryToken = useSelector((i) => i.user.entryToken);
   const viewImages = useSelector((i) => i.media.viewImages);
-  const baseURL = 'https://herrala-bricker-wedding.onrender.com/api/images/web-res/';
 
   // event handler
   const handlePress = () => {
+    // for returning to the same place after exiting highlight view
     const thisIndex = Math.floor(
         viewImages
             .map((i) => i.fileName)
-            .indexOf(fileName)/2
-    );
+            .indexOf(fileName)/2);
     dispatch(setScrollIndex(thisIndex));
-    navigate(`/highlight/${fileName}`);
+    dispatch(setHighlight(fileName));
+    navigate('/highlight');
   };
 
   return (
     <View style = {styles.imageContainer}>
       <Pressable onPress = {handlePress}>
-        <Image
-          style = {thisStyle}
-          source = {{uri: `${baseURL}/${fileName}?token=${entryToken}`}}
-        />
+        <ImageBase fileName = {fileName} thisStyle = {styles.gridImage}/>
       </Pressable>
     </View>
   );
 };
 
-export const ImageGrid = ({fileName}) => {
-  return <ImageBase fileName = {fileName} thisStyle = {styles.gridImage}/>;
-};
-
-// need to change so that clicking on it doesn't change the scroll index
+// component for the image on the welcome page
 export const ImageWelcome = ({fileName}) => {
-  return <ImageBase fileName = {fileName} thisStyle = {styles.welcomeImage}/>;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handlePress = () => {
+    // no index-setting here
+    dispatch(setHighlight(fileName));
+    navigate('/highlight');
+  };
+
+  return (
+    <View style = {styles.imageContainer}>
+      <Pressable onPress = {handlePress}>
+        <ImageBase fileName = {fileName} thisStyle = {styles.welcomeImage}/>
+      </Pressable>
+    </View>);
 };
 
-// need to change so that there isn't a button in here
+// component for images in highlight view
 export const ImageHighlight = ({fileName}) => {
-  return <ImageBase fileName = {fileName} thisStyle = {styles.highlightImage}/>;
+  const dispatch = useDispatch();
+
+  // event handlers
+  const handleSwipeStart = (event) => {
+    const touch = event.nativeEvent;
+    dispatch(setSwipeStart({x: touch.locationX, y: touch.locationY}));
+  };
+
+  const handleSwipeEnd = (event) => {
+    const touch = event.nativeEvent;
+    dispatch(setSwipeEnd({x: touch.locationX, y: touch.locationY}));
+  };
+
+  return (
+    <View style = {styles.imageContainer}>
+      <Pressable
+        onPressIn = {handleSwipeStart}
+        onPressOut = {handleSwipeEnd}>
+        <ImageBase fileName = {fileName} thisStyle = {styles.highlightImage}/>
+      </Pressable>
+    </View>
+  );
 };

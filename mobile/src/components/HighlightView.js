@@ -1,5 +1,5 @@
 import {StyleSheet, View} from 'react-native';
-import {useParams} from 'react-router-native';
+import {useSelector} from 'react-redux';
 import {ImageHighlight} from './ImageComponents';
 
 const styles = StyleSheet.create({
@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
 });
 
 const HighlightView = () => {
-  const {fileName} = useParams();
+  const fileName = useSelector((i) => i.media.highlight);
   return (
     <View style = {styles.container}>
       <ImageHighlight fileName = {fileName} />

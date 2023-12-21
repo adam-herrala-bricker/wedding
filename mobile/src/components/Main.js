@@ -34,7 +34,7 @@ const Main = () => {
       <Routes>
         <Route path = '/' element = {entryToken ? <Welcome />: <Entry />}/>
         <Route path = '/grid' element = {<GridView />}/>
-        <Route path = '/highlight/:fileName' element = {<HighlightView />}/>
+        <Route path = '/highlight' element = {<HighlightView />}/>
         <Route path = '*' element = {<Navigate to = '/' replace />}/>
       </Routes>
     </View>

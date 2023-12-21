@@ -23,13 +23,13 @@ const GridView = () => {
   const scrollIndex = useSelector((i) => i.view.scrollIndex);
   const listRef = useRef(null);
 
+  // this is used to scroll back to 0 when the scene changes
   useEffect(() => {
-    listRef.current?.scrollToIndex({index: scrollIndex});
+    listRef.current?.scrollToIndex({index: scrollIndex, animated: false});
   }, [media]);
 
   // note: getItemLayout is an optional optimization that makes
   // initialScrollIndex behave better, maybe
-  // update: verify if we actually need it
   return (
     <View style = {styles.outerContainer}>
       <SceneMenu />
@@ -40,6 +40,7 @@ const GridView = () => {
         numColumns={2}
         data = {media.viewImages}
         initialNumToRender = {10}
+        initialScrollIndex = {scrollIndex}
         getItemLayout={(data, index) =>
           ({length: 200, offset: 203 * index, index})}
         renderItem = {({item}) => <ImageGrid fileName={item.fileName}/>}

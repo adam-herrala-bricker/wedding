@@ -1,4 +1,5 @@
-// reducer for misc view states (language + notififcations + image scroll index)
+// reducer for misc view states
+// (language + notififcations + image scroll index)
 import {createSlice} from '@reduxjs/toolkit';
 
 // default state
@@ -34,6 +35,10 @@ const viewSlice = createSlice({
   },
 });
 
-export const {setLanguage, switchLanguage, setScrollIndex} = viewSlice.actions;
+export const {
+  setLanguage,
+  switchLanguage,
+  setScrollIndex,
+} = viewSlice.actions;
 
 export default viewSlice.reducer;
