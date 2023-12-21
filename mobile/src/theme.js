@@ -17,6 +17,7 @@ const theme = {
   fontSize: {
     heading: 26,
     subheading: 16,
+    tiny: 10,
   },
 
   fontWeight: {
@@ -25,6 +26,7 @@ const theme = {
 
   icon: {
     regular: 48,
+    small: 36,
   },
 
   radii: {

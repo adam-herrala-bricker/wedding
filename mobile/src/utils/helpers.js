@@ -55,3 +55,28 @@ export const getAdjoining = (imageName, imageList, direction) => {
   }
 };
 
+// helper helper that rounds to nearest second + ensures leading 0
+const secondHelper = (time) => {
+  const rounded = Math.floor(time);
+  if (rounded < 10) {
+    return `0${rounded}`;
+  } else {
+    return `${rounded}`;
+  }
+};
+
+// takes a time in seconds and returns in minutes to the nearest second
+export const toMinutes = (time) => {
+  // less than a minute
+  if (time < 60) {
+    return `0:${secondHelper(time)}`;
+  // greater than a minute but less than an hour
+  } else if (time <3600) {
+    const minutes = Math.floor(time/60);
+    const remainder = secondHelper(time - minutes);
+    return `${minutes}:${remainder}`;
+  // default
+  } else {
+    return time;
+  }
+};

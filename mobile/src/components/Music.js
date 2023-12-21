@@ -1,10 +1,18 @@
-import {View} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import AudioPlayer from './AudioPlayer';
 import TrackListing from './TrackListing';
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+
 const Music = () => {
   return (
-    <View>
+    <View style = {styles.container}>
       <TrackListing />
       <AudioPlayer />
     </View>
