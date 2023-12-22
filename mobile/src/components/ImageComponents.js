@@ -122,7 +122,11 @@ export const ImageHighlight = ({fileName}) => {
       dispatch(setSwipeStart({x: x0, y: y0}));
       dispatch(setSwipeEnd({x: moveX, y: moveY}));
       Animated
-          .spring(pan, {toValue: {x: 0, y: 0}, useNativeDriver: true})
+          .spring(pan, {
+            toValue: {x: 0, y: 0},
+            useNativeDriver: true,
+            damping: 30,
+          })
           .start();
     },
   })).current;
