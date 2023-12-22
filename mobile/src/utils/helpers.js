@@ -6,8 +6,7 @@ const getDistance = (cord1, cord2) => {
   return Math.sqrt(Math.pow(cord1.x-cord2.x, 2)+Math.pow(cord1.y-cord2.y, 2));
 };
 
-// tells you if you've swiped left or right based on start and end points
-// (could easily expand to also handle up and/or down)
+// tells you if you've swiped left, right, or down based on start and end points
 export const swipeHelper = (start, end) => {
   // minimum distance to swipe for a swipe to register
   const minSwipe = 100;
@@ -18,6 +17,7 @@ export const swipeHelper = (start, end) => {
 
   const distanceTotal = getDistance(start, end);
   const distanceY = Math.abs(start.y-end.y);
+  const distanceX = Math.abs(start.x-end.x);
 
   if (distanceTotal < minSwipe) {
     return null;
@@ -29,6 +29,13 @@ export const swipeHelper = (start, end) => {
       return 'right';
     } else if (end.x < start.x) {
       return 'left';
+    }
+  // then check for swipe in y-direction
+  } else if (distanceX/distanceTotal < maxOffAxis) {
+    if (end.y > start.y) {
+      return 'down';
+    } else if (end.y < end.x) {
+      return 'up';
     }
   }
 };

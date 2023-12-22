@@ -11,6 +11,7 @@ const defaultAllImages = []; // every image on server
 const defaultViewImages = []; // the images to view now
 const defaultAudio = [];
 const defaultSwipe = {x: 0, y: 0};
+const defaultReturnToGrid = false;
 const defaultHighlight = '';
 
 const mediaSlice = createSlice({
@@ -22,6 +23,7 @@ const mediaSlice = createSlice({
     audio: defaultAudio,
     swipeStart: defaultSwipe,
     swipeEnd: defaultSwipe,
+    returnToGrid: defaultReturnToGrid,
     highlight: defaultHighlight,
   },
 
@@ -71,7 +73,9 @@ const mediaSlice = createSlice({
       const swipeStart = state.swipeStart;
       const swipeEnd = action.payload;
       const swipeDirection = swipeHelper(swipeStart, swipeEnd);
-      if (swipeDirection) {
+
+      // left and right move to different picture
+      if (swipeDirection === 'left' || swipeDirection === 'right') {
         const newImage = getAdjoining(highlight, viewImages, swipeDirection);
         // sets swipe back to default + changes highlight
         return {
@@ -80,12 +84,17 @@ const mediaSlice = createSlice({
           swipeStart: defaultSwipe,
           swipeEnd: defaultSwipe,
         };
+      // up and down move to grid view
+      } else if (swipeDirection === 'up' || swipeDirection === 'down') {
+        return {...state, returnToGrid: true};
       }
-
       // default = do nothing
       return {...state};
     },
 
+    resetReturnToGrid(state) {
+      return {...state, returnToGrid: defaultReturnToGrid};
+    },
   },
 });
 
@@ -97,6 +106,7 @@ export const {
   setHighlight,
   setSwipeStart,
   setSwipeEnd,
+  resetReturnToGrid,
 } = mediaSlice.actions;
 
 // packaged functions
