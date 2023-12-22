@@ -8,7 +8,6 @@ import theme from '../theme';
 
 const styles = StyleSheet.create({
   outerContainer: {
-    backgroundColor: theme.color.dark,
   },
 
   container: {
@@ -21,17 +20,15 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
-    color: 'white',
-    padding: 8,
+    margin: 8,
+    paddingBottom: 3,
     fontSize: theme.fontSize.subheading,
     fontFamily: theme.fontFamily,
+
+    borderColor: theme.color.accent,
   },
 
 });
-
-const ButtonSeperator = () => {
-  return <View style = {styles.seperator}></View>;
-};
 
 const SceneButton = ({sceneCode}) => {
   const dispatch = useDispatch();
@@ -64,10 +61,10 @@ const SceneButton = ({sceneCode}) => {
       <Pressable onPress = {() => handleSceneChange(sceneCode)}>
         <Text
           style = {[
-            {backgroundColor:
+            {borderBottomWidth:
               loadedScene === sceneCode ?
-              theme.color.accent :
-              theme.color.dark},
+              3 :
+              0},
             styles.buttonText]}>
           {translateScene(sceneCode)}
         </Text>
@@ -92,7 +89,6 @@ const SceneMenu = () => {
       contentContainerStyle = {styles.container}
       data = {scenes.allScenes}
       renderItem = {({item}) => <SceneButton sceneCode={item.sceneName}/>}
-      ItemSeparatorComponent={ <ButtonSeperator />}
       keyExtractor = {(item) => item.id}/>
 
   );

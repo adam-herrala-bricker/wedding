@@ -34,7 +34,8 @@ const Music = () => {
         style = {styles.trackListContainer}
         data = {audioTracks}
         renderItem = {({item}) => <TrackListing fileName = {item.fileName}/>}
-        ItemSeparatorComponent={<Seperator />}
+        ListHeaderComponent = {<Seperator />}
+        ItemSeparatorComponent = {<Seperator />}
         keyExtractor = {(item) => item.id}/>
       <AudioPlayer />
     </View>

@@ -18,7 +18,7 @@ import theme from '../theme';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: theme.color.light,
+    backgroundColor: theme.color.dark,
     marginTop: Constants.statusBarHeight,
     flexDirection: 'row',
     alignItems: 'center',
@@ -26,6 +26,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingLeft: 15,
     paddingRight: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
     // borderBottomWidth: 1,
     // borderBottomColor: 'white',
   },
@@ -35,6 +37,7 @@ const styles = StyleSheet.create({
   },
 
   text: {
+    color: 'white',
     fontFamily: theme.fontFamily,
     fontSize: theme.fontSize.heading,
     fontWeight: theme.fontWeight.bold,
@@ -112,7 +115,7 @@ const LogOut = () => {
       <MaterialIcons
         name="logout"
         size={theme.icon.small}
-        color={isPressed ? theme.color.accent : 'black'} />
+        color={isPressed ? theme.color.dark : 'white'} />
     </Pressable>
   );
 };

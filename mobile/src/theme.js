@@ -5,6 +5,7 @@ const theme = {
     appBarBackground: '#FFFFFF',
     dark: '#25383D',
     accent: '#0095BB',
+    accentDark: '#007E9D',
     light: '#E2E2E2',
   },
 

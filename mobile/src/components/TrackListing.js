@@ -38,6 +38,11 @@ const styles = StyleSheet.create({
     fontWeight: theme.fontWeight.bold,
   },
 
+  textAlbum: {
+    fontFamily: theme.fontFamily,
+    fontStyle: 'italic',
+  },
+
   textArtist: {
     fontFamily: theme.fontFamily,
   },
@@ -69,13 +74,17 @@ const TrackListing = ({fileName}) => {
 
   return (
     <View
-      style = {[{backgroundColor: isActive ? theme.color.dark : 'white'},
+      style = {[{backgroundColor: isActive ? theme.color.accentDark : 'white'},
         styles.container]}>
       <Image style = {styles.image} source = {logo}/>
       <View style = {styles.textContainer}>
         <Text
           style = {[{color: isActive ? 'white' : 'black'}, styles.textTitle]}>
           {thisTitle}
+        </Text>
+        <Text
+          style = {[{color: isActive ? 'white' : 'black'}, styles.textAlbum]}>
+          Sanna & Adam
         </Text>
         <Text
           style = {[{color: isActive ? 'white' : 'black'}, styles.textArtist]}>

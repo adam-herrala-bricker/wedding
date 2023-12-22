@@ -127,6 +127,7 @@ export const initializeMedia = (entryToken) => {
           url: `${baseUrl}/${i.fileName}?token=${entryToken}`,
           title: thisTitle,
           artist: thisArtist,
+          album: 'Sanna & Adam',
         });
       });
     }
