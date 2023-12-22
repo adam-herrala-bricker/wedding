@@ -12,9 +12,11 @@ import theme from '../theme';
 const styles = StyleSheet.create({
   outerContainer: {
     width: 250,
+    marginBottom: 10,
     padding: 5,
     borderWidth: 1,
     borderRadius: theme.radii.subtle,
+    backgroundColor: 'white',
   },
 
   rowContainerButtons: {

@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     alignSelf: 'stretch',
+    backgroundColor: theme.color.light,
   },
 
   trackListContainer: {
