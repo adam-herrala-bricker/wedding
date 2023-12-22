@@ -63,10 +63,10 @@ const textDictionary = {
   scene5: {suo: 'ruoka', eng: 'food'},
   scene6: {suo: 'juhlat', eng: 'party'},
 
-  song0: {suo: 'odotus', eng: 'waiting'},
-  song1: {suo: 'siirtyminen', eng: 'transition'},
-  song2: {suo: 'alttarille kävely', eng: 'down the aisle'},
-  song3: {suo: 'a sunday kind of love', eng: 'a sunday kind of love'},
+  song0: {suo: 'Odotus', eng: 'Waiting'},
+  song1: {suo: 'Siirtyminen', eng: 'Transition'},
+  song2: {suo: 'Alttarille Kävely', eng: 'Down the Aisle'},
+  song3: {suo: 'A Sunday Kind of Love', eng: 'A Sunday Kind of Love'},
 
   back: {suo: 'takaisin', eng: 'back'},
   exit: {suo: 'ulos', eng: 'exit'},

@@ -73,10 +73,23 @@ export const toMinutes = (time) => {
   // greater than a minute but less than an hour
   } else if (time <3600) {
     const minutes = Math.floor(time/60);
-    const remainder = secondHelper(time - minutes);
+    const remainder = secondHelper(time - minutes*60);
     return `${minutes}:${remainder}`;
   // default
   } else {
     return time;
   }
+};
+
+// function for converting song files to the right name
+export const fileToName = (fileName) => {
+  const fileList = {
+    'waiting.mp3': 'song0',
+    'transition.mp3': 'song1',
+    'down-the-aisle.mp3': 'song2',
+    'Mia2.1.mp3': 'song3'};
+
+  const songCode = fileList[fileName];
+
+  return songCode;
 };

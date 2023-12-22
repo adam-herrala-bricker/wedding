@@ -25,6 +25,11 @@ export const getImages = async (entryToken) => {
   return await getGeneric(entryToken, 'image-data');
 };
 
+// GET request for audio metadata
+export const getAudio = async (entryToken) => {
+  return await getGeneric(entryToken, 'audio-data');
+};
+
 // GET request for scene metadata
 export const getScenes = async (entryToken) => {
   return await getGeneric(entryToken, 'scenes');

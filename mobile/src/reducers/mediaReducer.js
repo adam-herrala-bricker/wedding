@@ -2,7 +2,7 @@
 // (all images loaded from server, images for a current scene,
 // the image for highlight view, plus swipe handling between images)
 import {createSlice} from '@reduxjs/toolkit';
-import {getImages} from '../services/mediaServices';
+import {getAudio, getImages} from '../services/mediaServices';
 import {getAdjoining, swipeHelper} from '../utils/helpers';
 
 // default state
@@ -25,6 +25,10 @@ const mediaSlice = createSlice({
   },
 
   reducers: {
+    setAudio(state, action) {
+      return {...state, audio: action.payload};
+    },
+
     setAllImages(state, action) {
       return {...state, allImages: action.payload};
     },
@@ -85,6 +89,7 @@ const mediaSlice = createSlice({
 });
 
 export const {
+  setAudio,
   setAllImages,
   setViewImages,
   filterImages,
@@ -95,14 +100,19 @@ export const {
 
 // packaged functions
 
-// get all image metadata (after entry)
+// get all image + audio metadata (after entry)
 export const initializeImages = (entryToken) => {
   return async (dispatch) => {
     // only tries to initialize if there's an entry token
     if (entryToken) {
+      // images
       const images = await getImages(entryToken);
       dispatch(setAllImages(images));
       dispatch(setViewImages(images));
+
+      // audio
+      const audio = await getAudio(entryToken);
+      dispatch(setAudio(audio));
     }
   };
 };
