@@ -28,6 +28,8 @@ const styles = StyleSheet.create({
     paddingRight: 5,
     paddingTop: 5,
     paddingBottom: 5,
+    zindex: 100, // iOS
+    elevation: 100, // android
   },
 
   textContainer: {

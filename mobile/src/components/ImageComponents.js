@@ -1,4 +1,12 @@
-import {Image, Pressable, View, StyleSheet} from 'react-native';
+import {useRef} from 'react';
+import {
+  Animated,
+  Image,
+  PanResponder,
+  Pressable,
+  View,
+  StyleSheet,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigate} from 'react-router-native';
 import {
@@ -15,6 +23,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
 
     flexShrink: 1,
+    zIndex: 1,
+    elevation: 1,
   },
 
   gridImage: {
@@ -100,24 +110,32 @@ export const ImageWelcome = ({fileName}) => {
 export const ImageHighlight = ({fileName}) => {
   const dispatch = useDispatch();
 
-  // event handlers
-  const handleSwipeStart = (event) => {
-    const touch = event.nativeEvent;
-    dispatch(setSwipeStart({x: touch.locationX, y: touch.locationY}));
-  };
-
-  const handleSwipeEnd = (event) => {
-    const touch = event.nativeEvent;
-    dispatch(setSwipeEnd({x: touch.locationX, y: touch.locationY}));
-  };
+  // for animation
+  const pan = useRef(new Animated.ValueXY()).current;
+  const panResponder = useRef(PanResponder.create({
+    onMoveShouldSetPanResponder: () => true,
+    onPanResponderMove: Animated.event(
+        [null, {dx: pan.x, dy: pan.y}],
+        {useNativeDriver: false}),
+    onPanResponderRelease: (event, gesture) => {
+      const {x0, y0, moveX, moveY} = gesture;
+      dispatch(setSwipeStart({x: x0, y: y0}));
+      dispatch(setSwipeEnd({x: moveX, y: moveY}));
+      Animated
+          .spring(pan, {toValue: {x: 0, y: 0}, useNativeDriver: true})
+          .start();
+    },
+  })).current;
 
   return (
     <View style = {styles.imageContainer}>
-      <Pressable
-        onPressIn = {handleSwipeStart}
-        onPressOut = {handleSwipeEnd}>
+      <Animated.View
+        style={{
+          transform: [{translateX: pan.x}, {translateY: pan.y}],
+        }}
+        {...panResponder.panHandlers}>
         <ImageBase fileName = {fileName} thisStyle = {styles.highlightImage}/>
-      </Pressable>
+      </Animated.View>
     </View>
   );
 };
