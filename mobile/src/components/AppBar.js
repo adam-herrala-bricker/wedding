@@ -24,12 +24,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'stretch',
     justifyContent: 'space-between',
-    paddingLeft: 15,
-    paddingRight: 15,
+    paddingLeft: 10,
+    paddingRight: 5,
     paddingTop: 5,
     paddingBottom: 5,
-    // borderBottomWidth: 1,
-    // borderBottomColor: 'white',
   },
 
   textContainer: {
@@ -42,7 +40,7 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSize.heading,
     fontWeight: theme.fontWeight.bold,
 
-    marginRight: 10,
+    marginRight: 20,
   },
 
   button: {
