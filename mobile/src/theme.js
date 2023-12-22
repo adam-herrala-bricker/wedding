@@ -15,7 +15,8 @@ const theme = {
   }),
 
   fontSize: {
-    heading: 26,
+    superheading: 26,
+    heading: 20,
     subheading: 16,
     tiny: 10,
   },

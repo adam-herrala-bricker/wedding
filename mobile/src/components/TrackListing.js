@@ -1,7 +1,11 @@
 import {Image, Pressable, Text, View, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {Ionicons} from '@expo/vector-icons';
-import TrackPlayer, {useActiveTrack} from 'react-native-track-player';
+import TrackPlayer, {
+  useActiveTrack,
+  usePlaybackState,
+} from 'react-native-track-player';
+import {PlayPauseButton} from './AudioPlayer';
 import logo from '../../assets/logo-512.png';
 import textDictionary from '../resources/dictionary';
 import {fileToName} from '../utils/helpers';
@@ -16,11 +20,16 @@ const styles = StyleSheet.create({
   },
 
   textContainer: {
-    flex: 1,
+    flex: 3,
     marginLeft: 10,
   },
 
   buttonContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+
+  buttonStyle: {
     alignSelf: 'center',
   },
 
@@ -42,10 +51,12 @@ const styles = StyleSheet.create({
 
 const TrackListing = ({fileName}) => {
   const activeTrack = useActiveTrack();
+  const playerState = usePlaybackState();
   const entryToken = useSelector((i) => i.user.entryToken);
   const language = useSelector((i) => i.view.language);
 
   const isActive = activeTrack?.id === fileName;
+  const isPlaying = playerState.state === 'playing';
 
   const baseUrl = 'https://herrala-bricker-wedding.onrender.com/api/audio';
   const thisTitle = textDictionary[fileToName(fileName)][language];
@@ -78,12 +89,18 @@ const TrackListing = ({fileName}) => {
           {thisArtist}
         </Text>
       </View>
-      <Pressable style = {styles.buttonContainer} onPress = {loadTrack}>
-        <Ionicons
-          name = 'play-circle-outline'
-          size = {theme.icon.large}
-          color = {isActive ? 'white' : 'black'} />
-      </Pressable>
+      <View style = {styles.buttonContainer}>
+        {isActive ?
+        <PlayPauseButton
+          isPlaying = {isPlaying}
+          color = 'white'/> :
+        <Pressable style = {styles.buttonStyle} onPress = {loadTrack}>
+          <Ionicons
+            name = 'play-circle-outline'
+            size = {theme.icon.large}
+            color = {isActive ? 'white' : 'black'} />
+        </Pressable>}
+      </View>
     </View>
   );
 };

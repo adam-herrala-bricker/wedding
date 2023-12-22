@@ -43,6 +43,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
 
+  buttonStyle: {
+    alignSelf: 'center',
+  },
+
   infoText: {
     fontFamily: theme.fontFamily,
     marginLeft: 5,
@@ -70,34 +74,38 @@ const ChangeTrack = ({direction}) => {
   );
 };
 
-const PlayButton = () => {
+const PlayButton = ({color}) => {
   const handlePlay = async () => {
     await TrackPlayer.play();
   };
 
   return (
-    <Pressable onPress = {handlePlay}>
+    <Pressable style = {styles.buttonStyle} onPress = {handlePlay}>
       <Feather
         name = "play"
         size = {theme.icon.regular}
-        color = "black" />
+        color = {color} />
     </Pressable>
   );
 };
 
-const PauseButton = () => {
+const PauseButton = ({color}) => {
   const handlePause = async () => {
     await TrackPlayer.pause();
   };
 
   return (
-    <Pressable onPress = {handlePause}>
+    <Pressable style = {styles.buttonStyle} onPress = {handlePause}>
       <Feather
         name = "pause"
         size = {theme.icon.regular}
-        color = "black" />
+        color = {color} />
     </Pressable>
   );
+};
+
+export const PlayPauseButton = ({isPlaying, color}) => {
+  return isPlaying ? <PauseButton color = {color}/> : <PlayButton color = {color}/>; // eslint-disable-line max-len
 };
 
 const AudioPlayer = () => {
@@ -114,7 +122,7 @@ const AudioPlayer = () => {
     <View style = {styles.outerContainer}>
       <View style = {styles.rowContainerButtons}>
         <ChangeTrack direction = 'skip-back'/>
-        {isPlaying ? <PauseButton /> : <PlayButton />}
+        <PlayPauseButton isPlaying = {isPlaying} color = 'black'/>
         <ChangeTrack direction = 'skip-forward'/>
       </View>
       <ScrollView
@@ -140,7 +148,7 @@ const AudioPlayer = () => {
             progress = {duration > 0 ? amountBuffered : 1}
             color = {theme.color.light}
             height = {2}
-            width = {145}
+            width = {140}
             borderWidth = {0}/>
         </View>
         <Text style = {styles.durationText}>{toMinutes(duration)}</Text>

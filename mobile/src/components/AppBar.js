@@ -111,7 +111,7 @@ const LogOut = () => {
       onPressOut = {() => setIsPressed(false)}>
       <MaterialIcons
         name="logout"
-        size={theme.icon.regular}
+        size={theme.icon.small}
         color={isPressed ? theme.color.accent : 'black'} />
     </Pressable>
   );

@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 
   headerText: {
     fontFamily: theme.fontFamily,
-    fontSize: theme.fontSize.heading,
+    fontSize: theme.fontSize.superheading,
     fontWeight: theme.fontWeight.bold,
   },
 
@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
 
   photoText: {
     fontFamily: theme.fontFamily,
+    fontSize: theme.fontSize.tiny,
   },
 });
 
