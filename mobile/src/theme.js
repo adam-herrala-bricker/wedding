@@ -7,6 +7,7 @@ const theme = {
     accent: '#0095BB',
     accentDark: '#007E9D',
     light: '#E2E2E2',
+    red: '#BA0042',
   },
 
   fontFamily: Platform.select({

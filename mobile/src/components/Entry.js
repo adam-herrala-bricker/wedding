@@ -1,8 +1,10 @@
 import {useState} from 'react';
 import {View, Pressable, Text, StyleSheet, TextInput} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {notifier} from '../reducers/viewReducer';
 import {setEntryToken} from '../reducers/userReducer';
 import {login} from '../services/loginServices';
+import textDictionary from '../resources/dictionary';
 import theme from '../theme';
 
 const styles = StyleSheet.create({
@@ -42,6 +44,7 @@ const styles = StyleSheet.create({
 
 const Entry = () => {
   const dispatch = useDispatch();
+  const view = useSelector((i) => i.view);
   const [entryText, setEntryText] = useState('');
   const [isFocus, setIsFocus] = useState(false);
 
@@ -52,7 +55,11 @@ const Entry = () => {
       const body = await login('entry', entryText);
       dispatch(setEntryToken(body.token));
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
+      const errorMessage = error.message === 'invalid username or password' ?
+      `${textDictionary.entryError.eng} // ${textDictionary.entryError.suo}` :
+      error.message;
+      dispatch(notifier(errorMessage, true, 5));
     }
   };
 
@@ -61,10 +68,11 @@ const Entry = () => {
       <Text style = {[{alignSelf: 'flex-start'}, styles.displayText]}>
         Herrala Bricker Wedding
       </Text>
-      <Text></Text>
       <TextInput
         style = {[
-          {borderColor: isFocus ? theme.color.accent : 'black'},
+          {borderColor: isFocus ?
+            view.isError ? theme.color.red: theme.color.accent :
+            'black'},
           styles.boxCommon]}
         selectionColor={theme.color.accent}
         autoCapitalize = 'none'
@@ -76,9 +84,13 @@ const Entry = () => {
       <Pressable
         style = {({pressed}) => [
           {backgroundColor: pressed ? theme.color.light : 'white'},
+          {borderColor: view.isError ? theme.color.red : 'black'},
           styles.boxCommon]}
         onPress = {handlePress}>
-        <Text style = {styles.buttonText}>enter // sisään</Text>
+        <Text style = {[{color: view.isError ? theme.color.red : 'black'},
+          styles.buttonText]}>
+          {view.isError ? view.notification : 'enter // sisään'}
+        </Text>
       </Pressable>
       <Text style = {[{alignSelf: 'flex-end'}, styles.displayText]}>
         Herrala Bricker Häät

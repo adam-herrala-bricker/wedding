@@ -4,6 +4,7 @@ import {createSlice} from '@reduxjs/toolkit';
 
 // default state
 const defaultNotification = null;
+const defaultIsError = false; // if there's an error
 const defaultLanguage = 'suo';
 const defaultScrollIndex = 0;
 
@@ -12,11 +13,28 @@ const viewSlice = createSlice({
 
   initialState: {
     notification: defaultNotification,
+    isError: defaultIsError,
     language: defaultLanguage,
     scrollIndex: defaultScrollIndex,
   },
 
   reducers: {
+    setNotification(state, action) {
+      return {...state, notification: action.payload};
+    },
+
+    errorMode(state) {
+      return {...state, isError: true};
+    },
+
+    clearNotification(state) {
+      return {
+        ...state,
+        notification: defaultNotification,
+        isError: defaultIsError,
+      };
+    },
+
     setLanguage(state, action) {
       return {...state, language: action.payload};
     },
@@ -36,9 +54,25 @@ const viewSlice = createSlice({
 });
 
 export const {
+  setNotification,
+  errorMode,
+  clearNotification,
   setLanguage,
   switchLanguage,
   setScrollIndex,
 } = viewSlice.actions;
 
 export default viewSlice.reducer;
+
+// fun packaged function for notifying (duration is in seconds)
+export const notifier = (message, isError, duration) => {
+  return (dispatch) => {
+    dispatch(setNotification(message));
+    if (isError) {
+      dispatch(errorMode());
+    }
+    setTimeout(() => {
+      dispatch(clearNotification());
+    }, duration * 1000);
+  };
+};
