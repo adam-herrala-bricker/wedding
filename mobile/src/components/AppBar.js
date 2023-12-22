@@ -5,6 +5,7 @@ import {Pressable,
   View,
   ScrollView,
   Image} from 'react-native';
+import TrackPlayer from 'react-native-track-player';
 import {useNavigate} from 'react-router-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {MaterialIcons} from '@expo/vector-icons';
@@ -102,8 +103,9 @@ const LogOut = () => {
   const [isPressed, setIsPressed] = useState(false);
 
   // event handler
-  const handleLogout = () => {
+  const handleLogout = async () => {
     dispatch(clearUser());
+    await TrackPlayer.stop();
     navigate('/');
   };
 
