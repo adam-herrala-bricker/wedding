@@ -28,6 +28,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
 
+  barsContainer: {
+    justifyContent: 'center',
+  },
+
   barStyle: {
     alignSelf: 'center',
   },
@@ -92,6 +96,7 @@ const AudioPlayer = () => {
 
   const isPlaying = playerState.state === 'playing';
   const amountPlayed = position/duration;
+  const amountBuffered = buffered/duration;
 
   return (
     <View style = {styles.outerContainer}>
@@ -102,12 +107,21 @@ const AudioPlayer = () => {
       </View>
       <View style = {styles.rowContainerProgress}>
         <Text style = {styles.durationText}>{toMinutes(position)}</Text>
-        <Progress.Bar
-          style = {styles.barStyle}
-          progress = {duration > 0 ? amountPlayed : 1}
-          color = {theme.color.accent}
-          unfilledColor = {theme.color.light}
-          borderWidth = {1}/>
+        <View style = {styles.barsContainer}>
+          <Progress.Bar
+            style = {styles.barStyle}
+            progress = {duration > 0 ? amountPlayed : 1}
+            color = {theme.color.accent}
+            unfilledColor = {theme.color.light}
+            borderWidth = {1}/>
+          <Progress.Bar
+            style = {styles.barStyle}
+            progress = {duration > 0 ? amountBuffered : 1}
+            color = {theme.color.light}
+            height = {2}
+            width = {145}
+            borderWidth = {0}/>
+        </View>
         <Text style = {styles.durationText}>{toMinutes(duration)}</Text>
       </View>
     </View>
