@@ -25,6 +25,7 @@ const theme = {
   },
 
   icon: {
+    large: 56,
     regular: 48,
     small: 36,
   },
