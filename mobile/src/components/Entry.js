@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     marginTop: 20,
-    marginBottom: 0,
+    marginBottom: 20,
     fontFamily: theme.fontFamily,
     fontWeight: theme.fontWeight.bold,
     fontSize: theme.fontSize.heading,
@@ -55,7 +55,6 @@ const Entry = () => {
       const body = await login('entry', entryText);
       dispatch(setEntryToken(body.token));
     } catch (error) {
-      console.log(error.message);
       const errorMessage = error.message === 'invalid username or password' ?
       `${textDictionary.entryError.eng} // ${textDictionary.entryError.suo}` :
       error.message;
