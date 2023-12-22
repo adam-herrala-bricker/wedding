@@ -1,9 +1,10 @@
 // handles states for serving media
 // (all images loaded from server, images for a current scene,
 // the image for highlight view, plus swipe handling between images)
+import TrackPlayer from 'react-native-track-player';
 import {createSlice} from '@reduxjs/toolkit';
 import {getAudio, getImages} from '../services/mediaServices';
-import {getAdjoining, swipeHelper} from '../utils/helpers';
+import {compareSongs, getAdjoining, swipeHelper} from '../utils/helpers';
 
 // default state
 const defaultAllImages = []; // every image on server
@@ -101,7 +102,7 @@ export const {
 // packaged functions
 
 // get all image + audio metadata (after entry)
-export const initializeImages = (entryToken) => {
+export const initializeMedia = (entryToken) => {
   return async (dispatch) => {
     // only tries to initialize if there's an entry token
     if (entryToken) {
@@ -112,7 +113,22 @@ export const initializeImages = (entryToken) => {
 
       // audio
       const audio = await getAudio(entryToken);
+      audio.sort(compareSongs);
       dispatch(setAudio(audio));
+
+      // add audio tracks to queue
+      await TrackPlayer.reset();
+      const baseUrl = 'https://herrala-bricker-wedding.onrender.com/api/audio';
+      audio.forEach(async (i) => {
+        const thisTitle = i.fileName;
+        const thisArtist = i.fileName === 'Mia2.1.mp3' ? 'Mia Bricker' : 'Adam Herrala Bricker'; // eslint-disable-line max-len
+        await TrackPlayer.add({
+          id: i.fileName,
+          url: `${baseUrl}/${i.fileName}?token=${entryToken}`,
+          title: thisTitle,
+          artist: thisArtist,
+        });
+      });
     }
   };
 };

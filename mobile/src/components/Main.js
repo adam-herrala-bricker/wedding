@@ -3,7 +3,7 @@ import {Routes, Route, Navigate} from 'react-router-native';
 import {View, StyleSheet} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import TrackPlayer from 'react-native-track-player';
-import {initializeImages} from '../reducers/mediaReducer';
+import {initializeMedia} from '../reducers/mediaReducer';
 import {initializeScenes} from '../reducers/sceneReducer';
 import AppBar from './AppBar';
 import Entry from './Entry';
@@ -21,23 +21,22 @@ const styles = StyleSheet.create({
 });
 
 const Main = () => {
+  const dispatch = useDispatch();
+  const entryToken = useSelector((i) => i.user.entryToken);
   // need to setup player before running
   // (seems to be most stable doing it here)
   const setupPlayer = async () => {
     await TrackPlayer.setupPlayer();
   };
 
-  const dispatch = useDispatch();
-  const entryToken = useSelector((i) => i.user.entryToken);
 
   useEffect(() => {
-    console.log('setup!');
     setupPlayer();
   }, []);
 
   // effect hook to initialize states
   useEffect(() => {
-    dispatch(initializeImages(entryToken));
+    dispatch(initializeMedia(entryToken));
     dispatch(initializeScenes(entryToken));
   }, [entryToken]);
 

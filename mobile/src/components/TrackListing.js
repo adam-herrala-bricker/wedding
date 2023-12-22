@@ -8,7 +8,7 @@ import TrackPlayer, {
 import {PlayPauseButton} from './AudioPlayer';
 import logo from '../../assets/logo-512.png';
 import textDictionary from '../resources/dictionary';
-import {fileToName} from '../utils/helpers';
+import {fileToName, placeInQueue} from '../utils/helpers';
 import theme from '../theme';
 
 const styles = StyleSheet.create({
@@ -52,25 +52,18 @@ const styles = StyleSheet.create({
 const TrackListing = ({fileName}) => {
   const activeTrack = useActiveTrack();
   const playerState = usePlaybackState();
-  const entryToken = useSelector((i) => i.user.entryToken);
   const language = useSelector((i) => i.view.language);
 
   const isActive = activeTrack?.id === fileName;
   const isPlaying = playerState.state === 'playing';
 
-  const baseUrl = 'https://herrala-bricker-wedding.onrender.com/api/audio';
   const thisTitle = textDictionary[fileToName(fileName)][language];
   const thisArtist = fileName === 'Mia2.1.mp3' ? 'Mia Bricker' : 'Adam Herrala Bricker'; // eslint-disable-line max-len
 
   // event handler
   const loadTrack = async () => {
-    await TrackPlayer.reset();
-    await TrackPlayer.add({
-      id: fileName,
-      url: `${baseUrl}/${fileName}?token=${entryToken}`,
-      title: thisTitle,
-      artist: thisArtist,
-    });
+    const thisIndex = await placeInQueue(fileName);
+    await TrackPlayer.skip(thisIndex);
     await TrackPlayer.play();
   };
 

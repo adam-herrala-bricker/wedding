@@ -1,3 +1,5 @@
+import TrackPlayer from 'react-native-track-player';
+
 // gets distances between two 2D cordinates in cartesian space
 // each cord has format {x: number, y: number}
 const getDistance = (cord1, cord2) => {
@@ -92,4 +94,27 @@ export const fileToName = (fileName) => {
   const songCode = fileList[fileName];
 
   return songCode;
+};
+
+// helper function for sorting audio
+export const compareSongs = (song1, song2) => {
+  const name1 = fileToName(song1.fileName);
+  const name2 = fileToName(song2.fileName);
+  if (name1 > name2) {
+    return 1;
+  } else if (name1 < name2) {
+    return -1;
+  } else {
+    return 0;
+  }
+};
+
+// tells you where this audio file is in the queue
+export const placeInQueue = async (fileName) => {
+  const queue = await TrackPlayer.getQueue();
+  const orderedFiles = queue.map((i) => i.id);
+
+  const thisIndex = orderedFiles.indexOf(fileName);
+
+  return thisIndex;
 };

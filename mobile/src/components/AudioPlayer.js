@@ -1,4 +1,5 @@
 import {Pressable, Text, View, ScrollView, StyleSheet} from 'react-native';
+import {useSelector} from 'react-redux';
 import * as Progress from 'react-native-progress';
 import {Feather} from '@expo/vector-icons';
 import TrackPlayer, {
@@ -7,6 +8,8 @@ import TrackPlayer, {
   useProgress,
 } from 'react-native-track-player';
 import {toMinutes} from '../utils/helpers';
+import {fileToName} from '../utils/helpers';
+import textDictionary from '../resources/dictionary';
 import theme from '../theme';
 
 const styles = StyleSheet.create({
@@ -64,8 +67,17 @@ const styles = StyleSheet.create({
 });
 
 const ChangeTrack = ({direction}) => {
+  // event handler
+  const handlePress = async () => {
+    if (direction === 'skip-forward') {
+      await TrackPlayer.skipToNext();
+    } else if (direction === 'skip-back') {
+      await TrackPlayer.skipToPrevious();
+    }
+  };
+
   return (
-    <Pressable>
+    <Pressable onPress = {handlePress}>
       <Feather
         name = {direction}
         size = {theme.icon.small}
@@ -109,6 +121,7 @@ export const PlayPauseButton = ({isPlaying, color}) => {
 };
 
 const AudioPlayer = () => {
+  const language = useSelector((i) => i.view.language);
   const thisTrack = useActiveTrack();
   const playerState = usePlaybackState();
   // polls every 200ms
@@ -129,10 +142,14 @@ const AudioPlayer = () => {
         horizontal
         style = {styles.barStyle}
         contentContainerStyle = {styles.rowContainerTrackInfo}>
-        {thisTrack?.artist &&
-        <Text style = {styles.infoText}>{thisTrack.artist}</Text>}
         {thisTrack?.title &&
-        <Text style = {styles.infoText}>{thisTrack.title}</Text>}
+        <Text style = {styles.infoText}>
+          {textDictionary[fileToName(thisTrack.title)][language]}
+        </Text>}
+        {thisTrack?.artist &&
+        <Text style = {styles.infoText}>
+          {thisTrack.artist}
+        </Text>}
       </ScrollView>
       <View style = {styles.rowContainerProgress}>
         <Text style = {styles.durationText}>{toMinutes(position)}</Text>
