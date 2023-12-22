@@ -1,4 +1,4 @@
-import {Pressable, Text, View, StyleSheet} from 'react-native';
+import {Pressable, Text, View, ScrollView, StyleSheet} from 'react-native';
 import * as Progress from 'react-native-progress';
 import {Feather} from '@expo/vector-icons';
 import TrackPlayer, {
@@ -20,12 +20,17 @@ const styles = StyleSheet.create({
   rowContainerButtons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-end',
   },
 
   rowContainerProgress: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
+  },
+
+  rowContainerTrackInfo: {
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
 
   barsContainer: {
@@ -34,6 +39,12 @@ const styles = StyleSheet.create({
 
   barStyle: {
     alignSelf: 'center',
+  },
+
+  infoText: {
+    fontFamily: theme.fontFamily,
+    marginLeft: 5,
+    marginRight: 5,
   },
 
   durationText: {
@@ -89,7 +100,6 @@ const PauseButton = () => {
 
 const AudioPlayer = () => {
   const thisTrack = useActiveTrack();
-  console.log(thisTrack);
   const playerState = usePlaybackState();
   // polls every 200ms
   const {position, buffered, duration} = useProgress(200);
@@ -105,6 +115,15 @@ const AudioPlayer = () => {
         {isPlaying ? <PauseButton /> : <PlayButton />}
         <ChangeTrack direction = 'skip-forward'/>
       </View>
+      <ScrollView
+        horizontal
+        style = {styles.barStyle}
+        contentContainerStyle = {styles.rowContainerTrackInfo}>
+        {thisTrack?.artist &&
+        <Text style = {styles.infoText}>{thisTrack.artist}</Text>}
+        {thisTrack?.title &&
+        <Text style = {styles.infoText}>{thisTrack.title}</Text>}
+      </ScrollView>
       <View style = {styles.rowContainerProgress}>
         <Text style = {styles.durationText}>{toMinutes(position)}</Text>
         <View style = {styles.barsContainer}>
