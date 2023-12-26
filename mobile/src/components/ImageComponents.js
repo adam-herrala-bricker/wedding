@@ -51,12 +51,15 @@ const styles = StyleSheet.create({
 // base component that all the image components share
 const ImageBase = ({fileName, thisStyle}) => {
   const entryToken = useSelector((i) => i.user.entryToken);
+  const referer = useSelector((i) => i.view.refPath);
   const baseURL = 'https://herrala-bricker-wedding.onrender.com/api/images/web-res/';
 
   return (
     <Image
       style = {thisStyle}
-      source = {{uri: `${baseURL}/${fileName}?token=${entryToken}`}}
+      source = {{uri: `${baseURL}/${fileName}?token=${entryToken}`,
+        headers: {Referer: referer}}}
+      referrerPolicy='origin'
     />
   );
 };

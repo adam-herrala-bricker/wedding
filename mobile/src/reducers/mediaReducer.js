@@ -112,17 +112,17 @@ export const {
 // packaged functions
 
 // get all image + audio metadata (after entry)
-export const initializeMedia = (entryToken) => {
+export const initializeMedia = (entryToken, referer) => {
   return async (dispatch) => {
     // only tries to initialize if there's an entry token
     if (entryToken) {
       // images
-      const images = await getImages(entryToken);
+      const images = await getImages(entryToken, referer);
       dispatch(setAllImages(images));
       dispatch(setViewImages(images));
 
       // audio
-      const audio = await getAudio(entryToken);
+      const audio = await getAudio(entryToken, referer);
       audio.sort(compareSongs);
       dispatch(setAudio(audio));
 
@@ -135,6 +135,7 @@ export const initializeMedia = (entryToken) => {
         await TrackPlayer.add({
           id: i.fileName,
           url: `${baseUrl}/${i.fileName}?token=${entryToken}`,
+          headers: {Referer: referer},
           title: thisTitle,
           artist: thisArtist,
           album: 'Sanna & Adam',

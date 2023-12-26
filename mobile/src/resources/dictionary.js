@@ -68,6 +68,8 @@ const textDictionary = {
   song2: {suo: 'Alttarille Kävely', eng: 'Down the Aisle'},
   song3: {suo: 'A Sunday Kind of Love', eng: 'A Sunday Kind of Love'},
 
+  songX: {suo: 'Noita', eng: 'The Witch'},
+
   back: {suo: 'takaisin', eng: 'back'},
   exit: {suo: 'ulos', eng: 'exit'},
 };

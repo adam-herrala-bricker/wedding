@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
 
 const Welcome = () => {
   const language = useSelector((i) => i.view.language);
+  const referer = useSelector((i) => i.view.refPath);
 
   return (
     <View style = {styles.container}>
@@ -49,7 +50,8 @@ const Welcome = () => {
           {textDictionary.welcomeSubTxt[language]}
         </Text>
       </View>
-      <ImageWelcome fileName = '_DSC1924.jpg'/>
+      <ImageWelcome
+        fileName = {referer === '/demo' ? 'DEMO_0036.jpg' : '_DSC1924.jpg'} />
       <Text style = {styles.photoText}>
         {textDictionary.photoTxt[language]}
       </Text>

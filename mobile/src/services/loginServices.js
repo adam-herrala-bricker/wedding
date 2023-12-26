@@ -1,12 +1,13 @@
 const baseURL = 'https://herrala-bricker-wedding.onrender.com/api';
 
 // GET request to login (also used for checking entry key)
-export const login = async (username, password) => {
+export const login = async (username, password, referer) => {
   const response = await fetch(`${baseURL}/login`, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
+      'Referer': referer,
     },
     body: JSON.stringify({username, password}),
   });

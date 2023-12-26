@@ -1,13 +1,14 @@
 const baseURL = 'https://herrala-bricker-wedding.onrender.com/api';
 
 // generic function for get requests
-const getGeneric = async (entryToken, path) => {
+const getGeneric = async (entryToken, path, referer) => {
   const response = await fetch(`${baseURL}/${path}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
       'Authorization': `Bearer ${entryToken}`,
       'Content-Type': 'application/json',
+      'Referer': referer,
     },
   });
 
@@ -21,16 +22,16 @@ const getGeneric = async (entryToken, path) => {
 };
 
 // GET request for image metadata
-export const getImages = async (entryToken) => {
-  return await getGeneric(entryToken, 'image-data');
+export const getImages = async (entryToken, referer) => {
+  return await getGeneric(entryToken, 'image-data', referer);
 };
 
 // GET request for audio metadata
-export const getAudio = async (entryToken) => {
-  return await getGeneric(entryToken, 'audio-data');
+export const getAudio = async (entryToken, referer) => {
+  return await getGeneric(entryToken, 'audio-data', referer);
 };
 
 // GET request for scene metadata
-export const getScenes = async (entryToken) => {
-  return await getGeneric(entryToken, 'scenes');
+export const getScenes = async (entryToken, referer) => {
+  return await getGeneric(entryToken, 'scenes', referer);
 };

@@ -28,10 +28,10 @@ export const {setLoadedScene, setAllScenes} = sceneSlice.actions;
 
 // packaged functions
 
-export const initializeScenes = (entryToken) => {
+export const initializeScenes = (entryToken, referer) => {
   return async (dispatch) => {
     if (entryToken) {
-      const scenes = await getScenes(entryToken);
+      const scenes = await getScenes(entryToken, referer);
       dispatch(setAllScenes(scenes));
 
       const sceneNames = scenes.map((i) => i.sceneName);

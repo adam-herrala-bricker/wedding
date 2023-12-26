@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
 const Main = () => {
   const dispatch = useDispatch();
   const entryToken = useSelector((i) => i.user.entryToken);
+  const referer = useSelector((i) => i.view.refPath);
   // need to setup player before running
   // (seems to be most stable doing it here)
   const setupPlayer = async () => {
@@ -36,8 +37,8 @@ const Main = () => {
 
   // effect hook to initialize states
   useEffect(() => {
-    dispatch(initializeMedia(entryToken));
-    dispatch(initializeScenes(entryToken));
+    dispatch(initializeMedia(entryToken, referer));
+    dispatch(initializeScenes(entryToken, referer));
   }, [entryToken]);
 
   return (

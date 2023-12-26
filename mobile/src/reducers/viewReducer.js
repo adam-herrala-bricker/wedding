@@ -1,5 +1,5 @@
 // reducer for misc view states
-// (language + notififcations + image scroll index)
+// (language + notififcations + image scroll index + ref path)
 import {createSlice} from '@reduxjs/toolkit';
 
 // default state
@@ -7,6 +7,7 @@ const defaultNotification = null;
 const defaultIsError = false; // if there's an error
 const defaultLanguage = 'suo';
 const defaultScrollIndex = 0;
+const defaultRefPath = '';
 
 const viewSlice = createSlice({
   name: 'view',
@@ -16,6 +17,7 @@ const viewSlice = createSlice({
     isError: defaultIsError,
     language: defaultLanguage,
     scrollIndex: defaultScrollIndex,
+    refPath: defaultRefPath,
   },
 
   reducers: {
@@ -50,6 +52,18 @@ const viewSlice = createSlice({
     setScrollIndex(state, action) {
       return {...state, scrollIndex: action.payload};
     },
+
+    toggleRefPath(state) {
+      const currentRef = state.refPath;
+      const newRef = currentRef === defaultRefPath ?
+        '/demo' :
+        defaultRefPath;
+      return {...state, refPath: newRef};
+    },
+
+    resetRefPath(state) {
+      return {...state, refPath: defaultRefPath};
+    },
   },
 });
 
@@ -60,6 +74,8 @@ export const {
   setLanguage,
   switchLanguage,
   setScrollIndex,
+  toggleRefPath,
+  resetRefPath,
 } = viewSlice.actions;
 
 export default viewSlice.reducer;

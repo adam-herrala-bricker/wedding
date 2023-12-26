@@ -9,7 +9,7 @@ import TrackPlayer from 'react-native-track-player';
 import {useNavigate} from 'react-router-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {MaterialIcons} from '@expo/vector-icons';
-import {switchLanguage} from '../reducers/viewReducer';
+import {resetRefPath, switchLanguage} from '../reducers/viewReducer';
 import {clearUser} from '../reducers/userReducer';
 import usFlag from '../resources/us-flag.png';
 import finFlag from '../resources/fin-flag.png';
@@ -105,6 +105,7 @@ const LogOut = () => {
   // event handler
   const handleLogout = async () => {
     dispatch(clearUser());
+    dispatch(resetRefPath());
     await TrackPlayer.stop();
     navigate('/');
   };
