@@ -26,5 +26,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16.19' #same as dev environment
-      - name: style check
+      - name: Install mobile depencies
+        run: cd mobile && npm ci
+      - name: Style check
         run: cd mobile && npm run lint
