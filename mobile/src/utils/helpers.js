@@ -97,7 +97,8 @@ export const fileToName = (fileName) => {
     'transition.mp3': 'song1',
     'down-the-aisle.mp3': 'song2',
     'Mia2.1.mp3': 'song3',
-    'test36.1c.wav': 'songX'};
+    'test36.1c.wav': 'songX',
+    'test35.1.wav': 'songY'};
 
   const songCode = fileList[fileName];
 

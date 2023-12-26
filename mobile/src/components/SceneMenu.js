@@ -8,15 +8,14 @@ import theme from '../theme';
 
 const styles = StyleSheet.create({
   outerContainer: {
+    flexGrow: 0,
   },
 
-  container: {
+  sceneContainer: {
   },
 
   seperator: {
-
     borderRightWidth: 1,
-    borderColor: 'white',
   },
 
   buttonText: {
@@ -57,14 +56,12 @@ const SceneButton = ({sceneCode}) => {
   };
 
   return (
-    <View>
+    <View style = {styles.sceneContainer}>
       <Pressable onPress = {() => handleSceneChange(sceneCode)}>
         <Text
           style = {[
             {borderBottomWidth:
-              loadedScene === sceneCode ?
-              3 :
-              0},
+              loadedScene === sceneCode ? 3 : 0},
             styles.buttonText]}>
           {translateScene(sceneCode)}
         </Text>
@@ -82,15 +79,12 @@ const SceneMenu = () => {
   }
 
   return (
-
     <FlatList
       horizontal
       style = {styles.outerContainer}
-      contentContainerStyle = {styles.container}
       data = {scenes.allScenes}
       renderItem = {({item}) => <SceneButton sceneCode={item.sceneName}/>}
       keyExtractor = {(item) => item.id}/>
-
   );
 };
 

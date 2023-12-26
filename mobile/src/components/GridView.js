@@ -25,7 +25,10 @@ const GridView = () => {
 
   // this is used to scroll back to 0 when the scene changes
   useEffect(() => {
-    listRef.current?.scrollToIndex({index: scrollIndex, animated: false});
+    // shouldn't try this if there are no images displayed
+    if (media.viewImages.length > 0) {
+      listRef.current?.scrollToIndex({index: scrollIndex, animated: false});
+    }
   }, [media]);
 
   // note: getItemLayout is an optional optimization that makes
