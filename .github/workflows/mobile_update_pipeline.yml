@@ -1,0 +1,30 @@
+name: Mobile update pipeline
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+       - 'mobile/**' #only run when mobile has been changed
+  pull_request:
+    branches:
+      - main
+    - paths:
+      -'mobile/**'
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  mobile_update_pipeline:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          sparse-checkout: |  #only checkout mobile folder
+            mobile
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.19' #same as dev environment
+      - name: style check
+        run: cd mobile && npm run lint
