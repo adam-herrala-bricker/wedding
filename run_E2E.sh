@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#bash script to run the Cypress E2E tests
+#bash script to run the Cypress E2E tests in deployment pipeline
 #note: if you run this locally, you have to kill the process afterwards
 # lsof -i tcp:3003
 # kill -9 <PID>

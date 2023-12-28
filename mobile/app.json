@@ -1,0 +1,42 @@
+{
+  "expo": {
+    "name": "Wedding",
+    "slug": "mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/logo-green-bg.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#CBDFBD"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "audio"
+        ]
+      },
+      "bundleIdentifier": "com.adam.herrala.bricker.wedding"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#F6F4CF"
+      },
+      "package": "com.adam.herrala.bricker.wedding"
+    },
+    "web": {
+      "favicon": "./assets/minicon-32x32.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "7064d163-b793-432f-ae16-901bb7992a69"
+      }
+    }
+  }
+}
