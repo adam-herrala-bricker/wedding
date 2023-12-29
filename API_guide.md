@@ -7,7 +7,7 @@
 
 ## Requests for User Creation and Log-in
 
-### POST `/users`.
+### POST `/users`
 
 Creates a new user.
 
@@ -50,7 +50,7 @@ Returns:
 - `isDemo`
 - `isAdmin`
 
-### POST `/login`.
+### POST `/login`
 
 Logs users in.
 
