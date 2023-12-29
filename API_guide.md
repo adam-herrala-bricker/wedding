@@ -3,7 +3,7 @@
 >[!IMPORTANT]
 >For both default and demo requests, the base URL for the API is https://herrala-bricker-wedding.onrender.com/api
 >
->Demo requests must have a `Referer` header that includes `/demo`.
+>Demo requests must have a `Referer` header that includes `/demo`. Otherwise, requests will be treated as default.
 
 ## Requests for User Creation and Log-in
 
@@ -82,9 +82,9 @@ All requests require `Authorization: Bearer <entryToken>` as a header.
 
 ### POST `/entry-check`
 
-Streamlines entry token verification.
+Checks whether the token in the header is a valid entry token for the referer. 
 
-This checks whether the token in the header is a valid entry token for the referer. It's used by the frontend to smoothly exit the browser app when switching between `/` and `/demo`. Otherwise, the user would be left with a shell of the site with no loaded content and lots of `400` responses.
+This is used by the frontend to smoothly exit the browser app when switching between `/` and `/demo`. Otherwise, the user would be left with a shell of the site with no loaded content and lots of `400` responses.
 
 Parameters:
 - `none`
@@ -154,7 +154,7 @@ Returns:
 
 Uploads an image file.
 
-The image file is saved to disk storage on the server, and image metadata is added to the database. The id for `scene-0` (the _all/kaikki_ scene) is added to image metadata by default, and `isDemo` assigned dynamically based on referer.
+The image file is saved to disk storage on the server, and image metadata is added to the database. The id for `scene-0` (the _all/kaikki_ scene) is added to image metadata by default, and `isDemo` is assigned dynamically based on referer.
 
 >[!NOTE]
 >The server hosts both full and web resolution versions of every image. Because web-res images are so much smaller, all web-res images from the wedding (plus web-res tree images for the demo) are saved to the server disk. Uploading and deleting images only affects full-res images.
@@ -186,7 +186,7 @@ Returns:
 
 Updates the metadata for the image with the given `id`.
 
-While only used by the frontend to change scene linking, it can handle any update to image metatadata. If a parameter isn't included in the reponse, the previous value in the database will be preserved.
+While only used by the frontend to change scene linking, it can handle any update to image metadata. If a parameter isn't included in the response, the previous value in the database will be preserved.
 
 Parameters:
 - `fileName`
@@ -201,7 +201,7 @@ Returns:
 
 Deletes the audio file with the given `id`.
 
-If metadata for an audio file with `id` is found in the database, that entry is removed from, and the audio file is deleted from the server.
+If metadata for an audio file with `id` is found in the database, that entry is removed, and the audio file is deleted from the server.
 
 Parameters:
 - `none`
