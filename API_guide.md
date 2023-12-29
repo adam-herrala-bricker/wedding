@@ -156,20 +156,78 @@ Uploads an image file.
 
 The image file is saved to disk storage on the server, and image metadata is added to the database. The id for `scene-0` (the _all/kaikki_ scene) is added to image metadata by default, and `isDemo` assigned dynamically based on referer.
 
+>[!NOTE]
+>The server hosts both full and web resolution versions of every image. Because web-res images are so much smaller, all web-res images from the wedding (plus web-res tree images for the demo) are saved to the server disk. Uploading and deleting images only affects full-res images.
+>
+>This means an image can only be uploaded using the API if a web-res version has already been added to the server using some other means, creating an additional check on what images can be uploaded using the API.
+
 Parameters:
 - `FormData` object with `'adminUpload'` as the key and the image file as the value
 
 Returns:
 - `image` object
 
+### POST `/scenes`
+
+Creates a new scene.
+
+Scene names are generated dynamically on the frontend, so demo requests will have '-demo' appended to the provided name.
+
+Parameters:
+- `sceneName`
+    - type: string
+    - required: yes
+    - unique: yes
+
+Returns:
+- `scene` object
+
+### PUT `/images/:id`
+
+Updates the metadata for the image with the given `id`.
+
+While only used by the frontend to change scene linking, it can handle any update to image metatadata. If a parameter isn't included in the reponse, the previous value in the database will be preserved.
+
+Parameters:
+- `fileName`
+    - type: string
+- `scenes`
+    - type: [scenes]
+
+Returns:
+- updated `images` object (with `sceneName` populated in `scenes`)
+
 ### DELETE `/audio/:id`
 
-Delete the audio file with the given `id`.
+Deletes the audio file with the given `id`.
 
-If metadata for an audio file with `id` is found in the database, that entry is removed from the database, and the audio file itself is deleted from the server.
+If metadata for an audio file with `id` is found in the database, that entry is removed from, and the audio file is deleted from the server.
 
 Parameters:
 - `none`
 
 Returns:
 - `Status 204` (no response body)
+
+### DELETE `/images/:id`
+
+Deletes the image file with the given `id`.
+
+If metadata from an image file with `id` is found in the database, that entry is removed, and the (full-res) image file is deleted from the server.
+
+Parameters:
+- `none`
+
+Returns:
+- `Status 204` (no response body)
+
+### DELETE `/scenes/:id`
+
+Deletes the scene with the given `id`.
+
+Parameters:
+- `none`
+
+Returns:
+- `Status 204` (no response body)
+
