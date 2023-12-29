@@ -13,7 +13,7 @@ I made this web app so that friends and family could listen to music and view/do
 
 This was also my project for the University of Helsinki's fullstack web development course (https://fullstackopen.com/). The information contained in this ReadMe is largely reflective of that.
 
-The Basics
+### The Basics
 - Frontend: React
 - Backend: NodeJS
 - Mobile App: React Native (+ Expo)
