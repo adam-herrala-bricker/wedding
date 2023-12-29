@@ -39,16 +39,26 @@ To accomplish this minimal default-demo strategy, default and demo requests are 
 This project uses the jsonwebtoken package to authenticate requests using bearer tokens. 
 
 Three levels of authentication are currently supported.
-1. Entry authentication: When users provide a valid entry key, the server returns an **entry token.** This authenticates GET requests for audio and image files, scenes, and audio and image metadata.
+1. Entry authentication: When users provide a valid entry key, the server returns an **entry token.** This authenticates GET requests for audio and image files, scenes, and audio and image metadata. No audio, image, or scene content is accessible without a vaild entry token.
 2. User authentication: When a user logs in with a valid password, the server returns a **user token**. This is not presently used to authenticate any requests, but has been built into the architecture of the site to allow for possible expansion to user-specific views or operations.
-3. Admin authentication: When an admin user logs in with a valid password, the server returns an **admin token** in addition to a user token. This admin token authenticates requests to create and delete scenes, upload and delete media, as well as link/unlink images with scenes.
+3. Admin authentication: When an admin user logs in with a valid password, the server returns an **admin token** in addition to a user token. This admin token authenticates requests to create and delete scenes, upload and delete media, as well as link/unlink images with scenes. No changes to site content can be made without a valid admin token.
 
 >[!NOTE]
 >Default and demo tokens are signed using different secrets, and cannot be used to authenticate the other's requests. A demo entry token, for example, cannot be used to authenticate a request for default image metadata.
 
+### Static Media Files
+
+Requests for audio and image files are authenticated using entry tokens provided in the query:
+
+- Audio files: `/api/audio/<fileName>?token=<entryToken>`
+- Full-res image files: `/api/images/<fileName>?token=<entryToken>`
+- Web-res image files: `/api/images/web-res/<fileName>?token=<entryToken>`
+
+This approach was chosen because methods for adding an `Authorization` header to requests from browser `<img>` and `<audio>` elements seemed needlessly complicated (although this would have been easy to implement in the mobile app).
+
 ### API
 
-### Static Media Files
+See [API Guide](./API_guide.md)
 
 ## Database
 
