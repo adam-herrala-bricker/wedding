@@ -5,13 +5,13 @@ View the browser demo at https://herrala-bricker-wedding.onrender.com/demo/
 A mobile version will be available soon.
 
 >[!NOTE]
-> The entry key for the demo is `porkkalaGala`. If you'd like to demo admin features, please contact me.
+> The entry key for the demo is `porkkalaGala`. If you'd like to demo admin features, feel free to contact me.
 
 ## About
 
-I made this web app so that friends and family could listen to music and view/download pictures from my summer 2023 wedding. The demo version, unfortunately, has neither wedding music nor wedding pictures; instead you'll see pictures of trees. 
+I made this web app so that friends and family could listen to music and view/download pictures from my summer 2023 wedding. The demo version, I'm sorry to say, has neither wedding music nor wedding pictures; instead you'll see pictures of trees alongside music inspired by trees. 
 
-This was also my project for the University of Helsink's fullstack web development course (https://fullstackopen.com/).
+This was also my project for the University of Helsinki's fullstack web development course (https://fullstackopen.com/). The information contained in this ReadMe is largely reflective of that.
 
 The Basics
 - Frontend: React
@@ -30,11 +30,107 @@ The Basics
 >
 >For example, an endpoint, in this sense, won't be "default," since the same routes handle traffic from both `/` and `/demo`. However, the requests sent to these endpoints, and the responses returned by them, will be either "default" or "demo," since both vary systematically based on referer.
 
+The demo version of the app is structurally identical to the default version. While actual wedding content is unavailable when demoing, `/` and `/demo` return the same frontend build to the browser, and the same mobile app (with all the same components) handles both default and demo use. Additionally, default and demo requests are handled using the same routes and authenticated using the same middleware; default and demo media files are stored in the same directories on the server; and default and demo data are stored in the same collections in the same MongoDB database. This approach allows the demo view to match the default as closely as possible, all while requiring minimal extra code. The alternative, creating seperate frontend builds and/or seperate backend routes, would have been cumbersome to implement and a burden to maintain.
+
+To accomplish this minimal default-demo strategy, default and demo requests are differentiated based on the `Referer` header. For traffic from the browser, this requires no additional steps as the default and demo pages are provided at different URLs. In the mobile app, `/demo` is added to `Referer` when the app is put into "demo mode." Entry middleware on the server then sorts requests into default and demo, assigning the property `isDemo=true` for requests that include `/demo` in the `Referer` header, and `isDemo=false` for all other requests. As every entry in the database has the attribute `isDemo`, queries to the database then select for either only default or demo data. Admin requests that add new entries to the database will assign `isDemo` based on whether the user is authenticated as a default or demo admin.
+
 ### Authentication
 
-### API Routes Authenticated with an Entry Token
+This project uses the jsonwebtoken package to authenticate requests using bearer tokens. 
 
-### API Routes Authenticated with an Admin Token
+Three levels of authentication are currently supported.
+1. Entry authentication: When users provide a valid entry key, the server returns an **entry token.** This authenticates GET requests for audio and image files, scenes, and audio and image metadata.
+2. User authentication: When a user logs in with a valid password, the server returns a **user token**. This is not presently used to authenticate any requests, but has been built into the architecture of the site to allow for possible expansion to user-specific views or operations.
+3. Admin authentication: When an admin user logs in with a valid password, the server returns an **admin token** in addition to a user token. This admin token authenticates requests to create and delete scenes, upload and delete media, as well as link/unlink images with scenes.
+
+>[!NOTE]
+>Default and demo tokens are signed using different secrets, and cannot be used to authenticate the other's requests. A demo entry token, for example, cannot be used to authenticate a request for default image metadata.
+
+### Requests for User Creation and Log-in
+
+#### User Creation: POST `/api/users`.
+
+If an admin key is provided in the request, it is checked against the admin key stored on the server, and an admin user is created. If no admin key is provided, a non-admin user is created. The bcrypt package is used to create a password hash to be stored on the database. As it's not necessary for ordinary use of the site, user creation is not currently supported on the frontend.
+
+Parameters:
+- `username`
+    - type: string
+    - required: yes
+    - unique: yes
+    - minLength: 3
+- `displayname`
+    - type: string
+    - required: yes
+    - unique: yes
+    - minLength: 3
+- `password`
+    - type: string
+    - required: yes
+- `email`
+    - type: string
+    - required: yes
+    - unique: yes
+- `adminKey`
+    - type: string
+    - required: no
+- `isAdmin`
+    - type: boolean
+    - required: no
+    - default: false
+- `isDemo`
+    - type: boolean
+    - required: no
+    - default: false
+
+Returns:
+- `username`
+- `displayname`
+- `email`
+- `isDemo`
+- `isAdmin`
+
+#### User log in: POST `/api/login`.
+
+Provided passwords are checked against password hashes in the database using bcrypt. 
+
+Parameters:
+- `username`
+    - type: string
+    - required: yes
+- `password`
+    - type: string
+    - required: yes
+
+Returns:
+- `username`
+- `displayname`
+- `isDemo`
+- `isAdmin`
+- `token`
+- `adminToken`
+    - `null` for non-admin users
+
+>[!NOTE]
+>Site entry is handled as if the user is logging into a user called "entry," with the entry key checked like a password and the entry token provided as the `token` in the returned user object.
+
+### Requests Authenticated with an Entry Token
+
+All requests require `Authorization: Bearer <entryToken>` as a header.
+
+#### Entry token verification: POST `/api/entry-check`
+
+This checks whether the token in the header is a valid entry token for the referer. It's used by the frontend to smoothly exit the browser app when switching between `/` and `/demo`. Otherwise, the user would be left with a shell of the site with no loaded content.
+
+Returns:
+- `Status 200` (no response body)
+
+#### Audio metadata: GET `/api/audio-data`
+
+#### Image metadata: GET `/api/image-data`
+
+#### Scene data: GET `/api/scenes`
+
+### Requests Authenticated with an Admin Token
 
 ### Static Media Files
 
