@@ -5,7 +5,7 @@ View the browser demo at https://herrala-bricker-wedding.onrender.com/demo/
 A mobile version will be available soon.
 
 >[!NOTE]
-> The entry key for the demo is `porkkalaGala`. If you'd like to demo admin features, feel free to contact me.
+> The entry key for the demo is `porkkalaGala`. If you'd like to demo admin features, feel free to contact me for demo admin credentials.
 
 ## About
 
