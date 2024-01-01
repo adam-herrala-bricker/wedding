@@ -21,6 +21,25 @@ This was also my project for the University of Helsinki's fullstack web developm
 
 ## Frontend
 
+### Entry Page
+
+### Main Page
+
+### Language Selection
+
+### Log-in/Log-out
+
+### Image Resolution Selection
+
+### Image Scene Selection
+
+### Image "Highlight" View
+
+### Admin Features
+
+### Styling
+This project uses React Bootstrap styling and prebuilt components (i.e. the main menu bar and off-canvas login). However, React Bootstrap is bad, and I would recommend that no one use it. Its documentation is terrible, and it doesn't even look particularly good. If I were starting from the beginning, I'd definitely use Semantic instead.
+
 ## Backend
 
 ### Default vs. Demo Routing
