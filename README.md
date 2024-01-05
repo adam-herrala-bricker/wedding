@@ -9,7 +9,10 @@ A mobile version will be available soon.
 
 ## About
 
-I made this web app so that friends and family could listen to music and view/download pictures from my summer 2023 wedding. The demo version, I'm sorry to say, has neither wedding music nor wedding pictures; instead you'll see pictures of trees alongside music inspired by trees. 
+I made this web app so that friends and family could listen to music and view/download pictures from my summer 2023 wedding. The demo version, I'm sorry to say, has neither wedding music nor wedding pictures; instead you'll see pictures of trees alongside music inspired by trees.
+
+>[!IMPORTANT]
+>The photo credits you see on the demo page are for wedding photos; our wedding photographer did not take the pictures of trees.
 
 This was also my project for the University of Helsinki's fullstack web development course (https://fullstackopen.com/). The information contained in this ReadMe is largely reflective of that.
 
@@ -51,7 +54,7 @@ Clicking on any image in the grid takes the user to highlight view, with a singl
 >
 >Additionally, the user's vertical scroll position in the image grid is retained when exiting highlight view, returning them to the same place they were before entering highlight view (as opposed to sending them back to the top of the grid). This produces a much nicer user experience.
 >
->Unfortunately, scroll retention won't be noticeable in the demo, since there are too few images to enable scrolling.
+>As it includes far fewer images, scroll retention may not be noticeable in the demo (unless the viewport is made short enough to enable scrolling).
 
 ### Admin Features
 When logged in as an admin, users have a number of additional features available to them.
@@ -61,6 +64,9 @@ When logged in as an admin, users have a number of additional features available
 - Scene Creation and Deletion: Admin users can create and delete scenes directly from the 'suodata/filter' sub-menu. Scene codes are generated dynamically by the frontend, with scene mappings in the Finnish/English dictionary controlling the displayed scene names.
 - Scene Linking: Admin users will see buttons for each scene displayed below every image, making it easy to quickly link and unlink images and scenes.
 - Setting Images as 'Hidden:' One cool feature of the application is that admin users can hide an image from non-admin users simply by unlinking it from the 'kaikki/all' scene. To admins, the image will appear translucent but otherwise be visible, but it won't be loaded into the app when accessed by non-admins.
+
+### Responsive Design
+While the dedicated Android app is recommended when using a mobile device, the browser version is responsive enough to be useable in with a mobile browser.
 
 ### Styling
 This project uses React Bootstrap styling and prebuilt components (i.e., the main menu bar and off-canvas login) in conjunction with native styling (e.g., sub-menu buttons).
