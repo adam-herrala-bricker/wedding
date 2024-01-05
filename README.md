@@ -22,23 +22,53 @@ This was also my project for the University of Helsinki's fullstack web developm
 ## Frontend
 
 ### Entry Page
+First-time users are directed to an entry page, where they input an entry key to access the application. When a valid entry key is entered, the backend returns an entry token and users are directed to the main application. The entry token is retained in local storage until the user exits the application and is used to authenticate data and media requests (see below).
 
-### Main Page
+### Main Application
+The main application displays embedded audio files and a grid view of images. A loading bar reports the progress of image loading, hiding resolution and scene selection menus until every image is loaded. (Note: Since the demo version only has a few images, it's likely this progress bar won't be noticable.) For a better user experience, every image loads into the application at the start (as opposed to lazy loading).
 
 ### Language Selection
+Users can toggle between Finnish and (American) English language content by clicking the flag icons in the top left corner of the application. All bilingual text is stored in a shared [JavaScript object](frontend/src/resources/dictionary.js), facilitating efficient language switching and the easy addition of new bilingual text.
 
-### Log-in/Log-out
+### Log-in, Log-out, and Exiting the App
+Users can view an off-canvas log-in form by clicking 'kirjadu sisään/log in.' Logging in is not required for ordinary users of the site, but is necessary for admin authentication. User credentials are retained in local storage.
+
+Clicking 'kirjadu ulos/log out' logs the user out and removes their credentials from local storage, but keeps the application open.
+
+Clicking 'ulos/exit' removes all stored data (entry + user tokens) and closes the app, returning to the entry page.
 
 ### Image Resolution Selection
+Two versions of each image are stored on the server, a web-resolution file and a full-resolution file. While the grid view will always display the web-res file, users can choose whether the highlight view (see below) displays the web-res or full-res file through the 'resoluutio/resolution' sub-menu above the image grid. This selection also determines the resolution of image downloads.
 
 ### Image Scene Selection
+Images are assigned to different 'scenes' based on their content, which users can use to filter images using the 'suodata/filter' sub-menu. Example scenes include: 'kaikki/all', 'meidän suosikkimme/our favorites', and 'ryhmäkuvat/group pictures.'
 
-### Image "Highlight" View
+### Image Highlight View
+Clicking on any image in the grid takes the user to highlight view, with a single image filling the screen. Users can then scroll through images using the arrow buttons at the bottom of the screen or the left and right arrow keys. Users can also download images from highlight view by using the 'lataa/download' button.
+
+>[!NOTE]
+>One key feature of the application is the preservation of the user's view when switching to/from an image highlight. In highlight view, users will cycle through only those images included in the currently loaded scene, and they will return to the same scene when exiting highlight view.
+>
+>Additionally, the user's vertical scroll value in the image grid is retained when exiting highlight view, returning them to the same place they were before entering highlight view (as opposed to sending them back to the top of the grid). This produces a much nicer user experience.
+>
+>Unfortunately, scroll retention won't be noticable in the demo, since there are too few images to enable scrolling.
 
 ### Admin Features
+When logged in as an admin, users have a number of additional features available to them.
+
+- File Upload: Admin users can upload audio and image files to the page. All images are linked to the 'kaikki/all' scene by default. (Note: All web-res image files are already on the server, and frontend upload only supports full-res files, with only those files with web-res counterparts being uploadable. See API Guide for more.)
+- File Deletion: Admin users can delete audio and image files by clicking on a [-] button that appears next to every one. (Note: Again, this doesn't remove web-res images from the server.)
+- Scene Creation and Deletion: Admin users can create and delete scenes directly from the 'suodata/filter' sub-menu. Scene codes are generated dynamically by the frontend, with scene mappings in the Finnish/English dictionary controlling the displayed scene names.
+- Scene Linking: Admin users will see buttons for each scene displayed below every image, making it easy to quickly link and unlink images and scenes.
+- Setting Images as 'Hidden:' One cool feature of the application is that admin users can hide an image from non-admin users simply by unlinking it from the 'kaikki/all' scene. To admins, the image will appear translucent but otherwise be visible, but it won't be loaded into the app when accessed by non-admins.
 
 ### Styling
-This project uses React Bootstrap styling and prebuilt components (i.e. the main menu bar and off-canvas login). However, React Bootstrap is bad, and I would recommend that no one use it. Its documentation is terrible, and it doesn't even look particularly good. If I were starting from the beginning, I'd definitely use Semantic instead.
+This project uses React Bootstrap styling and prebuilt components (i.e., the main menu bar and off-canvas login) in conjunction with native styling (e.g., sub-menu buttons).
+
+### State Management and Routing
+All but the most ephemeral application states (e.g., form entries) are managed using React Redux, which is great.
+
+React Router is used for routing main and highlight views.
 
 ## Backend
 
