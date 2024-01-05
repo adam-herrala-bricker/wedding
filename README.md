@@ -148,9 +148,9 @@ Frontend and backend development share a single CI/CD pipeline, which uses GitHu
 - Check frontend and backend linting upon opening/syncing a PR or pushing to `main`.
 - Build and populate a temporary media folder for BE testing.
 - Run BE integration and E2E tests upon opening/syncing a PR or pushing to `main`.
-    - Note: These tests can be skipped for PRs by including `#skipBE` or `#skipFE` in the PR description. This can speed up checks when, e.g., no changes are being made to the BE.
+    - These tests can be skipped for PRs by including `#skipBE` or `#skipFE` in the PR description. This can speed up checks when, e.g., no changes are being made to the BE.
     - All tests will always be run when pushing to `main`.
-- Deploy to production on push to `main` if and only if all checks pass.
+- Deploy to production on push to `main` (if and only if all checks pass).
 
 >[!NOTE]
 >The project is configured to prevent direct pushes to main, requiring a PR in every instance.
