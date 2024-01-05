@@ -49,7 +49,7 @@ Clicking on any image in the grid takes the user to highlight view, with a singl
 >[!NOTE]
 >One key feature of the application is the preservation of the user's view when switching to/from an image highlight. In highlight view, users will cycle through only those images included in the currently loaded scene, and they will return to the same scene when exiting highlight view.
 >
->Additionally, the user's vertical scroll value in the image grid is retained when exiting highlight view, returning them to the same place they were before entering highlight view (as opposed to sending them back to the top of the grid). This produces a much nicer user experience.
+>Additionally, the user's vertical scroll position in the image grid is retained when exiting highlight view, returning them to the same place they were before entering highlight view (as opposed to sending them back to the top of the grid). This produces a much nicer user experience.
 >
 >Unfortunately, scroll retention won't be noticable in the demo, since there are too few images to enable scrolling.
 
@@ -111,15 +111,38 @@ See [API Guide](./API_guide.md)
 
 ## Database
 
+This project uses MongoDB Atlas, a cloud-based Mongo database, with the help of Mongoose for schemeas and validation.
+
+User data, scene data, and media metadata is all stored in the database, with seperate 'databases' for production, development, and testing.
+
 ## Mobile App
+
+Coming soon!
 
 ## Testing
 
 ### Backend Integration Testing
 
-### End-to-end Testing
+This project uses Jest and Supertest for running integration tests on the backend. Currently, over 100 integration tests are written to ensure that the backend behaves as expected. 
 
-## CI/CD
+Some of the most important checks:
+- Media and scene requests fail without authentication.
+- Entry tokens require a valid entry key.
+- Admin tokens require a valid admin account.
+- Admin accounts cannot be created without a valid admin key.
+- Entry tokens cannot authenticate admin requests.
+- Demo tokens cannot authenticate default requests.
+- Demo and default requests only return their respective content.
+- With correct authentication, requests return the expected data.
+- When requests fail (e.g., invalid authentication or validation fails), they return the expected error codes.
+
+### E2E Testing
+
+This project uses Cypress to run extensive 15 end-to-end tests. These check core site functionality (guest user and admin) for both good and bad credentials.
+
+## Deployment and CI/CD
+
+The web application is deployed using Render (https://render.com).
 
 ## Production Schematic
 
