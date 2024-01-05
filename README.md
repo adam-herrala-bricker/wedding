@@ -22,10 +22,10 @@ This was also my project for the University of Helsinki's fullstack web developm
 ## Frontend
 
 ### Entry Page
-First-time users are directed to an entry page, where they input an entry key to access the application. When a valid entry key is entered, the backend returns an entry token and users are directed to the main application. The entry token is retained in local storage until the user exits the application and is used to authenticate data and media requests (see below).
+First-time users are directed to an entry page, where they input an entry key to access the application. When a valid entry key is entered, the backend returns an entry token and users are directed to the main application. The entry token is retained in local storage until the user exits the application, and is used to authenticate data and media requests (see below).
 
 ### Main Application
-The main application displays embedded audio files and a grid view of images. A loading bar reports the progress of image loading, hiding resolution and scene selection menus until every image is loaded. (Note: Since the demo version only has a few images, it's likely this progress bar won't be noticable.) For a better user experience, every image loads into the application at the start (as opposed to lazy loading).
+The main application displays embedded audio files and a grid view of images. A loading bar reports the progress of image loading, hiding resolution and scene selection menus until every image is loaded. (Note: Since the demo version only has a few images, it's likely this progress bar won't be noticeable.) For a better user experience, every image loads into the application at the start (as opposed to lazy loading).
 
 ### Language Selection
 Users can toggle between Finnish and (American) English language content by clicking the flag icons in the top left corner of the application. All bilingual text is stored in a shared [JavaScript object](frontend/src/resources/dictionary.js), facilitating efficient language switching and the easy addition of new bilingual text.
@@ -41,7 +41,7 @@ Clicking 'ulos/exit' removes all stored data (entry + user tokens) and closes th
 Two versions of each image are stored on the server, a web-resolution file and a full-resolution file. While the grid view will always display the web-res file, users can choose whether the highlight view (see below) displays the web-res or full-res file through the 'resoluutio/resolution' sub-menu above the image grid. This selection also determines the resolution of image downloads.
 
 ### Image Scene Selection
-Images are assigned to different 'scenes' based on their content, which users can use to filter images using the 'suodata/filter' sub-menu. Example scenes include: 'kaikki/all', 'meidän suosikkimme/our favorites', and 'ryhmäkuvat/group pictures.'
+Admins assign images to different 'scenes' based on their content, which users can use to filter images using the 'suodata/filter' sub-menu. Example scenes include: 'kaikki/all', 'meidän suosikkimme/our favorites', and 'ryhmäkuvat/group pictures.'
 
 ### Image Highlight View
 Clicking on any image in the grid takes the user to highlight view, with a single image filling the screen. Users can then scroll through images using the arrow buttons at the bottom of the screen or the left and right arrow keys. Users can also download images from highlight view by using the 'lataa/download' button.
@@ -51,7 +51,7 @@ Clicking on any image in the grid takes the user to highlight view, with a singl
 >
 >Additionally, the user's vertical scroll position in the image grid is retained when exiting highlight view, returning them to the same place they were before entering highlight view (as opposed to sending them back to the top of the grid). This produces a much nicer user experience.
 >
->Unfortunately, scroll retention won't be noticable in the demo, since there are too few images to enable scrolling.
+>Unfortunately, scroll retention won't be noticeable in the demo, since there are too few images to enable scrolling.
 
 ### Admin Features
 When logged in as an admin, users have a number of additional features available to them.
@@ -75,11 +75,11 @@ React Router is used for routing main and highlight views.
 ### Default vs. Demo Routing
 
 >[!IMPORTANT]
->In this project, "default" denotes any item (e.g., entry key, token, secret, metadatum, media file, etc.) that is only available through the main `/` path. "Default" is synonomous with "non-demo", with "demo" and "default" taken to be exclusive.
+>In this project, "default" denotes any item (e.g., entry key, token, secret, metadatum, media file, etc.) that is only available through the main `/` path. "Default" is synonymous with "non-demo", with "demo" and "default" taken to be exclusive.
 >
->For example, an endpoint, in this sense, won't be "default," since the same routes handle traffic from both `/` and `/demo`. However, the requests sent to these endpoints, and the responses returned by them, will be either "default" or "demo," since both vary systematically based on referer.
+>For example, an endpoint, in this sense, won't be "default," since the same routes handle traffic from both `/` and `/demo`. However, the requests sent to these endpoints, and the responses returned by them, will be either "default" or "demo," since both vary systematically based on referrer.
 
-The demo version of the app is structurally identical to the default version. While actual wedding content is unavailable when demoing, `/` and `/demo` return the same frontend build to the browser, and the same mobile app (with all the same components) handles both default and demo use. Additionally, default and demo requests are handled using the same routes and authenticated using the same middleware; default and demo media files are stored in the same directories on the server; and default and demo data are stored in the same collections in the same MongoDB database. This approach allows the demo view to match the default as closely as possible, all while requiring minimal extra code. The alternative, creating seperate frontend builds and/or seperate backend routes, would have been cumbersome to implement and a burden to maintain.
+The demo version of the app is structurally identical to the default version. While actual wedding content is unavailable when demoing, `/` and `/demo` return the same frontend build to the browser, and the same mobile app (with all the same components) handles both default and demo use. Additionally, default and demo requests are handled using the same routes and authenticated using the same middleware; default and demo media files are stored in the same directories on the server; and default and demo data are stored in the same collections in the same MongoDB database. This approach allows the demo view to match the default as closely as possible, all while requiring minimal extra code. The alternative, creating separate frontend builds and/or separate backend routes, would have been cumbersome to implement and a burden to maintain.
 
 To accomplish this minimal default-demo strategy, default and demo requests are differentiated based on the `Referer` header. For traffic from the browser, this requires no additional steps as the default and demo pages are provided at different URLs. In the mobile app, `/demo` is added to `Referer` when the app is put into "demo mode." Entry middleware on the server then sorts requests into default and demo, assigning the property `isDemo=true` for requests that include `/demo` in the `Referer` header, and `isDemo=false` for all other requests. As every entry in the database has the attribute `isDemo`, queries to the database then select for either only default or demo data. Admin requests that add new entries to the database will assign `isDemo` based on whether the user is authenticated as a default or demo admin.
 
@@ -88,7 +88,7 @@ To accomplish this minimal default-demo strategy, default and demo requests are 
 This project uses the jsonwebtoken package to authenticate requests using bearer tokens. 
 
 Three levels of authentication are currently supported.
-1. Entry authentication: When users provide a valid entry key, the server returns an **entry token.** This authenticates GET requests for audio and image files, scenes, and audio and image metadata. No audio, image, or scene content is accessible without a vaild entry token.
+1. Entry authentication: When users provide a valid entry key, the server returns an **entry token.** This authenticates GET requests for audio and image files, scenes, and audio and image metadata. No audio, image, or scene content is accessible without a valid entry token.
 2. User authentication: When a user logs in with a valid password, the server returns a **user token**. This is not presently used to authenticate any requests, but has been built into the architecture of the site to allow for possible expansion to user-specific views or operations.
 3. Admin authentication: When an admin user logs in with a valid password, the server returns an **admin token** in addition to a user token. This admin token authenticates requests to create and delete scenes, upload and delete media, as well as link/unlink images with scenes. No changes to site content can be made without a valid admin token.
 
@@ -111,9 +111,9 @@ See [API Guide](./API_guide.md)
 
 ## Database
 
-This project uses MongoDB Atlas, a cloud-based Mongo database, with the help of Mongoose for schemeas and validation.
+This project uses MongoDB Atlas, a cloud-based Mongo database, with the help of Mongoose for schemas and validation.
 
-User data, scene data, and media metadata is all stored in the database, with seperate 'databases' for production, development, and testing.
+User data, scene data, and media metadata is all stored in the database, with separate 'databases' for production, development, and testing.
 
 ## Mobile App
 
@@ -138,7 +138,7 @@ Some of the most important checks:
 
 ### E2E Testing
 
-This project uses Cypress to run extensive 15 end-to-end tests. These check core site functionality (guest user and admin) for both good and bad credentials.
+This project uses Cypress to run 15 extensive end-to-end tests. These check core site functionality (guest user and admin) for both good and bad credentials.
 
 ## Deployment and CI/CD
 
@@ -157,7 +157,7 @@ Frontend and backend development share a single CI/CD pipeline, which uses GitHu
 
 GitHub actions are also used to:
 - Perform a twice-daily health check on the server.
-- Check linting for the mobile app (this will later be expanded to include deployment of updates to the Google Play Store).
+- Check linting for the mobile app (this can later be expanded to include deployment of updates to the Google Play Store).
 
 ## Production Schematic
 
