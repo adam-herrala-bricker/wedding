@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 import {Routes, Route, Navigate} from 'react-router-native';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, StatusBar} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import TrackPlayer from 'react-native-track-player';
 import {initializeMedia} from '../reducers/mediaReducer';
@@ -43,6 +43,7 @@ const Main = () => {
 
   return (
     <View style = {styles.container}>
+      <StatusBar />
       {entryToken && <AppBar />}
       <Routes>
         <Route path = '/' element = {entryToken ? <Welcome />: <Entry />}/>
