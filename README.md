@@ -1,8 +1,8 @@
 # Wedding Web App Project
 
-View the browser demo at https://herrala-bricker-wedding.onrender.com/demo/
+View the browser demo: https://herrala-bricker-wedding.onrender.com/demo/
 
-Download the Android app at https://play.google.com/apps/internaltest/4701371988909939863
+Download the Android app: https://play.google.com/apps/internaltest/4701371988909939863
 
 >[!IMPORTANT]
 > The entry key for the demo is `porkkalaGala`.
