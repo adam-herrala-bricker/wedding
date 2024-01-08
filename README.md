@@ -257,40 +257,40 @@ flowchart LR
 ## Time log
 | Date | Hours | Task(s) |
 | :----:|:-----| :-----|
-| 24.8 | 8 | |
-| 25.8 | 8 | |
-| 26.8 | 6 | |
-| 27.8 | 2 | |
-| 28.8 | 4 | |
-| 29.8 | 10 | |
-| 30.8 | 4 | |
-| 31.8 | 4 | |
-| 04.9| 4 | |
+| 24.8 | 8 | Initial setup, DB creation, BE user endpoints, image upload architecture|
+| 25.8 | 8 | Upload multiple images, FE login, initial menu, upload authentication, image metadata on DB, BE image deletion|
+| 26.8 | 6 | FE deletion, image render on upload, initial highlight view, FE and BE entry control, delete authorization|
+| 27.8 | 2 | Bilingual text, section links in menu, entry + login error notification|
+| 28.8 | 4 | Added image scene filtering, images in 'all' by default, set scene ordering, FE and BE scene deletion, bilingual scene names |
+| 29.8 | 10 | Improved filtering interface, initial auto-scroll, audio on FE and BE, admin hidden image view, bug fixes |
+| 30.8 | 4 | Improved auto-scroll, image sorting, FE design improvements |
+| 31.8 | 4 | Stable scene selection, song name handling, audio deletion FE and BE, arrow scrolling on highlight view, visual improvements, bug fixes |
+| 04.9| 4 | Production DB config, authentication upgrade, image sorting and audio rendering on upload |
 | cumulative | 50 | |
-| 05.9 | 7 | |
-| 07.9 | 7 | |
-| 08.9 | 3 | |
-| 10.9 | 5 | |
-| 12.9 | 4 | |
-| 16.10 | 10 | |
-| 17.10 | 10 | |
-| 22.10 | 5 | |
+| 05.9 | 7 | Media routing troubleshooting, improved visuals |
+| 07.9 | 7 | Download button, setup react router, responsive components |
+| 08.9 | 3 | Visual improvements (typeface, language select, buttons, audio rendering), key listener debugging |
+| 10.9 | 5 | Persistent loaded scenes, loading bar, scroll debugging, updated display while loading |
+| 12.9 | 4 | Web-res images and resolution selection |
+| 16.10 | 10 | React Redux Refactor 1: notifications, view reducer, highlight view to react router |
+| 18.10 | 10 | React Redux Refactor 2: scene reducer, media reducer, another event listener bug fix |
+| 22.10 | 5 | Audio upload reducer, remove image data from scene objects, authorization to view images|
 | cumulative | 101 | |
-| 21.11 | 9 | |
-| 22.11 | 3 | |
-| 02.12 | 8 | |
-| 03.13 | 2 | |
-| 05.12 | 2 | |
-| 06.12 | 8 | |
-| 07.12 | 8 | |
-| 08.12 | 4 | |
-| 10.12 | 4 | |
-| 13.12 | 6 | |
+| 21.11 | 9 | CI/CD setup, BE linting and style fixes, setup BE integration tests, setup testing DB. entry access tests, FE + BE audio authorization (+ testing) |
+| 22.11 | 3 | BE integration tests: media and metadata authorization, additional entry access, misc. testing improvements |
+| 02.12 | 8 | BE integration tests: admin metadata, user creation, user login, timeout debugging, media uploading |
+| 03.13 | 2 | BE integration tests: more uploading, deleting, misc. debugging and small improvements |
+| 05.12 | 2 | FE linting + style fixing, react version config |
+| 06.12 | 8 | E2E testing: cypress config, entry tests, image upload, scenes, CI/CD pipeline config; plus improved bilingual text|
+| 07.12 | 8 | E2E testing: audio upload, bad login, highlight view, image ordering, temp media folder config; plus: bleedover notification fix, improved error messages, build and CI/CD debugging, healthcheck |
+| 08.12 | 4 | Demo page handling: `isDemo` added to DB, demo routing, demo authentication, demo scenes, demo FE|
+| 10.12 | 4 | Demo entry tests |
+| 13.12 | 6 | Demo admin tests|
 | cumulative | 155 | |
-| 14.12 | 8 | |
-| 15.12 | 2 | |
-| 20.12 | 6 | |
-| 21.12 | 6 | |
+| 14.12 | 8 | Mobile: Config, linting, entry, menu bar, image grid, styling |
+| 15.12 | 2 | Mobile: Scene filtering, entry upgrades, layout improvements |
+| 20.12 | 6 | Mobile: Bilingual switching, welcome page, highlight view, autoscroll, image component refactor |
+| 21.12 | 6 | Audio player, highlight swiping |
 | total | 177 | |
 
 
