@@ -64,6 +64,9 @@ const text = {
   song2: {suo: 'alttarille kävely', eng: 'down the aisle'},
   song3: {suo: 'a sunday kind of love', eng: 'a sunday kind of love'},
 
+  songX: {suo: 'Noita', eng: 'The Witch'},
+  songY: {suo: 'Jazz-juhlat', eng: 'Jazz Party'},
+
   back: {suo: 'takaisin', eng: 'back'},
   exit: {suo: 'ulos', eng: 'exit'},
 };
