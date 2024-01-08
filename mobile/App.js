@@ -24,3 +24,9 @@ export default App;
 
 registerRootComponent(App);
 TrackPlayer.registerPlaybackService(() => PlaybackServices);
+
+const setupPlayer = async () => {
+  await TrackPlayer.setupPlayer();
+};
+
+setupPlayer();
