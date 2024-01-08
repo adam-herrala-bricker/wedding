@@ -33,7 +33,7 @@ const Main = () => {
 
   return (
     <View style = {styles.container}>
-      <StatusBar />
+      <StatusBar backgroundColor={'white'} barStyle={'dark-content'}/>
       {entryToken && <AppBar />}
       <Routes>
         <Route path = '/' element = {entryToken ? <Welcome />: <Entry />}/>
