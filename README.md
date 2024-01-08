@@ -22,7 +22,7 @@ This was also my project for the University of Helsinki's fullstack web developm
 - Frontend: React
 - Backend: NodeJS
 - Mobile App: React Native (+ Expo)
-- Database: MongoDB
+- Database: MongoDB Atlas
 
 ## Frontend
 
@@ -68,7 +68,7 @@ When logged in as an admin, users have a number of additional features available
 - Setting Images as 'Hidden:' One cool feature of the application is that admin users can hide an image from non-admin users simply by unlinking it from the 'kaikki/all' scene. To admins, the image will appear translucent but otherwise be visible, but it won't be loaded into the app when accessed by non-admins.
 
 ### Responsive Design
-While the dedicated Android app is recommended when using a mobile device, the browser version is responsive enough to be useable in with a mobile browser.
+While the dedicated Android app is recommended when using a mobile device, the browser version is responsive enough to be useable with a mobile browser.
 
 ### Styling
 This project uses React Bootstrap styling and prebuilt components (i.e., the main menu bar and off-canvas login) in conjunction with native styling (e.g., sub-menu buttons).
@@ -132,7 +132,7 @@ Mobile-specific features of the app include:
 - Gesture-based navigation for highlight view:
     - Swipe left and right to move between images.
     - Swipe down to exit highlight view.
-- Entry-page toggling between detault and demo mode.
+- Entry-page toggling between default and demo mode.
 
 ## Testing
 
@@ -149,7 +149,7 @@ Some of the most important checks:
 - Demo tokens cannot authenticate default requests.
 - Demo and default requests only return their respective content.
 - With correct authentication, requests return the expected data.
-- When requests fail (e.g., invalid authentication or validation fails), they return the expected error codes.
+- When requests fail (e.g., invalid authentication or rejected validation), they return the expected error codes.
 
 ### E2E Testing
 
