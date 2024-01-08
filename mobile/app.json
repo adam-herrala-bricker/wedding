@@ -28,7 +28,8 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#F6F4CF"
       },
-      "package": "com.adam.herrala.bricker.wedding"
+      "package": "com.adam.herrala.bricker.wedding",
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/minicon-32x32.png"

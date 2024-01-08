@@ -14,13 +14,11 @@ import {clearUser} from '../reducers/userReducer';
 import usFlag from '../resources/us-flag.png';
 import finFlag from '../resources/fin-flag.png';
 import textDictionary from '../resources/dictionary';
-import Constants from 'expo-constants';
 import theme from '../theme';
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.color.dark,
-    marginTop: Constants.statusBarHeight,
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'stretch',

@@ -1,17 +1,19 @@
 # Wedding Web App Project
 
-View the browser demo at https://herrala-bricker-wedding.onrender.com/demo/
+View the browser demo: https://herrala-bricker-wedding.onrender.com/demo/
 
-A mobile version will be available soon.
+Download the Android app: https://play.google.com/apps/internaltest/4701371988909939863
 
->[!NOTE]
-> The entry key for the demo is `porkkalaGala`. If you'd like to demo admin features, feel free to contact me for demo admin credentials.
+>[!IMPORTANT]
+> The entry key for the demo is `porkkalaGala`.
+>
+>Demoing admin features requires demo admin credentials, and downloading the app requires being added to the tester list. Feel free to contact me for either!
 
 ## About
 
 I made this web app so that friends and family could listen to music and view/download pictures from my summer 2023 wedding. The demo version, I'm sorry to say, has neither wedding music nor wedding pictures; instead you'll see pictures of trees alongside music inspired by trees.
 
->[!IMPORTANT]
+>[!NOTE]
 >The photo credits you see on the demo page are for wedding photos; our wedding photographer did not take the pictures of trees.
 
 This was also my project for the University of Helsinki's fullstack web development course (https://fullstackopen.com/). The information contained in this ReadMe is largely reflective of that.
@@ -123,7 +125,14 @@ User data, scene data, and media metadata is all stored in the database, with se
 
 ## Mobile App
 
-Coming soon!
+A mobile version of the app is available for Android devices (see link above). This Android app connects to the same endpoints on Render as the browser frontend. However, it only supports non-admin, view-only functionality. While users of the mobile app can view all the same images and listen to all the same audio, anything that requires an admin token (upload, deletion, scene linking, etc.) is only possible on browser.
+
+Mobile-specific features of the app include:
+- Audio playback using React Native Track Player.
+- Gesture-based navigation for highlight view:
+    - Swipe left and right to move between images.
+    - Swipe down to exit highlight view.
+- Entry-page toggling between detault and demo mode.
 
 ## Testing
 
