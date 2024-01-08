@@ -29,7 +29,7 @@
         "backgroundColor": "#F6F4CF"
       },
       "package": "com.adam.herrala.bricker.wedding",
-      "versionCode": 3
+      "versionCode": 4
     },
     "web": {
       "favicon": "./assets/minicon-32x32.png"
