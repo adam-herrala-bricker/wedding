@@ -28,7 +28,9 @@ const fileToName = (songFile) => {
     'waiting.mp3': 'song0',
     'transition.mp3': 'song1',
     'down-the-aisle.mp3': 'song2',
-    'Mia2.1.mp3': 'song3'};
+    'Mia2.1.mp3': 'song3',
+    'test36.1c.wav': 'songX',
+    'test35.1.wav': 'songY'};
 
   const songCode = fileList[songFile.fileName];
 
