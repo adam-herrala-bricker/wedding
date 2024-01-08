@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main #only check on push to main (which requires a PR)
+    paths:
+      - 'frontend/**' ## only run deployment if there's been a change to the FE or BE (still runs PR tests though)
+      - 'backend/**'
   pull_request:
     branches:
       - main
