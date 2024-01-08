@@ -290,7 +290,7 @@ flowchart LR
 | 14.12 | 8 | Mobile: Config, linting, entry, menu bar, image grid, styling |
 | 15.12 | 2 | Mobile: Scene filtering, entry upgrades, layout improvements |
 | 20.12 | 6 | Mobile: Bilingual switching, welcome page, highlight view, autoscroll, image component refactor |
-| 21.12 | 6 | Audio player, highlight swiping |
+| 21.12 | 6 | Mobile: Audio player, highlight swiping |
 | total | 177 | |
 
 

@@ -13,6 +13,7 @@ const defaultAudio = [];
 const defaultSwipe = {x: 0, y: 0};
 const defaultReturnToGrid = false;
 const defaultHighlight = '';
+const defaultAudioIsSetup = false;
 
 const mediaSlice = createSlice({
   name: 'media',
@@ -25,6 +26,7 @@ const mediaSlice = createSlice({
     swipeEnd: defaultSwipe,
     returnToGrid: defaultReturnToGrid,
     highlight: defaultHighlight,
+    audioIsSetup: defaultAudioIsSetup,
   },
 
   reducers: {
@@ -95,6 +97,10 @@ const mediaSlice = createSlice({
     resetReturnToGrid(state) {
       return {...state, returnToGrid: defaultReturnToGrid};
     },
+
+    setAudioIsSetup(state, action) {
+      return {...state, audioIsSetup: action.payload};
+    },
   },
 });
 
@@ -107,6 +113,7 @@ export const {
   setSwipeStart,
   setSwipeEnd,
   resetReturnToGrid,
+  setAudioIsSetup,
 } = mediaSlice.actions;
 
 // packaged functions
