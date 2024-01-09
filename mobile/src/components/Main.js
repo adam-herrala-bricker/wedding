@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 import {Routes, Route, Navigate} from 'react-router-native';
-import {View, Text, StyleSheet, StatusBar} from 'react-native';
+import {View, StyleSheet, StatusBar} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {initializeMedia, setAudioIsSetup} from '../reducers/mediaReducer';
 import {initializeScenes} from '../reducers/sceneReducer';
@@ -17,6 +17,11 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
     alignItems: 'center',
+  },
+
+  loading: {
+    backgroundColor: '#CBDFBD',
+    flex: 1,
   },
 });
 
@@ -44,7 +49,7 @@ const Main = () => {
     }
   }, [entryToken]);
 
-  if (!audioIsSetup) return <View><Text>setting up!</Text></View>;
+  if (!audioIsSetup) return <View style = {styles.loading}></View>;
 
   return (
     <View style = {styles.container}>
