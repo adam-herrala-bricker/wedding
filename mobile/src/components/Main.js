@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 import {Routes, Route, Navigate} from 'react-router-native';
-import {View, StyleSheet, StatusBar} from 'react-native';
+import {View, Text, StyleSheet, StatusBar} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {initializeMedia, setAudioIsSetup} from '../reducers/mediaReducer';
 import {initializeScenes} from '../reducers/sceneReducer';
@@ -27,12 +27,6 @@ const Main = () => {
   const referer = useSelector((i) => i.view.refPath);
   const audioIsSetup = useSelector((i) => i.media.audioIsSetup);
 
-  // effect hook to initialize states
-  useEffect(() => {
-    dispatch(initializeMedia(entryToken, referer));
-    dispatch(initializeScenes(entryToken, referer));
-  }, [entryToken]);
-
   // initial setup of track player
   const setupPlayer = async () => {
     if (!audioIsSetup) {
@@ -41,9 +35,16 @@ const Main = () => {
     }
   };
 
+  // effect hook to initialize states
   useEffect(() => {
     setupPlayer();
-  }, []);
+    if (audioIsSetup) {
+      dispatch(initializeMedia(entryToken, referer));
+      dispatch(initializeScenes(entryToken, referer));
+    }
+  }, [entryToken]);
+
+  if (!audioIsSetup) return <View><Text>setting up!</Text></View>;
 
   return (
     <View style = {styles.container}>
