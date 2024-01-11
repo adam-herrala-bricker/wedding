@@ -11,12 +11,18 @@ import GridView from './GridView';
 import HighlightView from './HighlightView';
 import Music from './Music';
 import Welcome from './Welcome';
+import theme from '../theme';
 
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     flexShrink: 1,
     alignItems: 'center',
+  },
+
+  loading: {
+    backgroundColor: theme.color.loadingBG,
+    flex: 1,
   },
 });
 
@@ -27,12 +33,6 @@ const Main = () => {
   const referer = useSelector((i) => i.view.refPath);
   const audioIsSetup = useSelector((i) => i.media.audioIsSetup);
 
-  // effect hook to initialize states
-  useEffect(() => {
-    dispatch(initializeMedia(entryToken, referer));
-    dispatch(initializeScenes(entryToken, referer));
-  }, [entryToken]);
-
   // initial setup of track player
   const setupPlayer = async () => {
     if (!audioIsSetup) {
@@ -41,10 +41,27 @@ const Main = () => {
     }
   };
 
+  // effect hook to initialize states
   useEffect(() => {
-    setupPlayer();
-  }, []);
+    // delay the setup to avoid a first-time startup issue
+    setTimeout(() => setupPlayer(), 5000);
+    if (audioIsSetup) {
+      dispatch(initializeMedia(entryToken, referer));
+      dispatch(initializeScenes(entryToken, referer));
+    }
+  }, [entryToken]);
 
+  // show blank page while track play sets up
+  if (!audioIsSetup) {
+    return (
+      <View style = {styles.loading}>
+        <StatusBar
+          backgroundColor={theme.color.loadingBG}
+          barStyle={'dark-content'}/>
+      </View>);
+  }
+
+  // main view
   return (
     <View style = {styles.container}>
       <StatusBar backgroundColor={'#FAFAFA'} barStyle={'dark-content'}/>
