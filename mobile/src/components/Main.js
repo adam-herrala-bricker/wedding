@@ -43,7 +43,7 @@ const Main = () => {
 
   // effect hook to initialize states
   useEffect(() => {
-    // try delaying the setup?
+    // delay the setup to avoid a first-time startup issue
     setTimeout(() => setupPlayer(), 5000);
     if (audioIsSetup) {
       dispatch(initializeMedia(entryToken, referer));
