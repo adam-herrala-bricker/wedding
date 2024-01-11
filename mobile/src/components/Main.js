@@ -11,6 +11,7 @@ import GridView from './GridView';
 import HighlightView from './HighlightView';
 import Music from './Music';
 import Welcome from './Welcome';
+import theme from '../theme';
 
 const styles = StyleSheet.create({
   container: {
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
   },
 
   loading: {
-    backgroundColor: '#CBDFBD',
+    backgroundColor: theme.color.loadingBG,
     flex: 1,
   },
 });
@@ -42,15 +43,25 @@ const Main = () => {
 
   // effect hook to initialize states
   useEffect(() => {
-    setupPlayer();
+    // try delaying the setup?
+    setTimeout(() => setupPlayer(), 5000);
     if (audioIsSetup) {
       dispatch(initializeMedia(entryToken, referer));
       dispatch(initializeScenes(entryToken, referer));
     }
   }, [entryToken]);
 
-  if (!audioIsSetup) return <View style = {styles.loading}></View>;
+  // show blank page while track play sets up
+  if (!audioIsSetup) {
+    return (
+      <View style = {styles.loading}>
+        <StatusBar
+          backgroundColor={theme.color.loadingBG}
+          barStyle={'dark-content'}/>
+      </View>);
+  }
 
+  // main view
   return (
     <View style = {styles.container}>
       <StatusBar backgroundColor={'#FAFAFA'} barStyle={'dark-content'}/>
